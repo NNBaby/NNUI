@@ -3,51 +3,61 @@
         {
             "name": "data",
             "type": "Data",
-            "batch_size": 100
+            "batch_size": 100,
+            "input": "mnist",
+            "outputs": ["data", "label"]
         },
         {
             "name": "conv1",
             "type": "Conv",
             "dim_out": 20,
-            "kernel": 5
+            "kernel": 5,
+            "input": "data"
         },
         {
             "name": "pool1",
             "type": "Pool",
             "pool": "MAX",
             "kernel": 2,
-            "stride": 2
+            "stride": 2,
+            "input": "conv1"
         },
         {
             "name": "conv2",
             "type": "Conv",
             "dim_out": 50,
-            "kernel": 5
+            "kernel": 5,
+            "input": "pool1"
         },
         {
             "name": "pool2",
             "type": "Pool",
             "pool": "MAX",
             "kernel": 2,
-            "stride": 2
+            "stride": 2,
+            "input": "conv2"
         },
         {  
             "name": "fc3",
             "type": "FC",
-            "dim_out": 500
+            "dim_out": 500,
+            "input": "pool2"
         },
         {
             "name": "relu3",
-            "type": "ReLU"
+            "type": "ReLU",
+            "input": "fc3"
         },
         {  
             "name": "pred",
             "type": "FC",
-            "dim_out": 10
+            "dim_out": 10,
+            "input": "relu3"
         },
         {
             "name": "loss",
-            "type": "SoftmaxWithLoss"
+            "type": "SoftmaxWithLoss",
+            "inputs": ["data", "label"]
         }
     ]
 }
