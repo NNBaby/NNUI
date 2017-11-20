@@ -1,0 +1,53 @@
+{
+    "operators":[
+        {
+            "name": "data",
+            "type": "Data",
+            "batch_size": 100
+        },
+        {
+            "name": "conv1",
+            "type": "Conv",
+            "dim_out": 20,
+            "kernel": 5
+        },
+        {
+            "name": "pool1",
+            "type": "Pool",
+            "pool": "MAX",
+            "kernel": 2,
+            "stride": 2
+        },
+        {
+            "name": "conv2",
+            "type": "Conv",
+            "dim_out": 50,
+            "kernel": 5
+        },
+        {
+            "name": "pool2",
+            "type": "Pool",
+            "pool": "MAX",
+            "kernel": 2,
+            "stride": 2
+        },
+        {  
+            "name": "fc3",
+            "type": "FC",
+            "dim_out": 500
+        },
+        {
+            "name": "relu3",
+            "type": "ReLU"
+        },
+        {  
+            "name": "pred",
+            "type": "FC",
+            "dim_out": 10
+        },
+        {
+            "name": "loss",
+            "type": "SoftmaxWithLoss"
+        }
+    ]
+}
