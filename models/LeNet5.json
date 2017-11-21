@@ -1,10 +1,30 @@
 {
+    "name": "LeNet-5",
+    
+    "train":{
+        "epochs": 20,
+        "batch_size": 100,
+        "optimizer": "adam",
+        "inputs":{
+            "data":{
+                "data": ["mnist_train_x", "mnist_train_y"],
+                "shapes": [[28, 28, 1], [1]],
+                "batch_size": 100
+            }
+        },
+        "outputs":{
+            "pred":{
+                "loss": "categorical_crossentropy",
+                "loss_weight": 1.0, 
+                "metrics": ["accuracy"]
+            }
+        }
+    },
+    
     "operators":[
         {
             "name": "data",
             "type": "Data",
-            "batch_size": 100,
-            "dataset": "mnist",
             "outputs": ["data", "label"]
         },
         {
@@ -49,7 +69,7 @@
             "dim_out": 10
         },
         {
-            "name": "softmax",
+            "name": "pred",
             "type": "Softmax"
         }
     ]

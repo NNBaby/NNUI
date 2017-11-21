@@ -1,5 +1,8 @@
 import keras.layers as L
 from keras import backend as K
+from keras.models import Model
+
+OPERATOR_NO_INPUT = "There is no input in this operator"
 
 def get_mnist():
     # mnist
@@ -16,12 +19,10 @@ def get_mnist():
         x_test = x_test.reshape((x_test.shape[0], rows, cols, 1))
 
 def Data(x = None, **argv):
-    if argv["dataset"] == "mnist":
-        channels, rows, cols = 1, 28, 28
-    else:
-        raise ValueError("Unknown dataset :-(")
-    shape = (channels, rows, cols) if K.image_data_format() == 'channels_first' else (rows, cols, channels)
-    return [L.Input(shape = shape), L.Input(shape = (1,))]
+    # the default shape is NHWC
+    # if K.image_data_format() != 'channels_first':
+    assert "shapes" in argv, ValueError(OPERATOR_NO_INPUT)
+    return [L.Input(shape = shape) for shape in argv["shapes"]]
 
 def FC(x, **argv):
     if len(x.get_shape()) > 2:
@@ -59,7 +60,19 @@ OP_MAP = {
     "Softmax": Softmax
 }
     
-def build_keras_model(topo):
+def build_keras_model(info, topo, mode):
+
+    # configure data operators
+    name2op = dict()
+    for op in topo:
+        name2op[op["name"]] = op
+    mode_info = info[mode]
+    inputs = mode_info["inputs"]
+    for op_name, data in inputs.items():
+        op = name2op[op_name]
+        op["shapes"] = data["shapes"]
+        op["batch_size"] = data["batch_size"]
+        
     xs = dict()
     for op in topo:
         inputs = [xs[name] for name in op["inputs"]]
@@ -69,4 +82,30 @@ def build_keras_model(topo):
             outputs = [outputs]
         for name, output in zip(op["outputs"], outputs):
             xs[name] = output
-    return xs
+    
+    loss_ops = []
+    for op in topo:
+        if "loss" in op:
+            loss_ops.append(op)
+            if "loss_weight" not in op:
+                op["loss_weight"] = 1.0
+    
+    # create model
+    inputs_info = mode_info["inputs"]
+    outputs_info = mode_info["outputs"]
+    inputs = [xs[name] for name in inputs_info]
+    outputs = [xs[name] for name in outputs_info]
+    
+    model = Model(inputs = inputs, outputs = outputs)
+    
+    optimizer = mode_info.get("optimizer", "sgd")
+    loss = [output["loss"] for output in outputs_info.values()]
+    loss_weights = [output.get("loss_weight", 1.0) for output in outputs_info.values()]
+    metrics = dict()
+    for op_name, info in outputs_info.items():
+        if "metrics" in info:
+            metrics[op_name] = info["metrics"]
+        
+    model.compile(optimizer = optimizer, loss = loss, loss_weights = loss_weights, metrics = metrics)
+    return model
+    
