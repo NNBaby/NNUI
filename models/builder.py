@@ -22,7 +22,7 @@ def Data(x = None, **argv):
     # the default shape is NHWC
     # if K.image_data_format() != 'channels_first':
     assert "shapes" in argv, ValueError(OPERATOR_NO_INPUT)
-    return [L.Input(shape = shape) for shape in argv["shapes"]]
+    return [L.Input(name = argv.get("name"), shape = shape) for shape in argv["shapes"]]
 
 def FC(x, **argv):
     if len(x.get_shape()) > 2:
@@ -30,25 +30,28 @@ def FC(x, **argv):
     return L.Dense(argv["dim_out"])(x)
     
 def Conv(x, **argv):
-    return L.Conv2D(filters = argv["dim_out"],
+    return L.Conv2D(name = argv.get("name"), 
+                    filters = argv["dim_out"],
                     kernel_size = argv["kernel"],
                     strides = argv.get("stride", 1),
                     padding = argv.get("padding", "valid"))(x)
                     
 def Pool(x, **argv):
     if argv["pool"] == "MAX":
-        return L.MaxPooling2D(pool_size = argv["kernel"],
+        return L.MaxPooling2D(name = argv.get("name"), 
+                              pool_size = argv["kernel"],
                               strides = argv.get("stride", 1))(x)
     elif argv["pool"] == "AVE":
-        return L.AveragePooling2D(pool_size = argv["kernel"],
-                              strides = argv.get("stride", 1))(x)
+        return L.AveragePooling2D(name = argv.get("name"), 
+                                  pool_size = argv["kernel"],
+                                  strides = argv.get("stride", 1))(x)
     raise ValueError("The pool operator must have pool type.")
     
 def ReLU(x, **argv):
-    return L.Activation("relu")(x) 
+    return L.Activation(name = argv.get("name"), activation = "relu")(x) 
 
 def Softmax(x, **argv):
-    return L.Activation("softmax")(x)
+    return L.Activation(name = argv.get("name"), activation = "softmax")(x)
     
     
 OP_MAP = {
@@ -59,6 +62,24 @@ OP_MAP = {
     "ReLU": ReLU,
     "Softmax": Softmax
 }
+
+def read_dataset(name):
+    dataset = dict()
+    if name == "mnist":
+        from keras.datasets import mnist
+        (x_train, y_train), (x_test, y_test) = mnist.load_data()
+        rows, cols = 28, 28
+        num_classes = 10
+        # NHWC
+        x_train = x_train.reshape((x_train.shape[0], rows, cols, 1))
+        x_test = x_test.reshape((x_test.shape[0], rows, cols, 1))
+        y_train = keras.utils.np_utils.to_categorical(y_train, num_classes)
+        y_test = keras.utils.np_utils.to_categorical(y_test, num_classes)
+        dataset["x_train"] = x_train
+        dataset["y_train"] = y_train
+        dataset["x_test"] = x_test
+        dataset["y_test"] = y_test
+    return dataset
     
 def build_keras_model(info, topo, mode):
 
@@ -71,7 +92,9 @@ def build_keras_model(info, topo, mode):
     for op_name, data in inputs.items():
         op = name2op[op_name]
         op["shapes"] = data["shapes"]
-        op["batch_size"] = data["batch_size"]
+        #op["batch_size"] = data["batch_size"]
+        #dataset = read_dataset(op["dataset"])
+        #op["datas"] = [dataset[name] for name in data["datas"]]
         
     xs = dict()
     for op in topo:

@@ -7,7 +7,8 @@
         "optimizer": "adam",
         "inputs":{
             "data":{
-                "data": ["mnist_train_x", "mnist_train_y"],
+                "dataset": "mnist",
+                "datas": ["train_x", "train_y"],
                 "shapes": [[28, 28, 1], [1]],
                 "batch_size": 100
             }
@@ -25,7 +26,7 @@
         {
             "name": "data",
             "type": "Data",
-            "outputs": ["data", "label"]
+            "output": "data"
         },
         {
             "name": "conv1",

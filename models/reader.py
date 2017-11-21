@@ -107,11 +107,26 @@ class Model:
         return op["name"]
 
     def train(self):
-        pass
+        import keras
+        from keras.datasets import mnist
+        (x_train, y_train), (x_test, y_test) = mnist.load_data()
+        rows, cols = 28, 28
+        num_classes = 10
+        # NHWC
+        x_train = x_train.reshape((x_train.shape[0], rows, cols, 1))
+        x_test = x_test.reshape((x_test.shape[0], rows, cols, 1))
+        y_train = keras.utils.np_utils.to_categorical(y_train, num_classes)
+        y_test = keras.utils.np_utils.to_categorical(y_test, num_classes)
+        self.model.fit(x = {"data": x_train}, y = {"pred": y_train}, batch_size = 128, epochs = 5)
 
     
 def read_model(filename):
     return Model(filename, mode = "train")
         
 model = read_model("LeNet5.json")
-print (model.model.inputs, model.model.outputs)
+model.train()
+
+
+
+model.model.fit(x=X_train,y=Y_train,epochs=20,batch_size=100)
+preds = model.model.evaluate(x=X_test,y=Y_test)
