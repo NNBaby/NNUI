@@ -91,16 +91,20 @@ def build_keras_model(info, topo, mode):
     inputs = mode_info["inputs"]
     for op_name, data in inputs.items():
         op = name2op[op_name]
-        op["shapes"] = data["shapes"]
-        #op["batch_size"] = data["batch_size"]
-        #dataset = read_dataset(op["dataset"])
-        #op["datas"] = [dataset[name] for name in data["datas"]]
         
     xs = dict()
     for op in topo:
         inputs = [xs[name] for name in op["inputs"]]
-        op_func = OP_MAP[op["type"]]
-        outputs = op_func(*inputs, **op)
+        #op_func = OP_MAP[op["type"]]
+        #outputs = op_func(*inputs, **op)
+        op_func = L.__getattribute__(op["type"])
+        info = op.copy()
+        for s in ["type", "input", "inputs", "output", "outputs"]:
+            if s in info:
+                del info[s]
+        outputs = op_func(**info)
+        if len(inputs) > 0:
+            outputs = outputs(*inputs)
         if type(outputs) is not list:
             outputs = [outputs]
         for name, output in zip(op["outputs"], outputs):

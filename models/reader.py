@@ -49,7 +49,7 @@ class Model:
         # compute in-degrees
         last_op = None
         for op in ops:
-            if op["type"] not in ["Data"]:
+            if op["type"] not in ["Data", "Input"]:
                 if "input" not in op and "inputs" not in op:
                     assert last_op is not None, ValueError(OPERATOR_FIRST_INPUT_NOT_EXISTS)
                     op["inputs"] = [last_op["name"]]
@@ -118,15 +118,14 @@ class Model:
         y_train = keras.utils.np_utils.to_categorical(y_train, num_classes)
         y_test = keras.utils.np_utils.to_categorical(y_test, num_classes)
         self.model.fit(x = {"data": x_train}, y = {"pred": y_train}, batch_size = 128, epochs = 5)
+        
+    def test(self):
+        pass
+        # preds = model.model.evaluate(x=X_test,y=Y_test)
 
     
 def read_model(filename):
     return Model(filename, mode = "train")
         
-model = read_model("LeNet5.json")
+model = read_model("LeNet5-keras.json")
 model.train()
-
-
-
-model.model.fit(x=X_train,y=Y_train,epochs=20,batch_size=100)
-preds = model.model.evaluate(x=X_test,y=Y_test)
