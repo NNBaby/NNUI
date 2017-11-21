@@ -44,14 +44,13 @@
             "type": "ReLU"
         },
         {  
-            "name": "pred",
+            "name": "fc4",
             "type": "FC",
             "dim_out": 10
         },
         {
             "name": "softmax",
-            "type": "Softmax",
-            "inputs": ["pred"]
+            "type": "Softmax"
         }
     ]
 }

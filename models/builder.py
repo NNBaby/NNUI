@@ -24,21 +24,23 @@ def Data(x = None, **argv):
     return [L.Input(shape = shape), L.Input(shape = (1,))]
 
 def FC(x, **argv):
+    if len(x.get_shape()) > 2:
+        x = L.Flatten()(x)
     return L.Dense(argv["dim_out"])(x)
     
 def Conv(x, **argv):
     return L.Conv2D(filters = argv["dim_out"],
                     kernel_size = argv["kernel"],
-                    strides = argv.get("strides", 1),
+                    strides = argv.get("stride", 1),
                     padding = argv.get("padding", "valid"))(x)
                     
 def Pool(x, **argv):
     if argv["pool"] == "MAX":
         return L.MaxPooling2D(pool_size = argv["kernel"],
-                              strides = argv.get("strides", 1))(x)
+                              strides = argv.get("stride", 1))(x)
     elif argv["pool"] == "AVE":
         return L.AveragePooling2D(pool_size = argv["kernel"],
-                              strides = argv.get("strides", 1))(x)
+                              strides = argv.get("stride", 1))(x)
     raise ValueError("The pool operator must have pool type.")
     
 def ReLU(x, **argv):
