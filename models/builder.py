@@ -45,7 +45,7 @@ def ReLU(x, **argv):
     return L.Activation("relu")(x) 
 
 def Softmax(x, **argv):
-    x = L.Activation("softmax")(x)
+    return L.Activation("softmax")(x)
     
     
 OP_MAP = {
