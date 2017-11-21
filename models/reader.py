@@ -3,11 +3,13 @@ try:
     import Queue
 except:
     import queue as Queue
+import builder
 
 OPERATOR_FIRST_INPUT_NOT_EXISTS = "The input of the first operator must exist"
 OPERATOR_INPUT_ERROR = "The key 'input' and 'inputs' cannot exist at the same time"
 OPERATOR_NOT_EXISTS = "Operator %s doesn't exist"
 OPERATOR_TOPO_ERROR = "Operator topology errors"
+OPERATOR_LOOP_ERROR = "Error:-( There is a cycle in the graph."
 
 # auto name if name is None    
 def get_op_name(op, names):
@@ -27,7 +29,7 @@ def get_op_name(op, names):
             op["name"] = name
     return op["name"]
 
-def read_model(filename):
+def get_model_topo(filename):
     fin = open(filename)
     data = json.loads(fin.read())
     ops = data["operators"]
@@ -75,8 +77,11 @@ def read_model(filename):
         if degree == 0:
             q.put(op_name)
     topo_inv = []
+    vis = set()
     while not q.empty():
         op_name = q.get()
+        assert op_name not in vis, ValueError(OPERATOR_LOOP_ERROR)
+        vis.add(op_name) # set visit flag for avoiding cycle in the graph
         topo_inv.append(op_name)
         for ip_name in name2op[op_name]["inputs"]:
             op_name = outputs[ip_name]
@@ -85,7 +90,14 @@ def read_model(filename):
                 q.put(ip_name)
     assert len(topo_inv) == len(in_degrees), ValueError(OPERATOR_TOPO_ERROR)
     topo = [name2op[name] for name in topo_inv[::-1]]
-    print (topo)
-        
+    return topo
+    
+def get_model_symbol(topo):
+    return builder.build_keras_model(topo)
+    
+def read_model(filename):
+    topo = get_model_topo(filename)
+    sym = get_model_symbol(topo)
+    return sym
         
 read_model("LeNet5.json")
