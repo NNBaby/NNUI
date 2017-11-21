@@ -49,9 +49,9 @@
             "dim_out": 10
         },
         {
-            "name": "loss",
-            "type": "SoftmaxWithLoss",
-            "inputs": ["pred", "label"]
+            "name": "softmax",
+            "type": "Softmax",
+            "inputs": ["pred"]
         }
     ]
 }

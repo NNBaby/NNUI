@@ -7,6 +7,7 @@ import builder
 
 OPERATOR_FIRST_INPUT_NOT_EXISTS = "The input of the first operator must exist"
 OPERATOR_INPUT_ERROR = "The key 'input' and 'inputs' cannot exist at the same time"
+OPERATOR_OUTPUT_ERROR = "The key 'output' and 'outputs' cannot exist at the same time"
 OPERATOR_NOT_EXISTS = "Operator %s doesn't exist"
 OPERATOR_TOPO_ERROR = "Operator topology errors"
 OPERATOR_LOOP_ERROR = "Error:-( There is a cycle in the graph."
@@ -44,10 +45,15 @@ def get_model_topo(filename):
         in_degrees[name] = 0
         outputs[name] = name
         if "output" in op:
+            assert "outputs" not in op, ValueError(OPERATOR_OUTPUT_ERROR)
+            op["outputs"] = [op["output"]]
             outputs[op["output"]] = name
         elif "outputs" in op:
             for o in op["outputs"]:
                 outputs[o] = name
+        else:
+            # no output
+            op["outputs"] = [name]
         name2op[name] = op
         
     # compute in-degrees
@@ -100,4 +106,5 @@ def read_model(filename):
     sym = get_model_symbol(topo)
     return sym
         
-read_model("LeNet5.json")
+sym = read_model("LeNet5.json")
+print (sym)
