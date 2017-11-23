@@ -4,6 +4,8 @@ try:
 except:
     import queue as Queue
 import builder
+import sys
+import socket
 
 OPERATOR_FIRST_INPUT_NOT_EXISTS = "The input of the first operator must exist"
 OPERATOR_INPUT_ERROR = "The key 'input' and 'inputs' cannot exist at the same time"
@@ -11,6 +13,19 @@ OPERATOR_OUTPUT_ERROR = "The key 'output' and 'outputs' cannot exist at the same
 OPERATOR_NOT_EXISTS = "Operator %s doesn't exist"
 OPERATOR_TOPO_ERROR = "Operator topology errors"
 OPERATOR_LOOP_ERROR = "Error:-( There is a cycle in the graph."
+
+class RedirectStdOut:
+    ADDRESS = ("127.0.0.1", 3939)
+    def __init__(self):
+        self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.buffer = ""
+    def write(self, text):
+        self.buffer += text
+    def flush(self):
+        self.socket.sendto(self.buffer.encode("UTF-8"), self.ADDRESS)
+        self.buffer = ""
+        
+sys.stdout = RedirectStdOut()
 
 class Model:
     def __init__(self, filename, mode):
