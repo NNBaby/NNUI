@@ -25,6 +25,7 @@ namespace nnui_test
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        private MainPageViewModel ViewModel = new MainPageViewModel();
         public MainPage()
         {
             this.InitializeComponent();
@@ -32,11 +33,16 @@ namespace nnui_test
             formattableTitleBar.ButtonBackgroundColor = Colors.Transparent;
             CoreApplicationViewTitleBar coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
             coreTitleBar.ExtendViewIntoTitleBar = true;
-            TestSourceCVS.Source = TestSourse.GetContacts(20);
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
+            //TestSourceCVS.Source = TestSourse.GetContacts(20);
+            //ViewModel.AddConv();
+            OpItem newItem = new OpItem();
+            newItem.Name = "conv";
+            newItem.Type = "Test";
+            newItem.Kernel = 3;
+            newItem.DimOut = 16;
+            newItem.Stride = 1;
+            ViewModel.OpItems.Add(newItem);
+            ViewModel.Visib1 = Visibility.Visible;
         }
     }
 }
