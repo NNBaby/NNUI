@@ -8,6 +8,7 @@ using Windows.UI.Xaml;
 using Newtonsoft.Json;
 using System.Collections.ObjectModel;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Controls;
 
 namespace nnui_test
 {
@@ -22,6 +23,48 @@ namespace nnui_test
             get => opItems;
             set { opItems = value; OnPropertyChanged(); }
         }
+        private int selectedIndex = 0;
+        public int SelectedIndex
+        {
+            get => selectedIndex;
+            set { selectedIndex = value; OnPropertyChanged(); }
+        }
+        private int shapeDisplay;
+        public int ShapeDisplay
+        {
+            get => shapeDisplay;
+            set { shapeDisplay = value; OnPropertyChanged(); }
+        }
+        private string nameDisplay;
+        public string NameDisplay
+        {
+            get => nameDisplay;
+            set { nameDisplay = value; OnPropertyChanged(); }
+        }
+        private string typeDisplay;
+        public string TypeDisplay
+        {
+            get => typeDisplay;
+            set { typeDisplay = value; OnPropertyChanged(); }
+        }
+        private string poolingDisplay;
+        public string PoolingDisplay
+        {
+            get => poolingDisplay;
+            set { poolingDisplay = value; OnPropertyChanged(); }
+        }
+        private int strideDisplay;
+        public int StrideDisplay
+        {
+            get => strideDisplay;
+            set { strideDisplay = value; OnPropertyChanged(); }
+        }
+        private int paddingDisplay;
+        public int PaddingDisplay
+        {
+            get => paddingDisplay;
+            set { paddingDisplay = value; OnPropertyChanged(); }
+        }
         private Visibility visib1;
         public Visibility Visib1
         {
@@ -31,14 +74,26 @@ namespace nnui_test
 
         #endregion
 
+        private class SendItem
+        {
+            public string name;
+            public string type;
+            public int kernel;
+            public int dim_out;
+            public string pool;
+            public int stride;
+            public int padding;
+        }
+
         public void AddConv()
         {
             OpItem newItem = new OpItem();
             newItem.Name = "conv";
-            newItem.Type = "Conv";
+            newItem.Type = "Convolution";
             newItem.Kernel = 3;
             newItem.DimOut = 16;
             newItem.Stride = 1;
+            newItem.Padding = 1;
             newItem.OpColor = new SolidColorBrush(Windows.UI.Colors.Orange);
             OpItems.Insert(OpItems.Count - 1, newItem);
         }
@@ -46,7 +101,7 @@ namespace nnui_test
         {
             OpItem newItem = new OpItem();
             newItem.Name = "bn";
-            newItem.Type = "BN";
+            newItem.Type = "Batch Normalization";
             newItem.Kernel = -1;
             newItem.DimOut = -1;
             newItem.Stride = -1;
@@ -68,7 +123,7 @@ namespace nnui_test
         {
             OpItem newItem = new OpItem();
             newItem.Name = "pooling";
-            newItem.Type = "MaxPool";
+            newItem.Type = "MaxPooling";
             newItem.Kernel = 2;
             newItem.DimOut = 16;
             newItem.Stride = 2;
@@ -92,9 +147,47 @@ namespace nnui_test
             if(OpItems.Count > 2)
                 OpItems.RemoveAt(OpItems.Count - 2);
         }
+        public void SelectionChanged()
+        {
+            TypeDisplay = OpItems[SelectedIndex].Type;
+            ShapeDisplay = OpItems[SelectedIndex].Kernel;
+            NameDisplay = OpItems[SelectedIndex].Name;
+            PaddingDisplay = OpItems[SelectedIndex].Padding;
+            StrideDisplay = OpItems[SelectedIndex].Stride;
+        }
+        public void PropertyModify()
+        {
+            OpItems[SelectedIndex].Type = TypeDisplay;
+            OpItems[SelectedIndex].Kernel = ShapeDisplay;
+            OpItems[SelectedIndex].Name = NameDisplay;
+            OpItems[SelectedIndex].Padding = PaddingDisplay;
+            OpItems[SelectedIndex].Stride = StrideDisplay;
+        }
+        public void TextBoxLostFocus(object sender)
+        {
+            TextBox textBox = sender as TextBox;
+            OpItems[SelectedIndex].Type = TypeDisplay;
+            OpItems[SelectedIndex].Kernel = ShapeDisplay;
+            OpItems[SelectedIndex].Name = textBox.Text;
+            OpItems[SelectedIndex].Padding = PaddingDisplay;
+            OpItems[SelectedIndex].Stride = StrideDisplay;
+        }
         public void Compile()
         {
-            json = JsonConvert.SerializeObject(OpItems);
+            SendItem tempItem = new SendItem();
+            List<SendItem> sendcontent = new List<SendItem>();
+            foreach (OpItem item in OpItems)
+            {
+                tempItem.name = item.Name;
+                tempItem.type = item.Type;
+                tempItem.kernel = item.Kernel;
+                tempItem.dim_out = item.DimOut;
+                tempItem.padding = item.Padding;
+                tempItem.pool = item.Pool;
+                tempItem.stride = item.Stride;
+                sendcontent.Add(tempItem);
+            }
+            json = JsonConvert.SerializeObject(sendcontent);
         }
     }
 }

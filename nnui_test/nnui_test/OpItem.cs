@@ -15,7 +15,8 @@ namespace nnui_test
         private int kernel;
         private int dim_out;
         private string pool;
-        public int stride;
+        private int stride;
+        private int padding;
         private SolidColorBrush opColor;
 
         public string Name
@@ -47,6 +48,11 @@ namespace nnui_test
         {
             get { return stride; }
             set { stride = value; }
+        }
+        public int Padding
+        {
+            get { return padding; }
+            set { padding = value; }
         }
         public SolidColorBrush OpColor
         {

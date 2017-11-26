@@ -65,36 +65,42 @@
                                 Margin="10"
                                 HorizontalAlignment="Stretch"
                                 Background="Orange"
+                                Style="{StaticResource ButtonRevealStyle}"
                                 Click="{x:Bind ViewModel.AddConv}">
                         </Button>
                         <Button Content="Batch Normalization"
                                 Margin="10"
                                 HorizontalAlignment="Stretch"
                                 Background="LightBlue"
+                                Style="{StaticResource ButtonRevealStyle}"
                                 Click="{x:Bind ViewModel.AddBN}">
                         </Button>
                         <Button Content="ReLU"
                                 Margin="10"
                                 HorizontalAlignment="Stretch"
                                 Background="LightGreen"
+                                Style="{StaticResource ButtonRevealStyle}"
                                 Click="{x:Bind ViewModel.AddReLU}">
                         </Button>
                         <Button Content="Pooling"
                                 Margin="10"
                                 HorizontalAlignment="Stretch"
                                 Background="LightYellow"
+                                Style="{StaticResource ButtonRevealStyle}"
                                 Click="{x:Bind ViewModel.AddPooling}">
                         </Button>
                         <Button Content="FC"
                                 Margin="10"
                                 HorizontalAlignment="Stretch"
                                 Background="LightPink"
+                                Style="{StaticResource ButtonRevealStyle}"
                                 Click="{x:Bind ViewModel.AddFC}">
                         </Button>
                         <Button Content="Remove"
                                 Background="Red"
                                 Margin="10"
                                 HorizontalAlignment="Stretch"
+                                Style="{StaticResource ButtonRevealStyle}"
                                 Click="{x:Bind ViewModel.Remove}">
                         </Button>
                     </StackPanel>
@@ -164,7 +170,9 @@
                             </mt:DataGrid>-->
                             <ListView ItemsSource="{x:Bind ViewModel.OpItems, Mode=TwoWay}"
                                       Width="250"
-                                      HorizontalAlignment="Left">
+                                      HorizontalAlignment="Left"
+                                      SelectedIndex="{x:Bind ViewModel.SelectedIndex, Mode=TwoWay}"
+                                      SelectionChanged="{x:Bind ViewModel.SelectionChanged}">
                                 <ListView.ItemTemplate>
                                     <DataTemplate x:Name="TestListViewTemplate"
                                                   x:DataType="data:OpItem">
@@ -206,6 +214,7 @@
                                         <RowDefinition Height="*"></RowDefinition>
                                         <RowDefinition Height="*"></RowDefinition>
                                         <RowDefinition Height="*"></RowDefinition>
+                                        <RowDefinition Height="*"></RowDefinition>
                                     </Grid.RowDefinitions>
                                     <TextBlock Text="Block Type:"
                                                Grid.Column="0"
@@ -214,52 +223,71 @@
                                                TextAlignment="Left"
                                                VerticalAlignment="Center">
                                     </TextBlock>
-                                    <TextBlock Text="Kernel Shape:"
+                                    <TextBlock Text="Name:"
                                                Grid.Column="0"
                                                Grid.Row="1"
                                                Margin="10"
                                                TextAlignment="Left"
                                                VerticalAlignment="Center">
                                     </TextBlock>
-                                    <TextBlock Text="Padding:"
+                                    <TextBlock Text="Kernel Shape:"
                                                Grid.Column="0"
                                                Grid.Row="2"
                                                Margin="10"
                                                TextAlignment="Left"
                                                VerticalAlignment="Center">
                                     </TextBlock>
-                                    <TextBlock Text="Stride:"
+                                    <TextBlock Text="Padding:"
                                                Grid.Column="0"
                                                Grid.Row="3"
                                                Margin="10"
                                                TextAlignment="Left"
                                                VerticalAlignment="Center">
                                     </TextBlock>
-                                    <TextBlock Text="Convolution"
+                                    <TextBlock Text="Stride:"
+                                               Grid.Column="0"
+                                               Grid.Row="4"
+                                               Margin="10"
+                                               TextAlignment="Left"
+                                               VerticalAlignment="Center">
+                                    </TextBlock>
+                                    <TextBlock Text="{x:Bind ViewModel.TypeDisplay, Mode=TwoWay}"
                                                Grid.Column="1"
                                                Grid.Row="0"
                                                Margin="10"
                                                VerticalAlignment="Center">
                                     </TextBlock>
-                                    <TextBox Text="(16, 3, 3, 16)"
+                                    <TextBox x:Name="NameBox"
+                                             Text="{x:Bind ViewModel.NameDisplay, Mode=TwoWay}"
                                              Grid.Column="1"
                                              Grid.Row="1"
                                              Margin="10"
                                              VerticalAlignment="Center">
                                     </TextBox>
-                                    <TextBox Text="(0, 0)"
-                                             Grid.Column="1"
+                                    <TextBox Text="{x:Bind ViewModel.ShapeDisplay, Mode=TwoWay}"
+                                             Grid.Column="3"
                                              Grid.Row="2"
                                              Margin="10"
                                              VerticalAlignment="Center">
                                     </TextBox>
-                                    <TextBox Text="(1, 1)"
+                                    <TextBox Text="{x:Bind ViewModel.PaddingDisplay, Mode=TwoWay}"
                                              Grid.Column="1"
                                              Grid.Row="3"
                                              Margin="10"
                                              VerticalAlignment="Center">
                                     </TextBox>
+                                    <TextBox Text="{x:Bind ViewModel.StrideDisplay, Mode=TwoWay}"
+                                             Grid.Column="1"
+                                             Grid.Row="4"
+                                             Margin="10"
+                                             VerticalAlignment="Center">
+                                    </TextBox>
                                     </Grid>
+                                <Button Content="Modify"
+                                        Margin="10"
+                                        Style="{StaticResource ButtonRevealStyle}"
+                                        Click="{x:Bind ViewModel.PropertyModify}"
+                                        HorizontalAlignment="Stretch"/>
                             </StackPanel>
                             <StackPanel Grid.Row="1">
                                 <TextBlock Text="Summary"
@@ -331,6 +359,7 @@
                         <Button Content="Compile"
                                 Click="{x:Bind ViewModel.Compile}"
                                 HorizontalAlignment="Stretch"
+                                Style="{StaticResource ButtonRevealStyle}"
                                 Margin="10"/>
                     </StackPanel>
                 </Grid>
