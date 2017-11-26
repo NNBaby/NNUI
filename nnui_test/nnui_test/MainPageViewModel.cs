@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Meowtrix.ComponentModel;
 using Windows.UI.Xaml;
 using Newtonsoft.Json;
+using System.Collections.ObjectModel;
+using Windows.UI.Xaml.Media;
 
 namespace nnui_test
 {
@@ -14,8 +16,8 @@ namespace nnui_test
         #region ViewModel definitions
         public string json;
 
-        private List<OpItem> opItems = new List<OpItem>();
-        public List<OpItem> OpItems
+        private ObservableCollection<OpItem> opItems = new ObservableCollection<OpItem>();
+        public ObservableCollection<OpItem> OpItems
         {
             get => opItems;
             set { opItems = value; OnPropertyChanged(); }
@@ -37,8 +39,8 @@ namespace nnui_test
             newItem.Kernel = 3;
             newItem.DimOut = 16;
             newItem.Stride = 1;
-            OpItems.Add(newItem);
-            Visib1 = Visibility.Collapsed;
+            newItem.OpColor = new SolidColorBrush(Windows.UI.Colors.Orange);
+            OpItems.Insert(OpItems.Count - 1, newItem);
         }
         public void AddBN()
         {
@@ -48,7 +50,8 @@ namespace nnui_test
             newItem.Kernel = -1;
             newItem.DimOut = -1;
             newItem.Stride = -1;
-            OpItems.Add(newItem);
+            newItem.OpColor = new SolidColorBrush(Windows.UI.Colors.LightBlue);
+            OpItems.Insert(OpItems.Count - 1, newItem);
         }
         public void AddReLU()
         {
@@ -58,7 +61,8 @@ namespace nnui_test
             newItem.Kernel = -1;
             newItem.DimOut = -1;
             newItem.Stride = -1;
-            OpItems.Add(newItem);
+            newItem.OpColor = new SolidColorBrush(Windows.UI.Colors.LightGreen);
+            OpItems.Insert(OpItems.Count - 1, newItem);
         }
         public void AddPooling()
         {
@@ -69,7 +73,8 @@ namespace nnui_test
             newItem.DimOut = 16;
             newItem.Stride = 2;
             newItem.Pool = "Max";
-            OpItems.Add(newItem);
+            newItem.OpColor = new SolidColorBrush(Windows.UI.Colors.LightYellow);
+            OpItems.Insert(OpItems.Count - 1, newItem);
         }
         public void AddFC()
         {
@@ -79,7 +84,13 @@ namespace nnui_test
             newItem.Kernel = -1;
             newItem.DimOut = 16;
             newItem.Stride = -1;
-            OpItems.Add(newItem);
+            newItem.OpColor = new SolidColorBrush(Windows.UI.Colors.LightPink);
+            OpItems.Insert(OpItems.Count - 1, newItem);
+        }
+        public void Remove()
+        {
+            if(OpItems.Count > 2)
+                OpItems.RemoveAt(OpItems.Count - 2);
         }
         public void Compile()
         {

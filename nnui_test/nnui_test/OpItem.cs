@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI.Xaml.Media;
 //using Meowtrix.ComponentModel;
 
 namespace nnui_test
@@ -15,6 +16,7 @@ namespace nnui_test
         private int dim_out;
         private string pool;
         public int stride;
+        private SolidColorBrush opColor;
 
         public string Name
         {
@@ -45,6 +47,11 @@ namespace nnui_test
         {
             get { return stride; }
             set { stride = value; }
+        }
+        public SolidColorBrush OpColor
+        {
+            get { return opColor; }
+            set { opColor = value; }
         }
 
     }

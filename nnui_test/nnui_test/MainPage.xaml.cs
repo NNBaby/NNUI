@@ -36,13 +36,21 @@ namespace nnui_test
             //TestSourceCVS.Source = TestSourse.GetContacts(20);
             //ViewModel.AddConv();
             OpItem newItem = new OpItem();
-            newItem.Name = "conv";
-            newItem.Type = "Test";
-            newItem.Kernel = 3;
-            newItem.DimOut = 16;
-            newItem.Stride = 1;
+            newItem.Name = "";
+            newItem.Type = "Input";
+            newItem.Kernel = -1;
+            newItem.DimOut = -1;
+            newItem.Stride = -1;
+            newItem.OpColor = new SolidColorBrush(Colors.Azure);
             ViewModel.OpItems.Add(newItem);
-            ViewModel.Visib1 = Visibility.Visible;
+            OpItem newItem2 = new OpItem();
+            newItem2.Name = "";
+            newItem2.Type = "Softmax";
+            newItem2.Kernel = -1;
+            newItem2.DimOut = -1;
+            newItem2.Stride = -1;
+            newItem2.OpColor = new SolidColorBrush(Colors.Azure);
+            ViewModel.OpItems.Add(newItem2);
         }
     }
 }
