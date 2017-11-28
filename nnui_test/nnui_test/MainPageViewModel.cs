@@ -87,73 +87,98 @@ namespace nnui_test
 
         public void AddConv()
         {
-            OpItem newItem = new OpItem();
-            newItem.Name = "conv";
-            newItem.Type = "Convolution";
-            newItem.Kernel = 3;
-            newItem.DimOut = 16;
-            newItem.Stride = 1;
-            newItem.Padding = 1;
-            newItem.OpColor = new SolidColorBrush(Windows.UI.Colors.Orange);
-            OpItems.Insert(OpItems.Count - 1, newItem);
+            if (SelectedIndex != OpItems.Count - 1)
+            {
+                OpItem newItem = new OpItem();
+                newItem.Name = "conv";
+                newItem.Type = "Convolution";
+                newItem.Kernel = 3;
+                newItem.DimOut = 16;
+                newItem.Stride = 1;
+                newItem.Padding = 1;
+                newItem.OpColor = new SolidColorBrush(Windows.UI.Colors.Orange);
+                OpItems.Insert(SelectedIndex + 1, newItem);
+                SelectedIndex++;
+            }
         }
         public void AddBN()
         {
-            OpItem newItem = new OpItem();
-            newItem.Name = "bn";
-            newItem.Type = "Batch Normalization";
-            newItem.Kernel = -1;
-            newItem.DimOut = -1;
-            newItem.Stride = -1;
-            newItem.OpColor = new SolidColorBrush(Windows.UI.Colors.LightBlue);
-            OpItems.Insert(OpItems.Count - 1, newItem);
+            if (SelectedIndex != OpItems.Count - 1)
+            {
+                OpItem newItem = new OpItem();
+                newItem.Name = "bn";
+                newItem.Type = "Batch Normalization";
+                newItem.Kernel = -1;
+                newItem.DimOut = -1;
+                newItem.Stride = -1;
+                newItem.OpColor = new SolidColorBrush(Windows.UI.Colors.LightBlue);
+                OpItems.Insert(SelectedIndex + 1, newItem);
+                SelectedIndex++;
+            }
         }
         public void AddReLU()
         {
-            OpItem newItem = new OpItem();
-            newItem.Name = "relu";
-            newItem.Type = "ReLU";
-            newItem.Kernel = -1;
-            newItem.DimOut = -1;
-            newItem.Stride = -1;
-            newItem.OpColor = new SolidColorBrush(Windows.UI.Colors.LightGreen);
-            OpItems.Insert(OpItems.Count - 1, newItem);
+            if (SelectedIndex != OpItems.Count - 1)
+            {
+                OpItem newItem = new OpItem();
+                newItem.Name = "relu";
+                newItem.Type = "ReLU";
+                newItem.Kernel = -1;
+                newItem.DimOut = -1;
+                newItem.Stride = -1;
+                newItem.OpColor = new SolidColorBrush(Windows.UI.Colors.LightGreen);
+                OpItems.Insert(SelectedIndex + 1, newItem);
+                SelectedIndex++;
+            }
         }
         public void AddPooling()
         {
-            OpItem newItem = new OpItem();
-            newItem.Name = "pooling";
-            newItem.Type = "MaxPooling";
-            newItem.Kernel = 2;
-            newItem.DimOut = 16;
-            newItem.Stride = 2;
-            newItem.Pool = "Max";
-            newItem.OpColor = new SolidColorBrush(Windows.UI.Colors.LightYellow);
-            OpItems.Insert(OpItems.Count - 1, newItem);
+            if (SelectedIndex != OpItems.Count - 1)
+            {
+                OpItem newItem = new OpItem();
+                newItem.Name = "pooling";
+                newItem.Type = "MaxPooling";
+                newItem.Kernel = 2;
+                newItem.DimOut = 16;
+                newItem.Stride = 2;
+                newItem.Pool = "Max";
+                newItem.OpColor = new SolidColorBrush(Windows.UI.Colors.LightYellow);
+                OpItems.Insert(SelectedIndex + 1, newItem);
+                SelectedIndex++;
+            }
         }
         public void AddFC()
         {
-            OpItem newItem = new OpItem();
-            newItem.Name = "fc";
-            newItem.Type = "FC";
-            newItem.Kernel = -1;
-            newItem.DimOut = 16;
-            newItem.Stride = -1;
-            newItem.OpColor = new SolidColorBrush(Windows.UI.Colors.LightPink);
-            OpItems.Insert(OpItems.Count - 1, newItem);
+            if (SelectedIndex != OpItems.Count - 1)
+            {
+                OpItem newItem = new OpItem();
+                newItem.Name = "fc";
+                newItem.Type = "FC";
+                newItem.Kernel = -1;
+                newItem.DimOut = 16;
+                newItem.Stride = -1;
+                newItem.OpColor = new SolidColorBrush(Windows.UI.Colors.LightPink);
+                OpItems.Insert(SelectedIndex + 1, newItem);
+                SelectedIndex++;
+            }
         }
         public void Remove()
         {
-            if(OpItems.Count > 2)
-                OpItems.RemoveAt(OpItems.Count - 2);
+            int temp = SelectedIndex;
+            if(SelectedIndex > 0 && SelectedIndex < OpItems.Count - 1)
+                OpItems.RemoveAt(SelectedIndex);
+            SelectedIndex = temp;
         }
         public void SelectionChanged()
         {
-            TypeDisplay = OpItems[SelectedIndex].Type;
-            ShapeDisplay = OpItems[SelectedIndex].Kernel;
-            NameDisplay = OpItems[SelectedIndex].Name;
-            PaddingDisplay = OpItems[SelectedIndex].Padding;
-            StrideDisplay = OpItems[SelectedIndex].Stride;
+            if (SelectedIndex != -1)
+            {
+                TypeDisplay = OpItems[SelectedIndex].Type;
+                ShapeDisplay = OpItems[SelectedIndex].Kernel;
+                NameDisplay = OpItems[SelectedIndex].Name;
+                PaddingDisplay = OpItems[SelectedIndex].Padding;
+                StrideDisplay = OpItems[SelectedIndex].Stride;
+            }
         }
         public void PropertyModify()
         {
