@@ -32,14 +32,6 @@
                         TintColor="White"
                         FallbackColor="White" />
         <CollectionViewSource x:Name="TestSourceCVS"/>
-        <!--<DataTemplate x:Name="TestListViewTemplate" x:DataType="data:OpItem">
-            <Grid>
-                <TextBlock Text="{x:Bind Type, Mode=TwoWay}" 
-                           x:Phase="1"  
-                           Style="{ThemeResource BaseTextBlockStyle}"
-                           Margin="12,6,0,0"/>
-            </Grid>
-        </DataTemplate>-->
     </Page.Resources>
 
 
@@ -163,11 +155,6 @@
                                 </Button>
                             </StackPanel>-->
                         <Grid>
-                            <!--<mt:DataGrid ItemsSource="{x:Bind ViewModel.OpItems, Mode=TwoWay}">
-                                <mt:DataGrid.Columns>
-                                    <mt:DataGridTextColumn Header="" Binding="{Binding Type}" Width="*"/>
-                                </mt:DataGrid.Columns>
-                            </mt:DataGrid>-->
                             <ListView ItemsSource="{x:Bind ViewModel.OpItems, Mode=TwoWay}"
                                       Width="250"
                                       HorizontalAlignment="Left"
@@ -237,13 +224,13 @@
                                                TextAlignment="Left"
                                                VerticalAlignment="Center">
                                     </TextBlock>
-                                    <TextBlock Text="Padding:"
+                                    <!--<TextBlock Text="Padding:"
                                                Grid.Column="0"
                                                Grid.Row="3"
                                                Margin="10"
                                                TextAlignment="Left"
                                                VerticalAlignment="Center">
-                                    </TextBlock>
+                                    </TextBlock>-->
                                     <TextBlock Text="Stride:"
                                                Grid.Column="0"
                                                Grid.Row="4"
@@ -270,12 +257,12 @@
                                              Margin="10"
                                              VerticalAlignment="Center">
                                     </TextBox>
-                                    <TextBox Text="{x:Bind ViewModel.PaddingDisplay, Mode=TwoWay}"
+                                    <!--<TextBox Text="{x:Bind ViewModel.PaddingDisplay, Mode=TwoWay}"
                                              Grid.Column="1"
                                              Grid.Row="3"
                                              Margin="10"
                                              VerticalAlignment="Center">
-                                    </TextBox>
+                                    </TextBox>-->
                                     <TextBox Text="{x:Bind ViewModel.StrideDisplay, Mode=TwoWay}"
                                              Grid.Column="1"
                                              Grid.Row="4"

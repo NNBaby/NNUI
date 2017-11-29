@@ -104,7 +104,6 @@
     <Compile Include="MainPageViewModel.cs" />
     <Compile Include="OpItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestSourse.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">

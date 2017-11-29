@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Meowtrix.ComponentModel;
 using Windows.UI.Xaml;
 using Newtonsoft.Json;
@@ -80,18 +76,7 @@ namespace nnui_test
             public Train train = new Train();
             public List<Operator> operators = new List<Operator>();
         }
-
-        private class SendItem
-        {
-            public string name;
-            public string type;
-            public int kernel;
-            public int dim_out;
-            public string pool;
-            public int stride;
-            public int padding;
-        }
-
+        
         private class Train
         {
             public int epochs = 20;
@@ -158,7 +143,7 @@ namespace nnui_test
             {
                 OpItem newItem = new OpItem();
                 newItem.Name = "bn";
-                newItem.OpType = "Batch Normalization";
+                newItem.OpType = "BatchNormalization";
                 newItem.Kernel = -1;
                 newItem.DimOut = -1;
                 newItem.Stride = -1;
