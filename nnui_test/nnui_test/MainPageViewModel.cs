@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using System.Collections.ObjectModel;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Controls;
+using AutoMapper.Mappers;
 
 namespace nnui_test
 {
@@ -74,6 +75,13 @@ namespace nnui_test
 
         #endregion
 
+        private class SendContent
+        {
+            public string name = "TestNet";
+            public Train train = new Train();
+            public List<Operator> operators = new List<Operator>();
+        }
+
         private class SendItem
         {
             public string name;
@@ -85,13 +93,57 @@ namespace nnui_test
             public int padding;
         }
 
+        private class Train
+        {
+            public int epochs = 20;
+            public int batch_size = 100;
+            public string optimizer = "adam";
+            public Input input = new Input();
+        }
+
+        private class Input
+        {
+            public Data data = new Data();
+        }
+        private class Data
+        {
+            public string shape = "[28, 28, 1]";
+            public int batchsize = 100;
+        }
+        private class Output
+        {
+            public Pred pred = new Pred();
+        }
+        private class Pred
+        {
+            public string loss = "categorical_corssentropy";
+            public double loss_weight = 1.0;
+            public string metrics = "accuracy";
+        }
+        private class Operator
+        {
+            public string name;
+            public string optype;
+            public int filters;
+            public int kernel_size;
+            public string pool_size;
+            public string strides;
+
+            public Operator Copy()
+            {
+                string data = JsonConvert.SerializeObject(this);
+                Operator copy = JsonConvert.DeserializeObject<Operator>(data);
+                return copy;
+            }
+        }
+
         public void AddConv()
         {
             if (SelectedIndex != OpItems.Count - 1)
             {
                 OpItem newItem = new OpItem();
                 newItem.Name = "conv";
-                newItem.Type = "Convolution";
+                newItem.OpType = "Convolution";
                 newItem.Kernel = 3;
                 newItem.DimOut = 16;
                 newItem.Stride = 1;
@@ -107,7 +159,7 @@ namespace nnui_test
             {
                 OpItem newItem = new OpItem();
                 newItem.Name = "bn";
-                newItem.Type = "Batch Normalization";
+                newItem.OpType = "Batch Normalization";
                 newItem.Kernel = -1;
                 newItem.DimOut = -1;
                 newItem.Stride = -1;
@@ -122,7 +174,7 @@ namespace nnui_test
             {
                 OpItem newItem = new OpItem();
                 newItem.Name = "relu";
-                newItem.Type = "ReLU";
+                newItem.OpType = "ReLU";
                 newItem.Kernel = -1;
                 newItem.DimOut = -1;
                 newItem.Stride = -1;
@@ -137,11 +189,11 @@ namespace nnui_test
             {
                 OpItem newItem = new OpItem();
                 newItem.Name = "pooling";
-                newItem.Type = "MaxPooling";
+                newItem.OpType = "MaxPooling";
                 newItem.Kernel = 2;
                 newItem.DimOut = 16;
                 newItem.Stride = 2;
-                newItem.Pool = "Max";
+                newItem.Pool = "[2, 2]";
                 newItem.OpColor = new SolidColorBrush(Windows.UI.Colors.LightYellow);
                 OpItems.Insert(SelectedIndex + 1, newItem);
                 SelectedIndex++;
@@ -153,7 +205,7 @@ namespace nnui_test
             {
                 OpItem newItem = new OpItem();
                 newItem.Name = "fc";
-                newItem.Type = "FC";
+                newItem.OpType = "FC";
                 newItem.Kernel = -1;
                 newItem.DimOut = 16;
                 newItem.Stride = -1;
@@ -173,7 +225,7 @@ namespace nnui_test
         {
             if (SelectedIndex != -1)
             {
-                TypeDisplay = OpItems[SelectedIndex].Type;
+                TypeDisplay = OpItems[SelectedIndex].OpType;
                 ShapeDisplay = OpItems[SelectedIndex].Kernel;
                 NameDisplay = OpItems[SelectedIndex].Name;
                 PaddingDisplay = OpItems[SelectedIndex].Padding;
@@ -182,7 +234,7 @@ namespace nnui_test
         }
         public void PropertyModify()
         {
-            OpItems[SelectedIndex].Type = TypeDisplay;
+            OpItems[SelectedIndex].OpType = TypeDisplay;
             OpItems[SelectedIndex].Kernel = ShapeDisplay;
             OpItems[SelectedIndex].Name = NameDisplay;
             OpItems[SelectedIndex].Padding = PaddingDisplay;
@@ -191,7 +243,7 @@ namespace nnui_test
         public void TextBoxLostFocus(object sender)
         {
             TextBox textBox = sender as TextBox;
-            OpItems[SelectedIndex].Type = TypeDisplay;
+            OpItems[SelectedIndex].OpType = TypeDisplay;
             OpItems[SelectedIndex].Kernel = ShapeDisplay;
             OpItems[SelectedIndex].Name = textBox.Text;
             OpItems[SelectedIndex].Padding = PaddingDisplay;
@@ -199,18 +251,17 @@ namespace nnui_test
         }
         public void Compile()
         {
-            SendItem tempItem = new SendItem();
-            List<SendItem> sendcontent = new List<SendItem>();
+            SendContent sendcontent = new SendContent();
+            Operator tempItem = new Operator();
             foreach (OpItem item in OpItems)
             {
                 tempItem.name = item.Name;
-                tempItem.type = item.Type;
-                tempItem.kernel = item.Kernel;
-                tempItem.dim_out = item.DimOut;
-                tempItem.padding = item.Padding;
-                tempItem.pool = item.Pool;
-                tempItem.stride = item.Stride;
-                sendcontent.Add(tempItem);
+                tempItem.optype = item.OpType;
+                tempItem.filters = item.DimOut;
+                tempItem.kernel_size = item.Kernel;
+                tempItem.pool_size = item.Pool;
+                tempItem.strides = string.Format("[{0}, {0}]", item.Stride);
+                sendcontent.operators.Add(tempItem.Copy());
             }
             json = JsonConvert.SerializeObject(sendcontent);
         }

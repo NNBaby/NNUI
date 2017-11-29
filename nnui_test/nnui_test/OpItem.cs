@@ -11,7 +11,7 @@ namespace nnui_test
     public class OpItem
     {
         private string name;
-        private string type;
+        private string optype;
         private int kernel;
         private int dim_out;
         private string pool;
@@ -24,10 +24,10 @@ namespace nnui_test
             get { return name; }
             set { name = value; }
         }
-        public string Type
+        public string OpType
         {
-            get { return type; }
-            set { type = value; }
+            get { return optype; }
+            set { optype = value; }
         }
         public int Kernel
         {

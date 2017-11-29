@@ -37,7 +37,7 @@ namespace nnui_test
             //ViewModel.AddConv();
             OpItem newItem = new OpItem();
             newItem.Name = "";
-            newItem.Type = "Input";
+            newItem.OpType = "Input";
             newItem.Kernel = -1;
             newItem.DimOut = -1;
             newItem.Stride = -1;
@@ -45,7 +45,7 @@ namespace nnui_test
             ViewModel.OpItems.Add(newItem);
             OpItem newItem2 = new OpItem();
             newItem2.Name = "";
-            newItem2.Type = "Softmax";
+            newItem2.OpType = "Softmax";
             newItem2.Kernel = -1;
             newItem2.DimOut = -1;
             newItem2.Stride = -1;
