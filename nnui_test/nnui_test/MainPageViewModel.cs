@@ -256,7 +256,7 @@ namespace nnui_test
 
         public async void SendInfo(string send)
         {
-            Uri requestUri = new Uri("http://10.172.150.48:3939/post");
+            Uri requestUri = new Uri("http://127.0.0.1:5000/post");
             HttpResponseMessage httpresponse = new HttpResponseMessage();
             string httpresponsebody;
             
@@ -270,12 +270,10 @@ namespace nnui_test
             }
             catch (Exception ex)
             {
-                httpresponsebody = "Error: " + ex.HResult.ToString("x") + "Message: " + ex.Message;
+                httpresponsebody = JsonConvert.SerializeObject("Error: " + ex.HResult.ToString("x") + "Message: " + ex.Message);
             }
-            string receivecontent = JsonConvert.SerializeObject(JsonConvert.DeserializeObject(httpresponsebody));
-
-            //ViewModel.AddMessage("response from pyWebServre: " + receivecontent + "\n");
-
+            SendContent receivecontent = JsonConvert.DeserializeObject<SendContent>(httpresponsebody);
+            
 
         }
     }
