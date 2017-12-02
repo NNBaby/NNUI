@@ -5,6 +5,8 @@ using Newtonsoft.Json;
 using System.Collections.ObjectModel;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Controls;
+using Windows.Web.Http;
+using System;
 
 namespace nnui_test
 {
@@ -247,7 +249,34 @@ namespace nnui_test
                 tempItem.strides = string.Format("[{0}, {0}]", item.Stride);
                 sendcontent.operators.Add(tempItem.Copy());
             }
-            json = JsonConvert.SerializeObject(sendcontent);
+            string send = JsonConvert.SerializeObject(sendcontent);
+            SendInfo(send);
+
+        }
+
+        public async void SendInfo(string send)
+        {
+            Uri requestUri = new Uri("http://10.172.150.48:3939/post");
+            HttpResponseMessage httpresponse = new HttpResponseMessage();
+            string httpresponsebody;
+            
+            HttpClient httpclient = new HttpClient();
+            try
+            {
+                httpclient.DefaultRequestHeaders.Accept.Add(new Windows.Web.Http.Headers.HttpMediaTypeWithQualityHeaderValue("application/json"));
+                httpresponse = await httpclient.PostAsync(requestUri, new HttpStringContent(send, Windows.Storage.Streams.UnicodeEncoding.Utf8, "application/json"));
+
+                httpresponsebody = await httpresponse.Content.ReadAsStringAsync();
+            }
+            catch (Exception ex)
+            {
+                httpresponsebody = "Error: " + ex.HResult.ToString("x") + "Message: " + ex.Message;
+            }
+            string receivecontent = JsonConvert.SerializeObject(JsonConvert.DeserializeObject(httpresponsebody));
+
+            //ViewModel.AddMessage("response from pyWebServre: " + receivecontent + "\n");
+
+
         }
     }
 }
