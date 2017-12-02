@@ -128,7 +128,7 @@ namespace nnui_test
             if (SelectedIndex != OpItems.Count - 1)
             {
                 OpItem newItem = new OpItem();
-                newItem.Name = "conv";
+                newItem.Name = string.Format("op{0}", OpItems.Count);
                 newItem.OpType = "Convolution";
                 newItem.Kernel = 3;
                 newItem.DimOut = 16;
@@ -144,11 +144,8 @@ namespace nnui_test
             if (SelectedIndex != OpItems.Count - 1)
             {
                 OpItem newItem = new OpItem();
-                newItem.Name = "bn";
+                newItem.Name = string.Format("op{0}", OpItems.Count);
                 newItem.OpType = "BatchNormalization";
-                newItem.Kernel = -1;
-                newItem.DimOut = -1;
-                newItem.Stride = -1;
                 newItem.OpColor = new SolidColorBrush(Windows.UI.Colors.LightBlue);
                 OpItems.Insert(SelectedIndex + 1, newItem);
                 SelectedIndex++;
@@ -159,11 +156,9 @@ namespace nnui_test
             if (SelectedIndex != OpItems.Count - 1)
             {
                 OpItem newItem = new OpItem();
-                newItem.Name = "relu";
-                newItem.OpType = "ReLU";
-                newItem.Kernel = -1;
-                newItem.DimOut = -1;
-                newItem.Stride = -1;
+                newItem.Name = string.Format("op{0}", OpItems.Count);
+                newItem.OpType = "Activation";
+                newItem.Activatiion = "relu";
                 newItem.OpColor = new SolidColorBrush(Windows.UI.Colors.LightGreen);
                 OpItems.Insert(SelectedIndex + 1, newItem);
                 SelectedIndex++;
@@ -174,7 +169,7 @@ namespace nnui_test
             if (SelectedIndex != OpItems.Count - 1)
             {
                 OpItem newItem = new OpItem();
-                newItem.Name = "pooling";
+                newItem.Name = string.Format("op{0}", OpItems.Count);
                 newItem.OpType = "MaxPooling";
                 newItem.Kernel = 2;
                 newItem.DimOut = 16;
@@ -185,16 +180,26 @@ namespace nnui_test
                 SelectedIndex++;
             }
         }
+        public void AddFlatten()
+        {
+            if (SelectedIndex != OpItems.Count - 1)
+            {
+                OpItem newItem = new OpItem();
+                newItem.Name = string.Format("op{0}", OpItems.Count);
+                newItem.OpType = "Flatten";
+                newItem.OpColor = new SolidColorBrush(Windows.UI.Colors.LightGray);
+                OpItems.Insert(SelectedIndex + 1, newItem);
+                SelectedIndex++;
+            }
+        }
         public void AddFC()
         {
             if (SelectedIndex != OpItems.Count - 1)
             {
                 OpItem newItem = new OpItem();
-                newItem.Name = "fc";
+                newItem.Name = string.Format("op{0}", OpItems.Count);
                 newItem.OpType = "FC";
-                newItem.Kernel = -1;
                 newItem.DimOut = 16;
-                newItem.Stride = -1;
                 newItem.OpColor = new SolidColorBrush(Windows.UI.Colors.LightPink);
                 OpItems.Insert(SelectedIndex + 1, newItem);
                 SelectedIndex++;

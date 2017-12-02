@@ -22,19 +22,14 @@ namespace nnui_test
             CoreApplicationViewTitleBar coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
             coreTitleBar.ExtendViewIntoTitleBar = true;
             OpItem newItem = new OpItem();
-            newItem.Name = "";
+            newItem.Name = "input";
             newItem.OpType = "Input";
-            newItem.Kernel = -1;
-            newItem.DimOut = -1;
-            newItem.Stride = -1;
             newItem.OpColor = new SolidColorBrush(Colors.Azure);
             ViewModel.OpItems.Add(newItem);
             OpItem newItem2 = new OpItem();
-            newItem2.Name = "";
-            newItem2.OpType = "Softmax";
-            newItem2.Kernel = -1;
-            newItem2.DimOut = -1;
-            newItem2.Stride = -1;
+            newItem2.Name = "softmax";
+            newItem2.OpType = "Activation";
+            newItem.Activatiion = "softmax";
             newItem2.OpColor = new SolidColorBrush(Colors.Azure);
             ViewModel.OpItems.Add(newItem2);
         }

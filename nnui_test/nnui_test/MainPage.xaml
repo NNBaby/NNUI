@@ -81,6 +81,13 @@
                                 Style="{StaticResource ButtonRevealStyle}"
                                 Click="{x:Bind ViewModel.AddPooling}">
                         </Button>
+                        <Button Content="Flattem"
+                                Margin="10"
+                                HorizontalAlignment="Stretch"
+                                Background="LightGray"
+                                Style="{StaticResource ButtonRevealStyle}"
+                                Click="{x:Bind ViewModel.AddFlatten}">
+                        </Button>
                         <Button Content="FC"
                                 Margin="10"
                                 HorizontalAlignment="Stretch"
