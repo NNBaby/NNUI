@@ -63,15 +63,34 @@ namespace nnui_test
             get => paddingDisplay;
             set { paddingDisplay = value; OnPropertyChanged(); }
         }
-        private Visibility visib1;
-        public Visibility Visib1
+        private Visibility typeVisib;
+        public Visibility TypeVisib
         {
-            get => visib1;
-            set { visib1 = value; OnPropertyChanged(); }
+            get => typeVisib;
+            set { typeVisib = value; OnPropertyChanged(); }
+        }
+        private Visibility nameVisib;
+        public Visibility NameVisib
+        {
+            get => nameVisib;
+            set { nameVisib = value; OnPropertyChanged(); }
+        }
+        private Visibility kernelShapeVisib;
+        public Visibility KernelShapeVisib
+        {
+            get => kernelShapeVisib;
+            set { kernelShapeVisib = value; OnPropertyChanged(); }
+        }
+        private Visibility strideVisib;
+        public Visibility StrideVisib
+        {
+            get => strideVisib;
+            set { strideVisib = value; OnPropertyChanged(); }
         }
 
         #endregion
 
+        #region SendContent difinitions
         private class SendContent
         {
             public string name = "TestNet";
@@ -93,7 +112,7 @@ namespace nnui_test
         }
         private class Data
         {
-            public string shape = "[28, 28, 1]";
+            public List<int> shape = new List<int>();
             public int batchsize = 100;
         }
         private class Output
@@ -112,8 +131,8 @@ namespace nnui_test
             public string optype;
             public int filters;
             public int kernel_size;
-            public string pool_size;
-            public string strides;
+            public List<int> pool_size;
+            public List<int> strides;
 
             public Operator Copy()
             {
@@ -122,6 +141,7 @@ namespace nnui_test
                 return copy;
             }
         }
+        #endregion
 
         public void AddConv()
         {
@@ -244,19 +264,37 @@ namespace nnui_test
         {
             SendContent sendcontent = new SendContent();
             Operator tempItem = new Operator();
+            sendcontent.train.input.data.shape.Add(28);
+            sendcontent.train.input.data.shape.Add(28);
+            sendcontent.train.input.data.shape.Add(1);
             foreach (OpItem item in OpItems)
             {
                 tempItem.name = item.Name;
                 tempItem.optype = item.OpType;
                 tempItem.filters = item.DimOut;
                 tempItem.kernel_size = item.Kernel;
-                tempItem.pool_size = item.Pool;
-                tempItem.strides = string.Format("[{0}, {0}]", item.Stride);
+                tempItem.pool_size = FormatConvert(item.Pool);
+                tempItem.strides = FormatConvert(string.Format("[{0}, {0}]", item.Stride));
                 sendcontent.operators.Add(tempItem.Copy());
             }
             string send = JsonConvert.SerializeObject(sendcontent);
             SendInfo(send);
 
+        }
+
+        private List<int> FormatConvert(string s)
+        {
+            List<int> list = new List<int>();
+            try
+            {
+                list.Add(s[1] - 48);
+                list.Add(s[4] - 48);
+                return list;
+            }
+            catch
+            {
+                return list;
+            }
         }
 
         public async void SendInfo(string send)
