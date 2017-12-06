@@ -82,24 +82,21 @@ def read_dataset(name):
     return dataset
     
 def build_keras_model(info, topo, mode):
-
     # configure data operators
     name2op = dict()
     for op in topo:
         name2op[op["name"]] = op
     mode_info = info[mode]
-    inputs = mode_info["inputs"]
-    for op_name, data in inputs.items():
-        op = name2op[op_name]
-        
+    # inputs = mode_info["inputs"]
+
     xs = dict()
     for op in topo:
         inputs = [xs[name] for name in op["inputs"]]
         #op_func = OP_MAP[op["type"]]
         #outputs = op_func(*inputs, **op)
-        op_func = L.__getattribute__(op["type"])
+        op_func = L.__getattribute__(op["optype"])
         info = op.copy()
-        for s in ["type", "input", "inputs", "output", "outputs"]:
+        for s in ["optype", "input", "inputs", "output", "outputs"]:
             if s in info:
                 del info[s]
         outputs = op_func(**info)
@@ -120,16 +117,17 @@ def build_keras_model(info, topo, mode):
     # create model
     inputs_info = mode_info["inputs"]
     outputs_info = mode_info["outputs"]
-    inputs = [xs[name] for name in inputs_info]
-    outputs = [xs[name] for name in outputs_info]
+    inputs = [xs[p["name"]] for p in inputs_info]
+    outputs = [xs[p["name"]] for p in outputs_info]
     
     model = Model(inputs = inputs, outputs = outputs)
     
     optimizer = mode_info.get("optimizer", "sgd")
-    loss = [output["loss"] for output in outputs_info.values()]
-    loss_weights = [output.get("loss_weight", 1.0) for output in outputs_info.values()]
+    loss = [output["loss"] for output in outputs_info]
+    loss_weights = [output.get("loss_weight", 1.0) for output in outputs_info]
     metrics = dict()
-    for op_name, info in outputs_info.items():
+    for info in outputs_info:
+        op_name = info["name"]
         if "metrics" in info:
             metrics[op_name] = info["metrics"]
         

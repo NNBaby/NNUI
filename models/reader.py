@@ -28,11 +28,19 @@ class RedirectStdOut:
 sys.stdout = RedirectStdOut()
 
 class Model:
-    def __init__(self, filename, mode):
+    def __init__(self, mode, filename = None, string = None):
         self.mode = mode
-        self.info = self.read_json(filename)
+        if filename is not None:
+            self.info = self.read_json(filename)
+        else:
+            self.info = self.read_json_from_cs(string)
         self.topo = self.get_model_topo(self.info)
         self.model = builder.build_keras_model(self.info, self.topo, self.mode)
+        
+    def read_json_from_cs(self, s):
+        js = s.strip("\" ").replace("\\\"", "\"")
+        return json.loads(js)
+        
     def read_json(self, filename):
         fin = open(filename)
         return json.loads(fin.read())
@@ -64,7 +72,7 @@ class Model:
         # compute in-degrees
         last_op = None
         for op in ops:
-            if op["type"] not in ["Data", "Input"]:
+            if op["optype"] not in ["Data", "Input"]:
                 if "input" not in op and "inputs" not in op:
                     assert last_op is not None, ValueError(OPERATOR_FIRST_INPUT_NOT_EXISTS)
                     op["inputs"] = [last_op["name"]]
@@ -107,7 +115,7 @@ class Model:
     def get_op_name(self, op, names):
         if "name" not in op:
             # auto name
-            type_name = op["type"]
+            type_name = op["optype"]
             # Add, Add_1, Add_2
             if type_name not in names:
                 op["name"] = type_name
@@ -140,7 +148,10 @@ class Model:
 
     
 def read_model(filename):
-    return Model(filename, mode = "train")
+    return Model(mode = "train", filename = filename)
         
 model = read_model("LeNet5-keras.json")
+#fin = open("LeNetCS.json")
+#buf = fin.read()
+#model = Model(mode = "train", string = buf)
 model.train()

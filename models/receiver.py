@@ -6,5 +6,5 @@ s.bind(address)
 
 print ("Listen...")
 while True:
-    data, addr = s.recvfrom(2048)
+    data, addr = s.recvfrom(64 * 1024)
     print (data.decode("UTF-8"))

@@ -5,19 +5,21 @@
         "epochs": 20,
         "batch_size": 100,
         "optimizer": "adam",
-        "inputs":{
-            "data":{
+        "inputs":[
+            {
+                "name": "data"
                 "shape": [28, 28, 1],
                 "batch_size": 100
             }
-        },
-        "outputs":{
-            "pred":{
+        ],
+        "outputs":[
+            {
+                "name": "pred",
                 "loss": "categorical_crossentropy",
                 "loss_weight": 1.0, 
                 "metrics": ["accuracy"]
             }
-        }
+        ]
     },
     
     "operators":[
@@ -35,7 +37,7 @@
         },
         {
             "name": "pool1",
-            "type": "MaxPooling2D",
+            "type": "MaxPooling2D2D",
             "pool_size": [2, 2],
             "strides": [2, 2]
         },
@@ -47,7 +49,7 @@
         },
         {
             "name": "pool2",
-            "type": "MaxPooling2D",
+            "type": "MaxPooling2D2D",
             "pool_size": [2, 2],
             "strides": [2, 2]
         },
