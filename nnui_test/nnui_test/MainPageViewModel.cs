@@ -95,7 +95,7 @@ namespace nnui_test
         {
             public string name = "TestNet";
             public Train train = new Train();
-            public List<Operator> operators = new List<Operator>();
+            public List<Object> operators = new List<Object>();
         }
         
         private class Train
@@ -129,15 +129,67 @@ namespace nnui_test
         {
             public string name;
             public string optype;
-            public int filters;
-            public int kernel_size;
-            public List<int> pool_size;
-            public List<int> strides;
 
+        }
+        private class InputLayer : Operator
+        {
+            public List<int> shape = new List<int>();
             public Operator Copy()
             {
                 string data = JsonConvert.SerializeObject(this);
-                Operator copy = JsonConvert.DeserializeObject<Operator>(data);
+                InputLayer copy = JsonConvert.DeserializeObject<InputLayer>(data);
+                return copy;
+            }
+        }
+        private class Conv : Operator
+        {
+            public int filters;
+            public int kernel_size;
+            public Operator Copy()
+            {
+                string data = JsonConvert.SerializeObject(this);
+                Conv copy = JsonConvert.DeserializeObject<Conv>(data);
+                return copy;
+            }
+        }
+        private class Pool : Operator
+        {
+            public List<int> pool_size;
+            public List<int> strides;
+            public Operator Copy()
+            {
+                string data = JsonConvert.SerializeObject(this);
+                Pool copy = JsonConvert.DeserializeObject<Pool>(data);
+                return copy;
+            }
+        }
+        private class Flatten : Operator
+        {
+            public Operator Copy()
+            {
+                string data = JsonConvert.SerializeObject(this);
+                Flatten copy = JsonConvert.DeserializeObject<Flatten>(data);
+                return copy;
+            }
+
+        }
+        private class Dense : Operator
+        {
+            public Operator Copy()
+            {
+                string data = JsonConvert.SerializeObject(this);
+                Dense copy = JsonConvert.DeserializeObject<Dense>(data);
+                return copy;
+            }
+
+        }
+        private class Activation : Operator
+        {
+            public string activation;
+            public Operator Copy()
+            {
+                string data = JsonConvert.SerializeObject(this);
+                Activation copy = JsonConvert.DeserializeObject<Activation>(data);
                 return copy;
             }
         }
@@ -263,20 +315,60 @@ namespace nnui_test
         public void Compile()
         {
             SendContent sendcontent = new SendContent();
-            Operator tempItem = new Operator();
+            InputLayer tempInput = new InputLayer();
+            Conv tempConv = new Conv();
+            Pool tempPool = new Pool();
+            Flatten tempFlatten = new Flatten();
+            Dense tempDense = new Dense();
+            Activation tempActivation = new Activation();
             sendcontent.train.input.data.shape.Add(28);
             sendcontent.train.input.data.shape.Add(28);
             sendcontent.train.input.data.shape.Add(1);
             foreach (OpItem item in OpItems)
             {
-                tempItem.name = item.Name;
-                tempItem.optype = item.OpType;
-                tempItem.filters = item.DimOut;
-                tempItem.kernel_size = item.Kernel;
-                tempItem.pool_size = FormatConvert(item.Pool);
-                tempItem.strides = FormatConvert(string.Format("[{0}, {0}]", item.Stride));
-                sendcontent.operators.Add(tempItem.Copy());
+                switch(item.OpType)
+                {
+                    case "Input":
+                        tempInput.name = item.Name;
+                        tempInput.optype = item.OpType;
+                        tempInput.shape.Add(28);
+                        tempInput.shape.Add(28);
+                        tempInput.shape.Add(1);
+                        sendcontent.operators.Add(tempInput.Copy());
+                        break;
+                    case "Convolution":
+                        tempConv.name = item.Name;
+                        tempConv.optype = item.OpType;
+                        tempConv.filters = item.DimOut;
+                        tempConv.kernel_size = item.Kernel;
+                        sendcontent.operators.Add(tempConv.Copy());
+                        break;
+                    case "MaxPooling":
+                        tempPool.name = item.Name;
+                        tempPool.optype = item.OpType;
+                        tempPool.pool_size = FormatConvert(item.Pool);
+                        tempPool.strides = FormatConvert(string.Format("[{0}, {0}]", item.Stride));
+                        sendcontent.operators.Add(tempPool.Copy());
+                        break;
+                    case "Flatten":
+                        tempFlatten.name = item.Name;
+                        tempFlatten.optype = item.OpType;
+                        sendcontent.operators.Add(tempFlatten.Copy());
+                        break;
+                    case "FC":
+                        tempDense.name = item.Name;
+                        tempDense.optype = item.OpType;
+                        sendcontent.operators.Add(tempDense.Copy());
+                        break;
+                    case "Activation":
+                        tempActivation.name = item.Name;
+                        tempActivation.optype = item.OpType;
+                        tempActivation.activation = item.Activatiion;
+                        sendcontent.operators.Add(tempActivation.Copy());
+                        break;
+                }
             }
+
             string send = JsonConvert.SerializeObject(sendcontent);
             SendInfo(send);
 
