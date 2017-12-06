@@ -53,7 +53,7 @@
                                  TextAlignment="Left"
                                  FontSize="24">
                         </TextBlock>
-                        <Button Content="Convolution"
+                        <Button Content="Convolution2D"
                                 Margin="10"
                                 HorizontalAlignment="Stretch"
                                 Background="Orange"
@@ -74,7 +74,7 @@
                                 Style="{StaticResource ButtonRevealStyle}"
                                 Click="{x:Bind ViewModel.AddReLU}">
                         </Button>
-                        <Button Content="Pooling"
+                        <Button Content="Pooling2D"
                                 Margin="10"
                                 HorizontalAlignment="Stretch"
                                 Background="LightYellow"
@@ -88,7 +88,7 @@
                                 Style="{StaticResource ButtonRevealStyle}"
                                 Click="{x:Bind ViewModel.AddFlatten}">
                         </Button>
-                        <Button Content="FC"
+                        <Button Content="Dense"
                                 Margin="10"
                                 HorizontalAlignment="Stretch"
                                 Background="LightPink"

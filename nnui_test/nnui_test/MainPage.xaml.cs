@@ -21,13 +21,15 @@ namespace nnui_test
             formattableTitleBar.ButtonBackgroundColor = Colors.Transparent;
             CoreApplicationViewTitleBar coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
             coreTitleBar.ExtendViewIntoTitleBar = true;
+
             OpItem newItem = new OpItem();
-            newItem.Name = "input";
+            newItem.Name = "data";
             newItem.OpType = "Input";
             newItem.OpColor = new SolidColorBrush(Colors.Azure);
             ViewModel.OpItems.Add(newItem);
+
             OpItem newItem2 = new OpItem();
-            newItem2.Name = "softmax";
+            newItem2.Name = "pred";
             newItem2.OpType = "Activation";
             newItem.Activatiion = "softmax";
             newItem2.OpColor = new SolidColorBrush(Colors.Azure);

@@ -103,12 +103,15 @@ namespace nnui_test
             public int epochs = 20;
             public int batch_size = 100;
             public string optimizer = "adam";
-            public Input input = new Input();
+            public List<Input> inputs = new List<Input>();
+            public List<Output> outputs = new List<Output>();
         }
 
         private class Input
         {
-            public Data data = new Data();
+            public string name;
+            public List<int> shape;
+            public int batch_size;
         }
         private class Data
         {
@@ -117,11 +120,14 @@ namespace nnui_test
         }
         private class Output
         {
-            public Pred pred = new Pred();
+            public string name;
+            public string loss;
+            public double loss_weight;
+            public List<string> metrics = new List<string>();
         }
         private class Pred
         {
-            public string loss = "categorical_corssentropy";
+            public string loss = "categorical_crossentropy";
             public double loss_weight = 1.0;
             public string metrics = "accuracy";
         }
@@ -175,6 +181,7 @@ namespace nnui_test
         }
         private class Dense : Operator
         {
+            public int units;
             public Operator Copy()
             {
                 string data = JsonConvert.SerializeObject(this);
@@ -201,7 +208,7 @@ namespace nnui_test
             {
                 OpItem newItem = new OpItem();
                 newItem.Name = string.Format("op{0}", OpItems.Count);
-                newItem.OpType = "Convolution";
+                newItem.OpType = "Convolution2D";
                 newItem.Kernel = 3;
                 newItem.DimOut = 16;
                 newItem.Stride = 1;
@@ -242,7 +249,7 @@ namespace nnui_test
             {
                 OpItem newItem = new OpItem();
                 newItem.Name = string.Format("op{0}", OpItems.Count);
-                newItem.OpType = "MaxPooling";
+                newItem.OpType = "MaxPooling2D";
                 newItem.Kernel = 2;
                 newItem.DimOut = 16;
                 newItem.Stride = 2;
@@ -270,7 +277,7 @@ namespace nnui_test
             {
                 OpItem newItem = new OpItem();
                 newItem.Name = string.Format("op{0}", OpItems.Count);
-                newItem.OpType = "FC";
+                newItem.OpType = "Dense";
                 newItem.DimOut = 16;
                 newItem.OpColor = new SolidColorBrush(Windows.UI.Colors.LightPink);
                 OpItems.Insert(SelectedIndex + 1, newItem);
@@ -321,9 +328,17 @@ namespace nnui_test
             Flatten tempFlatten = new Flatten();
             Dense tempDense = new Dense();
             Activation tempActivation = new Activation();
-            sendcontent.train.input.data.shape.Add(28);
-            sendcontent.train.input.data.shape.Add(28);
-            sendcontent.train.input.data.shape.Add(1);
+            Input input = new Input();
+            input.name = "data";
+            input.shape = new List<int>{28, 28, 1};
+            input.batch_size = 100;
+            sendcontent.train.inputs.Add(input);
+            Output output = new Output();
+            output.name = "pred";
+            output.loss = "categorical_crossentropy";
+            output.loss_weight = 1.0;
+            output.metrics.Add("accuracy");
+            sendcontent.train.outputs.Add(output);
             foreach (OpItem item in OpItems)
             {
                 switch(item.OpType)
@@ -331,19 +346,17 @@ namespace nnui_test
                     case "Input":
                         tempInput.name = item.Name;
                         tempInput.optype = item.OpType;
-                        tempInput.shape.Add(28);
-                        tempInput.shape.Add(28);
-                        tempInput.shape.Add(1);
+                        tempInput.shape = new List<int>{28, 28, 1};
                         sendcontent.operators.Add(tempInput.Copy());
                         break;
-                    case "Convolution":
+                    case "Convolution2D":
                         tempConv.name = item.Name;
                         tempConv.optype = item.OpType;
                         tempConv.filters = item.DimOut;
                         tempConv.kernel_size = item.Kernel;
                         sendcontent.operators.Add(tempConv.Copy());
                         break;
-                    case "MaxPooling":
+                    case "MaxPooling2D":
                         tempPool.name = item.Name;
                         tempPool.optype = item.OpType;
                         tempPool.pool_size = FormatConvert(item.Pool);
@@ -355,9 +368,10 @@ namespace nnui_test
                         tempFlatten.optype = item.OpType;
                         sendcontent.operators.Add(tempFlatten.Copy());
                         break;
-                    case "FC":
+                    case "Dense":
                         tempDense.name = item.Name;
                         tempDense.optype = item.OpType;
+                        tempDense.units = item.DimOut;
                         sendcontent.operators.Add(tempDense.Copy());
                         break;
                     case "Activation":
