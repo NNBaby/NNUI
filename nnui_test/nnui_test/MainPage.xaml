@@ -215,66 +215,76 @@
                                                Grid.Row="0"
                                                Margin="10"
                                                TextAlignment="Left"
-                                               VerticalAlignment="Center">
+                                               VerticalAlignment="Center"
+                                               Visibility="{x:Bind ViewModel.TypeVisib, Mode=OneWay}">
                                     </TextBlock>
                                     <TextBlock Text="Name:"
                                                Grid.Column="0"
                                                Grid.Row="1"
                                                Margin="10"
                                                TextAlignment="Left"
-                                               VerticalAlignment="Center">
+                                               VerticalAlignment="Center"
+                                               Visibility="{x:Bind ViewModel.NameVisib, Mode=OneWay}">
                                     </TextBlock>
                                     <TextBlock Text="Kernel Shape:"
                                                Grid.Column="0"
                                                Grid.Row="2"
                                                Margin="10"
                                                TextAlignment="Left"
-                                               VerticalAlignment="Center">
+                                               VerticalAlignment="Center"
+                                               Visibility="{x:Bind ViewModel.KernelShapeVisib, Mode=OneWay}">
                                     </TextBlock>
-                                    <!--<TextBlock Text="Padding:"
+                                    <TextBlock Text="OutDim:"
                                                Grid.Column="0"
                                                Grid.Row="3"
                                                Margin="10"
                                                TextAlignment="Left"
-                                               VerticalAlignment="Center">
-                                    </TextBlock>-->
+                                               VerticalAlignment="Center"
+                                               Visibility="{x:Bind ViewModel.DimOutVisib, Mode=OneWay}">
+                                    </TextBlock>
                                     <TextBlock Text="Stride:"
                                                Grid.Column="0"
                                                Grid.Row="4"
                                                Margin="10"
                                                TextAlignment="Left"
-                                               VerticalAlignment="Center">
+                                               VerticalAlignment="Center"
+                                               Visibility="{x:Bind ViewModel.StrideVisib, Mode=OneWay}">
                                     </TextBlock>
                                     <TextBlock Text="{x:Bind ViewModel.TypeDisplay, Mode=TwoWay}"
                                                Grid.Column="1"
                                                Grid.Row="0"
                                                Margin="10"
-                                               VerticalAlignment="Center">
+                                               VerticalAlignment="Center"
+                                               Visibility="{x:Bind ViewModel.TypeVisib, Mode=OneWay}">
                                     </TextBlock>
                                     <TextBox x:Name="NameBox"
                                              Text="{x:Bind ViewModel.NameDisplay, Mode=TwoWay}"
                                              Grid.Column="1"
                                              Grid.Row="1"
                                              Margin="10"
-                                             VerticalAlignment="Center">
+                                             VerticalAlignment="Center"
+                                             Visibility="{x:Bind ViewModel.NameVisib, Mode=OneWay}">
                                     </TextBox>
                                     <TextBox Text="{x:Bind ViewModel.ShapeDisplay, Mode=TwoWay}"
                                              Grid.Column="3"
                                              Grid.Row="2"
                                              Margin="10"
-                                             VerticalAlignment="Center">
+                                             VerticalAlignment="Center"
+                                             Visibility="{x:Bind ViewModel.KernelShapeVisib, Mode=OneWay}">
                                     </TextBox>
-                                    <!--<TextBox Text="{x:Bind ViewModel.PaddingDisplay, Mode=TwoWay}"
+                                    <TextBox Text="{x:Bind ViewModel.OutDimDisplay, Mode=TwoWay}"
                                              Grid.Column="1"
                                              Grid.Row="3"
                                              Margin="10"
-                                             VerticalAlignment="Center">
-                                    </TextBox>-->
+                                             VerticalAlignment="Center"
+                                             Visibility="{x:Bind ViewModel.DimOutVisib, Mode=OneWay}">
+                                    </TextBox>
                                     <TextBox Text="{x:Bind ViewModel.StrideDisplay, Mode=TwoWay}"
                                              Grid.Column="1"
                                              Grid.Row="4"
                                              Margin="10"
-                                             VerticalAlignment="Center">
+                                             VerticalAlignment="Center"
+                                             Visibility="{x:Bind ViewModel.StrideVisib, Mode=OneWay}">
                                     </TextBox>
                                     </Grid>
                                 <Button Content="Modify"

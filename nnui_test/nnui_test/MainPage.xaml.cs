@@ -21,6 +21,8 @@ namespace nnui_test
             formattableTitleBar.ButtonBackgroundColor = Colors.Transparent;
             CoreApplicationViewTitleBar coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
             coreTitleBar.ExtendViewIntoTitleBar = true;
+            ViewModel.TypeVisib = Windows.UI.Xaml.Visibility.Visible;
+            ViewModel.NameVisib = Windows.UI.Xaml.Visibility.Visible;
 
             OpItem newItem = new OpItem();
             newItem.Name = "data";
@@ -34,6 +36,7 @@ namespace nnui_test
             newItem.Activatiion = "softmax";
             newItem2.OpColor = new SolidColorBrush(Colors.Azure);
             ViewModel.OpItems.Add(newItem2);
+            ViewModel.SelectionChanged();
         }
     }
 }

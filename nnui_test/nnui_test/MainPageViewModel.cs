@@ -57,11 +57,11 @@ namespace nnui_test
             get => strideDisplay;
             set { strideDisplay = value; OnPropertyChanged(); }
         }
-        private int paddingDisplay;
-        public int PaddingDisplay
+        private int outDimDisplay;
+        public int OutDimDisplay
         {
-            get => paddingDisplay;
-            set { paddingDisplay = value; OnPropertyChanged(); }
+            get => outDimDisplay;
+            set { outDimDisplay = value; OnPropertyChanged(); }
         }
         private Visibility typeVisib;
         public Visibility TypeVisib
@@ -86,6 +86,25 @@ namespace nnui_test
         {
             get => strideVisib;
             set { strideVisib = value; OnPropertyChanged(); }
+        }
+        private Visibility dimOutVisib;
+        public Visibility DimOutVisib
+        {
+            get => dimOutVisib;
+            set { dimOutVisib = value; OnPropertyChanged(); }
+        }
+        private Visibility padVisib;
+        public Visibility PadVisib
+        {
+            get => padVisib;
+            set { padVisib = value; OnPropertyChanged(); }
+        }
+
+        private Visibility activationVisib;
+        public Visibility ActivationVisib
+        {
+            get => activationVisib;
+            set { activationVisib = value; OnPropertyChanged(); }
         }
 
         #endregion
@@ -201,7 +220,9 @@ namespace nnui_test
             }
         }
         #endregion
+        
 
+        #region Op button logic
         public void AddConv()
         {
             if (SelectedIndex != OpItems.Count - 1)
@@ -251,9 +272,7 @@ namespace nnui_test
                 newItem.Name = string.Format("op{0}", OpItems.Count);
                 newItem.OpType = "MaxPooling2D";
                 newItem.Kernel = 2;
-                newItem.DimOut = 16;
                 newItem.Stride = 2;
-                newItem.Pool = "[2, 2]";
                 newItem.OpColor = new SolidColorBrush(Windows.UI.Colors.LightYellow);
                 OpItems.Insert(SelectedIndex + 1, newItem);
                 SelectedIndex++;
@@ -291,6 +310,9 @@ namespace nnui_test
                 OpItems.RemoveAt(SelectedIndex);
             SelectedIndex = temp;
         }
+        #endregion
+
+
         public void SelectionChanged()
         {
             if (SelectedIndex != -1)
@@ -298,8 +320,61 @@ namespace nnui_test
                 TypeDisplay = OpItems[SelectedIndex].OpType;
                 ShapeDisplay = OpItems[SelectedIndex].Kernel;
                 NameDisplay = OpItems[SelectedIndex].Name;
-                PaddingDisplay = OpItems[SelectedIndex].Padding;
+                OutDimDisplay = OpItems[SelectedIndex].DimOut;
                 StrideDisplay = OpItems[SelectedIndex].Stride;
+                OutDimDisplay = OpItems[SelectedIndex].DimOut;
+                switch (OpItems[SelectedIndex].OpType)
+                {
+                    case "Convolution2D":
+                        KernelShapeVisib = Visibility.Visible;
+                        DimOutVisib = Visibility.Visible;
+                        StrideVisib = Visibility.Visible;
+                        PadVisib = Visibility.Visible;
+                        ActivationVisib = Visibility.Collapsed;
+                        break;
+                    case "BatchNormalization":
+                        KernelShapeVisib = Visibility.Collapsed;
+                        DimOutVisib = Visibility.Collapsed;
+                        StrideVisib = Visibility.Collapsed;
+                        PadVisib = Visibility.Collapsed;
+                        ActivationVisib = Visibility.Collapsed;
+                        break;
+                    case "Activation":
+                        KernelShapeVisib = Visibility.Collapsed;
+                        DimOutVisib = Visibility.Collapsed;
+                        StrideVisib = Visibility.Collapsed;
+                        PadVisib = Visibility.Collapsed;
+                        ActivationVisib = Visibility.Visible;
+                        break;
+                    case "MaxPooling2D":
+                        KernelShapeVisib = Visibility.Visible;
+                        DimOutVisib = Visibility.Collapsed;
+                        StrideVisib = Visibility.Visible;
+                        PadVisib = Visibility.Collapsed;
+                        ActivationVisib = Visibility.Collapsed;
+                        break;
+                    case "Flatten":
+                        KernelShapeVisib = Visibility.Collapsed;
+                        DimOutVisib = Visibility.Collapsed;
+                        StrideVisib = Visibility.Collapsed;
+                        PadVisib = Visibility.Collapsed;
+                        ActivationVisib = Visibility.Collapsed;
+                        break;
+                    case "Dense":
+                        KernelShapeVisib = Visibility.Collapsed;
+                        DimOutVisib = Visibility.Visible;
+                        StrideVisib = Visibility.Collapsed;
+                        PadVisib = Visibility.Collapsed;
+                        ActivationVisib = Visibility.Collapsed;
+                        break;
+                    case "Input":
+                        KernelShapeVisib = Visibility.Visible;
+                        DimOutVisib = Visibility.Collapsed;
+                        StrideVisib = Visibility.Collapsed;
+                        PadVisib = Visibility.Collapsed;
+                        ActivationVisib = Visibility.Collapsed;
+                        break;
+                }
             }
         }
         public void PropertyModify()
@@ -307,7 +382,7 @@ namespace nnui_test
             OpItems[SelectedIndex].OpType = TypeDisplay;
             OpItems[SelectedIndex].Kernel = ShapeDisplay;
             OpItems[SelectedIndex].Name = NameDisplay;
-            OpItems[SelectedIndex].Padding = PaddingDisplay;
+            OpItems[SelectedIndex].DimOut = OutDimDisplay;
             OpItems[SelectedIndex].Stride = StrideDisplay;
         }
         public void TextBoxLostFocus(object sender)
@@ -316,7 +391,7 @@ namespace nnui_test
             OpItems[SelectedIndex].OpType = TypeDisplay;
             OpItems[SelectedIndex].Kernel = ShapeDisplay;
             OpItems[SelectedIndex].Name = textBox.Text;
-            OpItems[SelectedIndex].Padding = PaddingDisplay;
+            OpItems[SelectedIndex].DimOut = OutDimDisplay;
             OpItems[SelectedIndex].Stride = StrideDisplay;
         }
         public void Compile()
@@ -359,7 +434,7 @@ namespace nnui_test
                     case "MaxPooling2D":
                         tempPool.name = item.Name;
                         tempPool.optype = item.OpType;
-                        tempPool.pool_size = FormatConvert(item.Pool);
+                        tempPool.pool_size = FormatConvert(string.Format("[{0}, {0}]", item.Kernel));
                         tempPool.strides = FormatConvert(string.Format("[{0}, {0}]", item.Stride));
                         sendcontent.operators.Add(tempPool.Copy());
                         break;
