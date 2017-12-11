@@ -1,0 +1,81 @@
+{
+    "name": "LeNet-5",
+    
+    "train":{
+        "epochs": 20,
+        "batch_size": 100,
+        "optimizer": "adam",
+        "inputs":[
+            {
+                "name": "data",
+                "shape": [28, 28, 1],
+                "batch_size": 100
+            }
+        ],
+        "outputs":[
+            {
+                "name": "pred",
+                "loss": "categorical_crossentropy",
+                "loss_weight": 1.0, 
+                "metrics": ["accuracy"]
+            }
+        ]
+    },
+    
+    "operators":[
+        {
+            "name": "data",
+            "optype": "Input",
+            "shape": [28,28,1]
+        },
+        {
+            "name": "conv1",
+            "optype": "Conv2D",
+            "filters": 20,
+            "kernel_size": 5,
+            "input": "data"
+        },
+        {
+            "name": "pool1",
+            "optype": "MaxPooling2D",
+            "pool_size": [2, 2],
+            "strides": [2, 2]
+        },
+        {
+            "name": "conv2",
+            "optype": "Conv2D",
+            "filters": 50,
+            "kernel_size": 5
+        },
+        {
+            "name": "pool2",
+            "optype": "MaxPooling2D",
+            "pool_size": [2, 2],
+            "strides": [2, 2]
+        },
+        {
+            "name": "flatten",
+            "optype": "Flatten"
+        },
+        {  
+            "name": "fc3",
+            "optype": "Dense",
+            "units": 500
+        },
+        {
+            "name": "relu3",
+            "optype": "Activation",
+            "activation": "relu"
+        },
+        {  
+            "name": "fc4",
+            "optype": "Dense",
+            "units": 10
+        },
+        {
+            "name": "pred",
+            "optype": "Activation",
+            "activation": "softmax"
+        }
+    ]
+}
