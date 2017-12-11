@@ -3,9 +3,10 @@ try:
     import Queue
 except:
     import queue as Queue
-import builder
+    
 import sys
 import socket
+from . import builder
 
 OPERATOR_FIRST_INPUT_NOT_EXISTS = "The input of the first operator must exist"
 OPERATOR_INPUT_ERROR = "The key 'input' and 'inputs' cannot exist at the same time"
@@ -14,6 +15,7 @@ OPERATOR_NOT_EXISTS = "Operator %s doesn't exist"
 OPERATOR_TOPO_ERROR = "Operator topology errors"
 OPERATOR_LOOP_ERROR = "Error:-( There is a cycle in the graph."
 
+'''
 class RedirectStdOut:
     ADDRESS = ("127.0.0.1", 3939)
     def __init__(self):
@@ -26,22 +28,32 @@ class RedirectStdOut:
         self.buffer = ""
         
 sys.stdout = RedirectStdOut()
+'''
 
 class Model:
-    def __init__(self, mode, filename = None, string = None):
+    def __init__(self, mode = "train"):
         self.mode = mode
-        if filename is not None:
-            self.info = self.read_json(filename)
-        else:
-            self.info = self.read_json_from_cs(string)
+        self.info = None
+        self.topo = None
+        self.model = None
+    def open(self, filename):
+        self.info = self.read_json(filename)
+        self.read_dict(self.info)
+    def read_json(self, string):
+        self.info = json.loads(string)
+        self.read_dict(self.info)
+    def read_csjs(self, string): 
+        def read_json_from_cs(self, s):
+            js = s.strip("\" ").replace("\\\"", "\"")
+            return json.loads(js)
+        self.info = self.read_json_from_cs(string)  
+        self.read_dict(self.info)
+    def read_dict(self, dict_data):
+        self.info = dict_data
         self.topo = self.get_model_topo(self.info)
         self.model = builder.build_keras_model(self.info, self.topo, self.mode)
-        
-    def read_json_from_cs(self, s):
-        js = s.strip("\" ").replace("\\\"", "\"")
-        return json.loads(js)
-        
-    def read_json(self, filename):
+
+    def open_json(self, filename):
         fin = open(filename)
         return json.loads(fin.read())
 
@@ -146,12 +158,10 @@ class Model:
         pass
         # preds = model.model.evaluate(x=X_test,y=Y_test)
 
-    
-def read_model(filename):
-    return Model(mode = "train", filename = filename)
-        
-model = read_model("LeNet5-keras.json")
-#fin = open("LeNetCS.json")
-#buf = fin.read()
-#model = Model(mode = "train", string = buf)
-model.train()
+if __name__ == "__main__":    
+    model = Model(mode = "train")
+    mdoel.open("LeNet5-keras.json")
+    #fin = open("LeNetCS.json")
+    #buf = fin.read()
+    #model = Model(mode = "train", string = buf)
+    model.train()

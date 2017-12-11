@@ -1,8 +1,0 @@
-﻿<Application
-    x:Class="uiClient.App"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:uiClient"
-    RequestedTheme="Light">
-
-</Application>
