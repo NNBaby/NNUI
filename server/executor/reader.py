@@ -4,6 +4,7 @@ try:
 except:
     import queue as Queue
     
+import keras
 import sys
 import socket
 from . import builder
@@ -29,6 +30,18 @@ class RedirectStdOut:
         
 sys.stdout = RedirectStdOut()
 '''
+
+class LogRedirectCallback(keras.callbacks.Callback):
+
+    def __init__(self, nnbaby_model):
+        super(LogRedirectCallback, self).__init__()
+        self.nnbaby_model = nnbaby_model
+
+    def on_train_begin(self, logs={}):
+        pass
+
+    def on_batch_end(self, batch, logs={}):
+        self.nnbaby_model.write_logs(logs)
 
 class Model:
     def __init__(self, mode = "train"):
@@ -141,9 +154,13 @@ class Model:
                 op["name"] = name
         return op["name"]
 
+    def write_logs(self, logs):
+        print (logs)
+        
     def train(self):
         import keras
         from keras.datasets import mnist
+        mode_info = self.info[self.mode]
         (x_train, y_train), (x_test, y_test) = mnist.load_data()
         rows, cols = 28, 28
         num_classes = 10
@@ -152,7 +169,9 @@ class Model:
         x_test = x_test.reshape((x_test.shape[0], rows, cols, 1)) / 255.0
         y_train = keras.utils.np_utils.to_categorical(y_train, num_classes)
         y_test = keras.utils.np_utils.to_categorical(y_test, num_classes)
-        self.model.fit(x = {"data": x_train}, y = {"pred": y_train}, batch_size = 128, epochs = 5)
+        self.model.fit(x = {"data": x_train}, y = {"pred": y_train},
+                       batch_size = mode_info["batch_size"], epochs = mode_info["epochs"],
+                       callbacks = [LogRedirectCallback(nnbaby_model = self)], verbose = 0)
         
     def test(self):
         pass

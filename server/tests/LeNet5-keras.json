@@ -2,8 +2,8 @@
     "name": "LeNet-5",
     
     "train":{
-        "epochs": 20,
-        "batch_size": 100,
+        "epochs": 5,
+        "batch_size": 128,
         "optimizer": "adam",
         "inputs":[
             {
