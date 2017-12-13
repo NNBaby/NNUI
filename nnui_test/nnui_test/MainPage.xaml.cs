@@ -24,16 +24,25 @@ namespace nnui_test
             ViewModel.TypeVisib = Windows.UI.Xaml.Visibility.Visible;
             ViewModel.NameVisib = Windows.UI.Xaml.Visibility.Visible;
 
+            ViewModel.OptimizerSelect.Add("SGD");
+            ViewModel.OptimizerSelect.Add("SGD with momentum");
+            ViewModel.OptimizerSelect.Add("Adam");
+
+            ViewModel.ActivationSelect.Add("ReLU");
+            ViewModel.ActivationSelect.Add("Softmax");
+            ViewModel.ActivationSelect.Add("Sigmoid");
+
             OpItem newItem = new OpItem();
             newItem.Name = "data";
             newItem.OpType = "Input";
+            newItem.InputShape = "[28, 28, 1]";
             newItem.OpColor = new SolidColorBrush(Colors.Azure);
             ViewModel.OpItems.Add(newItem);
 
             OpItem newItem2 = new OpItem();
             newItem2.Name = "pred";
             newItem2.OpType = "Activation";
-            newItem.Activatiion = "softmax";
+            newItem2.Activation = ViewModel.ActivationSelect[1];
             newItem2.OpColor = new SolidColorBrush(Colors.Azure);
             ViewModel.OpItems.Add(newItem2);
             ViewModel.SelectionChanged();

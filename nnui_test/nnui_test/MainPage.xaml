@@ -84,7 +84,7 @@
                         <Button Content="Flattem"
                                 Margin="10"
                                 HorizontalAlignment="Stretch"
-                                Background="LightGray"
+                                Background="LightSalmon"
                                 Style="{StaticResource ButtonRevealStyle}"
                                 Click="{x:Bind ViewModel.AddFlatten}">
                         </Button>
@@ -209,6 +209,8 @@
                                         <RowDefinition Height="*"></RowDefinition>
                                         <RowDefinition Height="*"></RowDefinition>
                                         <RowDefinition Height="*"></RowDefinition>
+                                        <RowDefinition Height="*"></RowDefinition>
+                                        <RowDefinition Height="*"></RowDefinition>
                                     </Grid.RowDefinitions>
                                     <TextBlock Text="Block Type:"
                                                Grid.Column="0"
@@ -250,6 +252,22 @@
                                                VerticalAlignment="Center"
                                                Visibility="{x:Bind ViewModel.StrideVisib, Mode=OneWay}">
                                     </TextBlock>
+                                    <TextBlock Text="Act. type:"
+                                               Grid.Column="0"
+                                               Grid.Row="5"
+                                               Margin="10"
+                                               TextAlignment="Left"
+                                               VerticalAlignment="Center"
+                                               Visibility="{x:Bind ViewModel.ActivationVisib, Mode=OneWay}">
+                                    </TextBlock>
+                                    <TextBlock Text="Input shape:"
+                                               Grid.Column="0"
+                                               Grid.Row="6"
+                                               Margin="10"
+                                               TextAlignment="Left"
+                                               VerticalAlignment="Center"
+                                               Visibility="{x:Bind ViewModel.InputShapeVisib, Mode=OneWay}">
+                                    </TextBlock>
                                     <TextBlock Text="{x:Bind ViewModel.TypeDisplay, Mode=TwoWay}"
                                                Grid.Column="1"
                                                Grid.Row="0"
@@ -286,6 +304,22 @@
                                              VerticalAlignment="Center"
                                              Visibility="{x:Bind ViewModel.StrideVisib, Mode=OneWay}">
                                     </TextBox>
+                                    <ComboBox ItemsSource="{x:Bind ViewModel.ActivationSelect, Mode=TwoWay}"
+                                              Grid.Column="1"
+                                              Grid.Row="5"
+                                              Margin="10"
+                                              VerticalAlignment="Center"
+                                              Visibility="{x:Bind ViewModel.ActivationVisib, Mode=OneWay}"
+                                              HorizontalAlignment="Stretch"
+                                              SelectedIndex="{x:Bind ViewModel.ActivationSelectIndex, Mode=TwoWay}">
+                                    </ComboBox>
+                                    <TextBlock Text="{x:Bind ViewModel.InputShapeDisplay, Mode=TwoWay}"
+                                             Grid.Column="1"
+                                             Grid.Row="6"
+                                             Margin="10"
+                                             VerticalAlignment="Center"
+                                             Visibility="{x:Bind ViewModel.InputShapeVisib, Mode=OneWay}">
+                                    </TextBlock>
                                     </Grid>
                                 <Button Content="Modify"
                                         Margin="10"
@@ -304,6 +338,7 @@
                                         <ColumnDefinition Width="*"></ColumnDefinition>
                                     </Grid.ColumnDefinitions>
                                     <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"></RowDefinition>
                                         <RowDefinition Height="*"></RowDefinition>
                                         <RowDefinition Height="*"></RowDefinition>
                                         <RowDefinition Height="*"></RowDefinition>
@@ -333,6 +368,12 @@
                                                VerticalAlignment="Center"
                                                Margin="10">
                                     </TextBlock>
+                                    <TextBlock Text="Optimizer:"
+                                               Grid.Row="4"
+                                               Grid.Column="0"
+                                               VerticalAlignment="Center"
+                                               Margin="10">
+                                    </TextBlock>
                                     <TextBlock Text="0.42M"
                                                Grid.Row="0"
                                                Grid.Column="1"
@@ -345,18 +386,31 @@
                                                VerticalAlignment="Center"
                                                Margin="10">
                                     </TextBlock>
-                                    <TextBox Text="64"
+                                    <TextBox Text="{x:Bind ViewModel.BatchSizeDisplay, Mode=TwoWay}"
                                                Grid.Row="2"
                                                Grid.Column="1"
                                                VerticalAlignment="Center"
                                                Margin="10">
                                     </TextBox>
-                                    <TextBox Text="400"
+                                    <TextBox Text="{x:Bind ViewModel.EpochDisplay, Mode=TwoWay}"
                                                Grid.Row="3"
                                                Grid.Column="1"
                                                VerticalAlignment="Center"
                                                Margin="10">
                                     </TextBox>
+                                    <TextBox Text="{x:Bind ViewModel.EpochDisplay, Mode=TwoWay}"
+                                               Grid.Row="3"
+                                               Grid.Column="1"
+                                               VerticalAlignment="Center"
+                                               Margin="10">
+                                    </TextBox>
+                                    <ComboBox ItemsSource="{x:Bind ViewModel.OptimizerSelect, Mode=OneWay}"
+                                              Margin="10"
+                                              Grid.Column="1"
+                                              Grid.Row="4"
+                                              HorizontalAlignment="Stretch"
+                                              SelectedIndex="{x:Bind ViewModel.OptimizerSelectedIndex, Mode=TwoWay}">
+                                    </ComboBox>
                                 </Grid>
                             </StackPanel>
                         </Grid>
@@ -368,9 +422,8 @@
                     </StackPanel>
                 </Grid>
             </PivotItem>
-            <PivotItem Header="Training">
-                <!--Pivot content goes here-->
-                <TextBlock Text="Content of pivot item 2."/>
+            <PivotItem Header="Training"
+                       Margin="0">
             </PivotItem>
             <PivotItem Header="About">
                 <!--Pivot content goes here-->

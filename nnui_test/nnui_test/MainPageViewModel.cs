@@ -21,11 +21,23 @@ namespace nnui_test
             get => opItems;
             set { opItems = value; OnPropertyChanged(); }
         }
+        private ObservableCollection<string> optimizerSelect = new ObservableCollection<string>();
+        public ObservableCollection<string> OptimizerSelect
+        {
+            get => optimizerSelect;
+            set { optimizerSelect = value; OnPropertyChanged(); }
+        }
         private int selectedIndex = 0;
         public int SelectedIndex
         {
             get => selectedIndex;
             set { selectedIndex = value; OnPropertyChanged(); }
+        }
+        private int optimizerSelectedIndex = 0;
+        public int OptimizerSelectedIndex
+        {
+            get => optimizerSelectedIndex;
+            set { optimizerSelectedIndex = value; OnPropertyChanged(); }
         }
         private int shapeDisplay;
         public int ShapeDisplay
@@ -62,6 +74,36 @@ namespace nnui_test
         {
             get => outDimDisplay;
             set { outDimDisplay = value; OnPropertyChanged(); }
+        }
+        private ObservableCollection<string> activationSelect = new ObservableCollection<string>();
+        public ObservableCollection<string> ActivationSelect
+        {
+            get => activationSelect;
+            set { activationSelect = value; OnPropertyChanged(); }
+        }
+        private int activationSelectIndex;
+        public int ActivationSelectIndex
+        {
+            get => activationSelectIndex;
+            set { activationSelectIndex = value; OnPropertyChanged(); }
+        }
+        private string inputShapeDisplay;
+        public string InputShapeDisplay
+        {
+            get => inputShapeDisplay;
+            set { inputShapeDisplay = value; OnPropertyChanged(); }
+        }
+        private int batchSizeDisplay;
+        public int BatchSizeDisplay
+        {
+            get => batchSizeDisplay;
+            set { batchSizeDisplay = value; OnPropertyChanged(); }
+        }
+        private int epochDisplay;
+        public int EpochDisplay
+        {
+            get => epochDisplay;
+            set { epochDisplay = value; OnPropertyChanged(); }
         }
         private Visibility typeVisib;
         public Visibility TypeVisib
@@ -106,12 +148,19 @@ namespace nnui_test
             get => activationVisib;
             set { activationVisib = value; OnPropertyChanged(); }
         }
+        private Visibility inputShapeVisib;
+        public Visibility InputShapeVisib
+        {
+            get => inputShapeVisib;
+            set { inputShapeVisib = value; OnPropertyChanged(); }
+        }
 
         #endregion
 
-        #region SendContent difinitions
+        #region SendContent definitions
         private class SendContent
         {
+            public int request_type;
             public string name = "TestNet";
             public Train train = new Train();
             public List<Object> operators = new List<Object>();
@@ -220,7 +269,6 @@ namespace nnui_test
             }
         }
         #endregion
-        
 
         #region Op button logic
         public void AddConv()
@@ -258,7 +306,7 @@ namespace nnui_test
                 OpItem newItem = new OpItem();
                 newItem.Name = string.Format("op{0}", OpItems.Count);
                 newItem.OpType = "Activation";
-                newItem.Activatiion = "relu";
+                newItem.Activation = ActivationSelect[0];
                 newItem.OpColor = new SolidColorBrush(Windows.UI.Colors.LightGreen);
                 OpItems.Insert(SelectedIndex + 1, newItem);
                 SelectedIndex++;
@@ -285,7 +333,7 @@ namespace nnui_test
                 OpItem newItem = new OpItem();
                 newItem.Name = string.Format("op{0}", OpItems.Count);
                 newItem.OpType = "Flatten";
-                newItem.OpColor = new SolidColorBrush(Windows.UI.Colors.LightGray);
+                newItem.OpColor = new SolidColorBrush(Windows.UI.Colors.LightSalmon);
                 OpItems.Insert(SelectedIndex + 1, newItem);
                 SelectedIndex++;
             }
@@ -323,6 +371,8 @@ namespace nnui_test
                 OutDimDisplay = OpItems[SelectedIndex].DimOut;
                 StrideDisplay = OpItems[SelectedIndex].Stride;
                 OutDimDisplay = OpItems[SelectedIndex].DimOut;
+                ActivationSelectIndex = GetActivationIndex(OpItems[SelectedIndex].Activation);
+                InputShapeDisplay = OpItems[SelectedIndex].InputShape;
                 switch (OpItems[SelectedIndex].OpType)
                 {
                     case "Convolution2D":
@@ -331,6 +381,7 @@ namespace nnui_test
                         StrideVisib = Visibility.Visible;
                         PadVisib = Visibility.Visible;
                         ActivationVisib = Visibility.Collapsed;
+                        InputShapeVisib = Visibility.Collapsed;
                         break;
                     case "BatchNormalization":
                         KernelShapeVisib = Visibility.Collapsed;
@@ -338,6 +389,7 @@ namespace nnui_test
                         StrideVisib = Visibility.Collapsed;
                         PadVisib = Visibility.Collapsed;
                         ActivationVisib = Visibility.Collapsed;
+                        InputShapeVisib = Visibility.Collapsed;
                         break;
                     case "Activation":
                         KernelShapeVisib = Visibility.Collapsed;
@@ -345,6 +397,7 @@ namespace nnui_test
                         StrideVisib = Visibility.Collapsed;
                         PadVisib = Visibility.Collapsed;
                         ActivationVisib = Visibility.Visible;
+                        InputShapeVisib = Visibility.Collapsed;
                         break;
                     case "MaxPooling2D":
                         KernelShapeVisib = Visibility.Visible;
@@ -352,6 +405,7 @@ namespace nnui_test
                         StrideVisib = Visibility.Visible;
                         PadVisib = Visibility.Collapsed;
                         ActivationVisib = Visibility.Collapsed;
+                        InputShapeVisib = Visibility.Collapsed;
                         break;
                     case "Flatten":
                         KernelShapeVisib = Visibility.Collapsed;
@@ -359,6 +413,7 @@ namespace nnui_test
                         StrideVisib = Visibility.Collapsed;
                         PadVisib = Visibility.Collapsed;
                         ActivationVisib = Visibility.Collapsed;
+                        InputShapeVisib = Visibility.Collapsed;
                         break;
                     case "Dense":
                         KernelShapeVisib = Visibility.Collapsed;
@@ -366,6 +421,7 @@ namespace nnui_test
                         StrideVisib = Visibility.Collapsed;
                         PadVisib = Visibility.Collapsed;
                         ActivationVisib = Visibility.Collapsed;
+                        InputShapeVisib = Visibility.Collapsed;
                         break;
                     case "Input":
                         KernelShapeVisib = Visibility.Visible;
@@ -373,6 +429,7 @@ namespace nnui_test
                         StrideVisib = Visibility.Collapsed;
                         PadVisib = Visibility.Collapsed;
                         ActivationVisib = Visibility.Collapsed;
+                        InputShapeVisib = Visibility.Visible;
                         break;
                 }
             }
@@ -384,6 +441,8 @@ namespace nnui_test
             OpItems[SelectedIndex].Name = NameDisplay;
             OpItems[SelectedIndex].DimOut = OutDimDisplay;
             OpItems[SelectedIndex].Stride = StrideDisplay;
+            OpItems[SelectedIndex].Activation = ActivationSelect[ActivationSelectIndex];
+            OpItems[SelectedIndex].InputShape = InputShapeDisplay;
         }
         public void TextBoxLostFocus(object sender)
         {
@@ -393,10 +452,13 @@ namespace nnui_test
             OpItems[SelectedIndex].Name = textBox.Text;
             OpItems[SelectedIndex].DimOut = OutDimDisplay;
             OpItems[SelectedIndex].Stride = StrideDisplay;
+            OpItems[SelectedIndex].Activation = ActivationSelect[ActivationSelectIndex];
+            OpItems[SelectedIndex].InputShape = InputShapeDisplay;
         }
         public void Compile()
         {
             SendContent sendcontent = new SendContent();
+            sendcontent.request_type = 0;
             InputLayer tempInput = new InputLayer();
             Conv tempConv = new Conv();
             Pool tempPool = new Pool();
@@ -406,8 +468,11 @@ namespace nnui_test
             Input input = new Input();
             input.name = "data";
             input.shape = new List<int>{28, 28, 1};
-            input.batch_size = 100;
+            input.batch_size = BatchSizeDisplay;
             sendcontent.train.inputs.Add(input);
+            sendcontent.train.batch_size = BatchSizeDisplay;
+            sendcontent.train.epochs = EpochDisplay;
+            sendcontent.train.optimizer = OptimizerSelect[OptimizerSelectedIndex];
             Output output = new Output();
             output.name = "pred";
             output.loss = "categorical_crossentropy";
@@ -452,7 +517,7 @@ namespace nnui_test
                     case "Activation":
                         tempActivation.name = item.Name;
                         tempActivation.optype = item.OpType;
-                        tempActivation.activation = item.Activatiion;
+                        tempActivation.activation = item.Activation;
                         sendcontent.operators.Add(tempActivation.Copy());
                         break;
                 }
@@ -478,6 +543,33 @@ namespace nnui_test
             }
         }
 
+        //public async void ResultUpdate()
+        //{
+        //    Uri requestUri = new Uri("http://127.0.0.1:5000/post");
+        //    HttpResponseMessage httpresponse = new HttpResponseMessage();
+        //    RequestContent sendcontent = new RequestContent();
+        //    sendcontent.request_type = 1;
+        //    sendcontent.offset = 0;
+        //    string httpresponsebody;
+
+        //    string send = JsonConvert.SerializeObject(sendcontent);
+
+        //    HttpClient httpclient = new HttpClient();
+        //    try
+        //    {
+        //        httpclient.DefaultRequestHeaders.Accept.Add(new Windows.Web.Http.Headers.HttpMediaTypeWithQualityHeaderValue("application/json"));
+        //        httpresponse = await httpclient.PostAsync(requestUri, new HttpStringContent(send, Windows.Storage.Streams.UnicodeEncoding.Utf8, "application/json"));
+
+        //        httpresponsebody = await httpresponse.Content.ReadAsStringAsync();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        httpresponsebody = JsonConvert.SerializeObject("Error: " + ex.HResult.ToString("x") + "Message: " + ex.Message);
+        //    }
+        //    string receivecontent = JsonConvert.DeserializeObject<string>(httpresponsebody);
+
+        //}
+
         public async void SendInfo(string send)
         {
             Uri requestUri = new Uri("http://127.0.0.1:5000/post");
@@ -499,6 +591,14 @@ namespace nnui_test
             SendContent receivecontent = JsonConvert.DeserializeObject<SendContent>(httpresponsebody);
             
 
+        }
+
+        private int GetActivationIndex(string str)
+        {
+            for (int i = 0; i < ActivationSelect.Count; i++)
+                if (ActivationSelect[i] == str)
+                    return i;
+            return -1;
         }
     }
 }
