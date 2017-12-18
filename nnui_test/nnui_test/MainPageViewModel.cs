@@ -446,7 +446,7 @@ namespace nnui_test
                         InputShapeVisib = Visibility.Collapsed;
                         break;
                     case "Input":
-                        KernelShapeVisib = Visibility.Visible;
+                        KernelShapeVisib = Visibility.Collapsed;
                         DimOutVisib = Visibility.Collapsed;
                         StrideVisib = Visibility.Collapsed;
                         PadVisib = Visibility.Collapsed;
