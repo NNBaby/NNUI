@@ -49,6 +49,7 @@ class Model:
         self.info = None
         self.topo = None
         self.model = None
+        self.logger = []
     def open(self, filename):
         self.info = self.read_json(filename)
         self.read_dict(self.info)
@@ -65,7 +66,6 @@ class Model:
         self.info = dict_data
         self.topo = self.get_model_topo(self.info)
         self.model = builder.build_keras_model(self.info, self.topo, self.mode)
-
     def open_json(self, filename):
         fin = open(filename)
         return json.loads(fin.read())
@@ -153,10 +153,8 @@ class Model:
                     i += 1
                 op["name"] = name
         return op["name"]
-
     def write_logs(self, logs):
-        print (logs)
-        
+        self.logger.append(logs)
     def train(self):
         import keras
         from keras.datasets import mnist
