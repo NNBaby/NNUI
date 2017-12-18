@@ -3,6 +3,7 @@ using Windows.UI;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
+using WinRTXamlToolkit.Controls.DataVisualization.Charting;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -25,7 +26,6 @@ namespace nnui_test
             ViewModel.NameVisib = Windows.UI.Xaml.Visibility.Visible;
 
             ViewModel.OptimizerSelect.Add("SGD");
-            ViewModel.OptimizerSelect.Add("SGD with momentum");
             ViewModel.OptimizerSelect.Add("Adam");
 
             ViewModel.ActivationSelect.Add("relu");
@@ -49,6 +49,11 @@ namespace nnui_test
 
             ViewModel.IpDisplay = "127.0.0.1:5000";
         }
-       
+
+        private void Button_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            (LineChart.Series[0] as LineSeries).ItemsSource = null;
+            (LineChart.Series[0] as LineSeries).ItemsSource = ViewModel.losslist;
+        }
     }
 }

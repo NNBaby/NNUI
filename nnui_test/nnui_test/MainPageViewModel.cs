@@ -7,14 +7,15 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Controls;
 using Windows.Web.Http;
 using System;
-
+using System.Threading.Tasks;
+using WinRTXamlToolkit.Controls.DataVisualization.Charting;
 namespace nnui_test
 {
     public class MainPageViewModel : NotificationObject
     {
         #region ViewModel definitions
         public string json;
-
+        DispatcherTimer dispatchertimer = new DispatcherTimer();//for display info
         private ObservableCollection<OpItem> opItems = new ObservableCollection<OpItem>();
         public ObservableCollection<OpItem> OpItems
         {
@@ -160,18 +161,33 @@ namespace nnui_test
             get => inputShapeVisib;
             set { inputShapeVisib = value; OnPropertyChanged(); }
         }
+        public string display_info = "information display";
+        public string DisplayInfo
+        {
+            get => display_info;
+            set { display_info = value; OnPropertyChanged(); }
+        }
 
+        public List<LossInfo> losslist = new List<LossInfo>();
         #endregion
 
         #region SendContent definitions
+        public class LossInfo
+        {
+            public int itr { get; set; }
+            //int itr_end = -1;
+            public float loss { get; set; }
+        }
+        public LossInfo curlossinfo = new LossInfo() { itr = 0, loss = -1 };
         private class SendContent
         {
             public int request_type;
             public string name = "TestNet";
             public Train train = new Train();
             public List<Object> operators = new List<Object>();
+            public LossInfo curlossinfo_send = new LossInfo() { itr = 0, loss = -1 };
         }
-        
+
         private class Train
         {
             public int epochs = 20;
@@ -360,7 +376,7 @@ namespace nnui_test
         public void Remove()
         {
             int temp = SelectedIndex;
-            if(SelectedIndex > 0 && SelectedIndex < OpItems.Count - 1)
+            if (SelectedIndex > 0 && SelectedIndex < OpItems.Count - 1)
                 OpItems.RemoveAt(SelectedIndex);
             SelectedIndex = temp;
         }
@@ -465,7 +481,7 @@ namespace nnui_test
                 OpItems[SelectedIndex].Activation = ActivationSelect[ActivationSelectIndex];
             OpItems[SelectedIndex].InputShape = InputShapeDisplay;
         }
-        public void Compile()
+        public async void Compile()
         {
             SendContent sendcontent = new SendContent();
             sendcontent.request_type = 0;
@@ -477,7 +493,7 @@ namespace nnui_test
             Activation tempActivation = new Activation();
             Input input = new Input();
             input.name = "data";
-            input.shape = new List<int>{28, 28, 1};
+            input.shape = new List<int> { 28, 28, 1 };
             input.batch_size = BatchSizeDisplay;
             sendcontent.train.inputs.Add(input);
             sendcontent.train.batch_size = BatchSizeDisplay;
@@ -491,12 +507,12 @@ namespace nnui_test
             sendcontent.train.outputs.Add(output);
             foreach (OpItem item in OpItems)
             {
-                switch(item.OpType)
+                switch (item.OpType)
                 {
                     case "Input":
                         tempInput.name = item.Name;
                         tempInput.optype = item.OpType;
-                        tempInput.shape = new List<int>{28, 28, 1};
+                        tempInput.shape = new List<int> { 28, 28, 1 };
                         sendcontent.operators.Add(tempInput.Copy());
                         break;
                     case "Convolution2D":
@@ -534,7 +550,7 @@ namespace nnui_test
             }
 
             string send = JsonConvert.SerializeObject(sendcontent);
-            SendInfo(send);
+            await SendInfo(send, 0);
 
         }
 
@@ -553,39 +569,12 @@ namespace nnui_test
             }
         }
 
-        //public async void ResultUpdate()
-        //{
-        //    Uri requestUri = new Uri("http://127.0.0.1:5000/post");
-        //    HttpResponseMessage httpresponse = new HttpResponseMessage();
-        //    RequestContent sendcontent = new RequestContent();
-        //    sendcontent.request_type = 1;
-        //    sendcontent.offset = 0;
-        //    string httpresponsebody;
-
-        //    string send = JsonConvert.SerializeObject(sendcontent);
-
-        //    HttpClient httpclient = new HttpClient();
-        //    try
-        //    {
-        //        httpclient.DefaultRequestHeaders.Accept.Add(new Windows.Web.Http.Headers.HttpMediaTypeWithQualityHeaderValue("application/json"));
-        //        httpresponse = await httpclient.PostAsync(requestUri, new HttpStringContent(send, Windows.Storage.Streams.UnicodeEncoding.Utf8, "application/json"));
-
-        //        httpresponsebody = await httpresponse.Content.ReadAsStringAsync();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        httpresponsebody = JsonConvert.SerializeObject("Error: " + ex.HResult.ToString("x") + "Message: " + ex.Message);
-        //    }
-        //    string receivecontent = JsonConvert.DeserializeObject<string>(httpresponsebody);
-
-        //}
-
-        public async void SendInfo(string send)
+        public async Task SendInfo(string send, int func)
         {
             Uri requestUri = new Uri("http://127.0.0.1:5000/post");
             HttpResponseMessage httpresponse = new HttpResponseMessage();
             string httpresponsebody;
-            
+
             HttpClient httpclient = new HttpClient();
             try
             {
@@ -598,9 +587,41 @@ namespace nnui_test
             {
                 httpresponsebody = JsonConvert.SerializeObject("Error: " + ex.HResult.ToString("x") + "Message: " + ex.Message);
             }
-            SendContent receivecontent = JsonConvert.DeserializeObject<SendContent>(httpresponsebody);
-            
+            //SendContent receivecontent = JsonConvert.DeserializeObject<SendContent>(httpresponsebody);
+            //DisplayInfo = "wait for response";
+            if (func == 1)
+            {
+                curlossinfo = JsonConvert.DeserializeObject<LossInfo>(httpresponsebody);
+                losslist.Add(new LossInfo() { itr = curlossinfo.itr, loss = curlossinfo.loss });
+                DisplayInfo = DisplayInfo + '\n' + curlossinfo.itr.ToString() + "   " + curlossinfo.loss.ToString();
+            }
 
+        }
+        public void GetLossInfo()
+        {
+            dispatchertimer.Tick += dispatcherTimer_Tick;
+            dispatchertimer.Interval = new TimeSpan(0, 0, 1);
+            dispatchertimer.Start();
+        }
+        public async void dispatcherTimer_Tick(object sender, object e)
+        {
+            if (curlossinfo.itr > 20)
+                dispatchertimer.Stop();
+            await displayinfo(curlossinfo.itr + 1, curlossinfo.itr + 3);
+        }
+        public async Task displayinfo(int startitr, int enditr)
+        {
+
+            for (int itr = startitr; itr < enditr; itr++)
+            {
+                curlossinfo.itr = itr;
+                curlossinfo.loss = -1;
+                SendContent sendcontent = new SendContent();
+                sendcontent.request_type = 1;
+                sendcontent.curlossinfo_send = curlossinfo;
+                string request = JsonConvert.SerializeObject(sendcontent);
+                await SendInfo(request, 1);
+            }
         }
 
         private int GetActivationIndex(string str)

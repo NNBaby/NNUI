@@ -8,8 +8,9 @@
     xmlns:media="using:Windows.UI.Xaml.Media"
     xmlns:data="using:nnui_test"
     mc:Ignorable="d"
-    xmlns:mt="using:MyToolkit.Controls">
-    
+    xmlns:mt="using:MyToolkit.Controls"
+    xmlns:Charting="using:WinRTXamlToolkit.Controls.DataVisualization.Charting">
+
     <Page.Resources>
         <AcrylicBrush x:Key="CustomAcrylicBrush"
                         BackgroundSource="HostBackdrop"
@@ -354,7 +355,7 @@
                                              VerticalAlignment="Center"
                                              Visibility="{x:Bind ViewModel.InputShapeVisib, Mode=OneWay}">
                                     </TextBlock>
-                                    </Grid>
+                                </Grid>
                                 <Button Content="Modify"
                                         Margin="10"
                                         Style="{StaticResource ButtonRevealStyle}"
@@ -489,8 +490,67 @@
                     </StackPanel>
                 </Grid>
             </PivotItem>
-            <PivotItem Header="Training"
-                       Margin="0">
+            <PivotItem Header="Training">
+                <!--Pivot content goes here-->
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="3*" MinWidth="300"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0" Background="{ThemeResource CustomAcrylicBrush1}">
+                        <Button Content="Get loss info" 
+                                HorizontalAlignment="Stretch" 
+                                VerticalAlignment="Stretch" 
+                                Margin="10" 
+                                Click="{x:Bind ViewModel.GetLossInfo}">
+                        </Button>
+
+                        <Button Content="Get model graph" 
+                                HorizontalAlignment="Stretch" 
+                                VerticalAlignment="Stretch" 
+                                Margin="10">
+                        </Button>
+
+                        <Button Content="others" 
+                                HorizontalAlignment="Stretch" 
+                                VerticalAlignment="Stretch" 
+                                Margin="10">
+                        </Button>
+                    </StackPanel>
+                    <Grid Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="2*"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Button Content="refresh" 
+                                Margin="0" 
+                                Width="100"
+                                Height="50"
+                                Click="Button_Click">
+                        </Button>
+
+
+                        <!--<Charting:Chart x:Name="LineChart" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="100">
+                            <Charting:LineSeries Title="loss" Margin="10" IndependentValuePath="itr" DependentValuePath="loss" IsSelectionEnabled="True"/>
+                            -->
+                        <!--<Charting:LineSeries Title="loss" Margin="10" IndependentValuePath="itr" DependentValuePath="loss" IsSelectionEnabled="True" ItemsSource="{x:Bind ViewModel.LossList, Mode=TwoWay}" />-->
+                        <!--
+                        </Charting:Chart>-->
+                        <Charting:Chart x:Name="LineChart" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="100">
+                            <Charting:LineSeries Title="loss" Margin="10" IndependentValuePath="itr" DependentValuePath="loss" IsSelectionEnabled="True"/>
+                        </Charting:Chart>
+
+
+                        <ScrollViewer Grid.Row="1" Height="230"
+                                      HorizontalAlignment="Stretch" 
+                                      Margin="20" 
+                                      HorizontalScrollBarVisibility="Auto" 
+                                      VerticalScrollBarVisibility="Auto">
+                            <TextBlock   Text="{x:Bind ViewModel.DisplayInfo, Mode=TwoWay}"  VerticalAlignment="Top"/>
+                        </ScrollViewer>
+                    </Grid>
+                </Grid>
             </PivotItem>
             <PivotItem Header="About">
                 <!--Pivot content goes here-->
