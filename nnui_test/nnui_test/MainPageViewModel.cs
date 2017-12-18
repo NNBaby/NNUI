@@ -441,7 +441,10 @@ namespace nnui_test
             OpItems[SelectedIndex].Name = NameDisplay;
             OpItems[SelectedIndex].DimOut = OutDimDisplay;
             OpItems[SelectedIndex].Stride = StrideDisplay;
-            OpItems[SelectedIndex].Activation = ActivationSelect[ActivationSelectIndex];
+
+            if (ActivationSelectIndex != -1)
+                OpItems[SelectedIndex].Activation = ActivationSelect[ActivationSelectIndex];
+
             OpItems[SelectedIndex].InputShape = InputShapeDisplay;
         }
         public void TextBoxLostFocus(object sender)
@@ -452,7 +455,8 @@ namespace nnui_test
             OpItems[SelectedIndex].Name = textBox.Text;
             OpItems[SelectedIndex].DimOut = OutDimDisplay;
             OpItems[SelectedIndex].Stride = StrideDisplay;
-            OpItems[SelectedIndex].Activation = ActivationSelect[ActivationSelectIndex];
+            if (ActivationSelectIndex != -1)
+                OpItems[SelectedIndex].Activation = ActivationSelect[ActivationSelectIndex];
             OpItems[SelectedIndex].InputShape = InputShapeDisplay;
         }
         public void Compile()

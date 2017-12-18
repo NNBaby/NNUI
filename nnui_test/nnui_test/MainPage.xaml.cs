@@ -28,9 +28,9 @@ namespace nnui_test
             ViewModel.OptimizerSelect.Add("SGD with momentum");
             ViewModel.OptimizerSelect.Add("Adam");
 
-            ViewModel.ActivationSelect.Add("ReLU");
-            ViewModel.ActivationSelect.Add("Softmax");
-            ViewModel.ActivationSelect.Add("Sigmoid");
+            ViewModel.ActivationSelect.Add("relu");
+            ViewModel.ActivationSelect.Add("softmax");
+            ViewModel.ActivationSelect.Add("sigmoid");
 
             OpItem newItem = new OpItem();
             newItem.Name = "data";
