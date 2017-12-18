@@ -46,6 +46,9 @@ namespace nnui_test
             newItem2.OpColor = new SolidColorBrush(Colors.Azure);
             ViewModel.OpItems.Add(newItem2);
             ViewModel.SelectionChanged();
+
+            ViewModel.IpDisplay = "127.0.0.1:5000";
         }
+       
     }
 }

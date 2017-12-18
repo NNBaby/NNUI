@@ -105,6 +105,12 @@ namespace nnui_test
             get => epochDisplay;
             set { epochDisplay = value; OnPropertyChanged(); }
         }
+        private string ipDisplay;
+        public string IpDisplay
+        {
+            get => ipDisplay;
+            set { ipDisplay = value; OnPropertyChanged(); }
+        }
         private Visibility typeVisib;
         public Visibility TypeVisib
         {

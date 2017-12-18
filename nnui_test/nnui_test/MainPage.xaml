@@ -458,7 +458,7 @@
                                                Text="Server IP:"
                                                Margin="10"/>
                                     <TextBox Grid.Column="1"
-                                               Text="127.0.0.1:5000"
+                                               Text="{x:Bind ViewModel.IpDisplay, Mode=TwoWay}"
                                                Margin="10"/>
                                 </Grid>
                                 <Grid>
