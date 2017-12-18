@@ -7,14 +7,15 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Controls;
 using Windows.Web.Http;
 using System;
-
+using System.Threading.Tasks;
+using WinRTXamlToolkit.Controls.DataVisualization.Charting;
 namespace nnui_test
 {
     public class MainPageViewModel : NotificationObject
     {
         #region ViewModel definitions
         public string json;
-
+        DispatcherTimer dispatchertimer = new DispatcherTimer();//for display info
         private ObservableCollection<OpItem> opItems = new ObservableCollection<OpItem>();
         public ObservableCollection<OpItem> OpItems
         {
@@ -106,10 +107,25 @@ namespace nnui_test
             get => activationVisib;
             set { activationVisib = value; OnPropertyChanged(); }
         }
+        public string display_info = "information display";
+        public string DisplayInfo
+        {
+            get => display_info;
+            set { display_info = value; OnPropertyChanged(); }
+        }
 
+        public LossInfo curlossinfo = new LossInfo() { itr = 0, loss = -1 };
+
+        public List<LossInfo> losslist = new List<LossInfo>();
         #endregion
 
         #region SendContent difinitions
+        public class LossInfo
+        {
+            public int itr { get; set; }
+            //int itr_end = -1;
+            public float loss { get; set; }
+        }
         private class SendContent
         {
             public string name = "TestNet";
@@ -478,12 +494,34 @@ namespace nnui_test
             }
         }
 
-        public async void SendInfo(string send)
+        //public async void SendInfo(string send)
+        //{
+        //    Uri requestUri = new Uri("http://127.0.0.1:5000/post");
+        //    HttpResponseMessage httpresponse = new HttpResponseMessage();
+        //    string httpresponsebody;
+            
+        //    HttpClient httpclient = new HttpClient();
+        //    try
+        //    {
+        //        httpclient.DefaultRequestHeaders.Accept.Add(new Windows.Web.Http.Headers.HttpMediaTypeWithQualityHeaderValue("application/json"));
+        //        httpresponse = await httpclient.PostAsync(requestUri, new HttpStringContent(send, Windows.Storage.Streams.UnicodeEncoding.Utf8, "application/json"));
+
+        //        httpresponsebody = await httpresponse.Content.ReadAsStringAsync();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        httpresponsebody = JsonConvert.SerializeObject("Error: " + ex.HResult.ToString("x") + "Message: " + ex.Message);
+        //    }
+        //    SendContent receivecontent = JsonConvert.DeserializeObject<SendContent>(httpresponsebody);
+            
+
+        //}
+        public async Task SendInfo(string send)
         {
             Uri requestUri = new Uri("http://127.0.0.1:5000/post");
             HttpResponseMessage httpresponse = new HttpResponseMessage();
             string httpresponsebody;
-            
+
             HttpClient httpclient = new HttpClient();
             try
             {
@@ -496,9 +534,36 @@ namespace nnui_test
             {
                 httpresponsebody = JsonConvert.SerializeObject("Error: " + ex.HResult.ToString("x") + "Message: " + ex.Message);
             }
-            SendContent receivecontent = JsonConvert.DeserializeObject<SendContent>(httpresponsebody);
-            
+            //SendContent receivecontent = JsonConvert.DeserializeObject<SendContent>(httpresponsebody);
+            //DisplayInfo = "wait for response";
+            curlossinfo = JsonConvert.DeserializeObject<LossInfo>(httpresponsebody);
+            losslist.Add(new LossInfo() { itr = curlossinfo.itr, loss = curlossinfo.loss });
+            DisplayInfo = DisplayInfo + '\n' + curlossinfo.itr.ToString() + "   " + curlossinfo.loss.ToString();
 
+        }
+        public void GetLossInfo()
+        {
+            dispatchertimer.Tick += dispatcherTimer_Tick;
+            dispatchertimer.Interval = new TimeSpan(0, 0, 1);
+            dispatchertimer.Start();
+        }
+        public async void dispatcherTimer_Tick(object sender, object e)
+        {
+            if (curlossinfo.itr > 20)
+                dispatchertimer.Stop();
+            await displayinfo(curlossinfo.itr + 1, curlossinfo.itr + 3);
+        }
+        public async Task displayinfo(int startitr, int enditr)
+        {
+
+            for (int itr = startitr; itr < enditr; itr++)
+            {
+                curlossinfo.itr = itr;
+                curlossinfo.loss = -1;
+                string request = JsonConvert.SerializeObject(curlossinfo);
+
+                await SendInfo(request);
+            }
         }
     }
 }

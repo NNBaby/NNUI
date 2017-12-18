@@ -3,6 +3,7 @@ using Windows.UI;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
+using WinRTXamlToolkit.Controls.DataVisualization.Charting;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -37,6 +38,12 @@ namespace nnui_test
             newItem2.OpColor = new SolidColorBrush(Colors.Azure);
             ViewModel.OpItems.Add(newItem2);
             ViewModel.SelectionChanged();
+        }
+
+        private void Button_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            (LineChart.Series[0] as LineSeries).ItemsSource = null;
+            (LineChart.Series[0] as LineSeries).ItemsSource = ViewModel.losslist;
         }
     }
 }
