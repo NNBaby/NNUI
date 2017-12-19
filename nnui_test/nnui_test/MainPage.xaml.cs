@@ -1,6 +1,8 @@
-﻿using Windows.ApplicationModel.Core;
+﻿using System;
+using Windows.ApplicationModel.Core;
 using Windows.UI;
 using Windows.UI.ViewManagement;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using WinRTXamlToolkit.Controls.DataVisualization.Charting;
@@ -15,6 +17,7 @@ namespace nnui_test
     public sealed partial class MainPage : Page
     {
         private MainPageViewModel ViewModel = new MainPageViewModel();
+        DispatcherTimer dispatchertimer = new DispatcherTimer();
         public MainPage()
         {
             this.InitializeComponent();
@@ -25,21 +28,40 @@ namespace nnui_test
             ViewModel.TypeVisib = Windows.UI.Xaml.Visibility.Visible;
             ViewModel.NameVisib = Windows.UI.Xaml.Visibility.Visible;
 
+            ViewModel.OptimizerSelect.Add("SGD");
+            ViewModel.OptimizerSelect.Add("Adam");
+
+            ViewModel.ActivationSelect.Add("relu");
+            ViewModel.ActivationSelect.Add("softmax");
+            ViewModel.ActivationSelect.Add("sigmoid");
+
             OpItem newItem = new OpItem();
             newItem.Name = "data";
             newItem.OpType = "Input";
+            newItem.InputShape = "[28, 28, 1]";
             newItem.OpColor = new SolidColorBrush(Colors.Azure);
             ViewModel.OpItems.Add(newItem);
 
             OpItem newItem2 = new OpItem();
             newItem2.Name = "pred";
             newItem2.OpType = "Activation";
-            newItem.Activatiion = "softmax";
+            newItem2.Activation = ViewModel.ActivationSelect[1];
             newItem2.OpColor = new SolidColorBrush(Colors.Azure);
             ViewModel.OpItems.Add(newItem2);
             ViewModel.SelectionChanged();
+
+            ViewModel.IpDisplay = "127.0.0.1:5000";
+
+            dispatchertimer.Tick += dispatcherTimer_Tick;
+            dispatchertimer.Interval = new TimeSpan(0, 0, 1);
+            dispatchertimer.Start();
         }
 
+        public void dispatcherTimer_Tick(object sender, object e)
+        {
+            (LineChart.Series[0] as LineSeries).ItemsSource = null;
+            (LineChart.Series[0] as LineSeries).ItemsSource = ViewModel.losslist;
+        }
         private void Button_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             (LineChart.Series[0] as LineSeries).ItemsSource = null;

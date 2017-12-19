@@ -13,6 +13,7 @@ namespace nnui_test
         private int stride;
         private int padding;
         private string activation;
+        private string inputShape;
         private SolidColorBrush opColor;
 
         public string Name
@@ -55,11 +56,17 @@ namespace nnui_test
             get { return opColor; }
             set { opColor = value; }
         }
-        public string Activatiion
+        public string Activation
         {
             get { return activation; }
             set { activation = value; }
         }
+        public string InputShape
+        {
+            get { return inputShape; }
+            set { inputShape = value; }
+        }
+
 
     }
 }

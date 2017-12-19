@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 import json
-from executor import new_model
+from executor import new_model, get_loss
 app = Flask(__name__)
 
 @app.route('/get/')
@@ -21,11 +21,18 @@ def get_res():
 def post_res():
     jsonpack = request.json
     # the type of jsonpack is dict
-    print('This is json message :', jsonpack, '\n\n')
-    mid = new_model(jsonpack)
-    result = {
-        "id": mid
-    }
+    # print('This is json message :', jsonpack, '\n\n')
+    # print (jsonpack)
+    result = dict()
+    rtype = jsonpack["request_type"]
+    if rtype == 0:
+        mid = new_model(jsonpack)
+        result["id"] = mid
+    elif rtype == 1:
+        num_iter = jsonpack["curlossinfo_send"]["itr"]
+        result["itr"] = num_iter
+        result["loss"] = get_loss(0, num_iter)
+    print (result)
     return jsonify(result)
 
 if __name__ == "__main__":
