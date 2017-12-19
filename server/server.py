@@ -32,6 +32,7 @@ def post_res():
         num_iter = jsonpack["curlossinfo_send"]["itr"]
         result["itr"] = num_iter
         result["loss"] = get_loss(0, num_iter)
+    print (result)
     return jsonify(result)
 
 if __name__ == "__main__":

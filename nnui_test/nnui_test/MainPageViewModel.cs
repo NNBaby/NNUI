@@ -592,8 +592,11 @@ namespace nnui_test
             if (func == 1)
             {
                 curlossinfo = JsonConvert.DeserializeObject<LossInfo>(httpresponsebody);
-                losslist.Add(new LossInfo() { itr = curlossinfo.itr, loss = curlossinfo.loss });
-                DisplayInfo = DisplayInfo + '\n' + curlossinfo.itr.ToString() + "   " + curlossinfo.loss.ToString();
+                if (curlossinfo.loss != -1)
+                {
+                    losslist.Add(new LossInfo() { itr = curlossinfo.itr, loss = curlossinfo.loss });
+                    DisplayInfo = DisplayInfo + '\n' + curlossinfo.itr.ToString() + "   " + curlossinfo.loss.ToString();
+                }
             }
 
         }
@@ -605,8 +608,6 @@ namespace nnui_test
         }
         public async void dispatcherTimer_Tick(object sender, object e)
         {
-            if (curlossinfo.itr > 20)
-                dispatchertimer.Stop();
             await displayinfo(curlossinfo.itr + 1, curlossinfo.itr + 3);
         }
         public async Task displayinfo(int startitr, int enditr)
