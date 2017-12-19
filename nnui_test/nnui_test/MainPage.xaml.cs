@@ -1,6 +1,8 @@
-﻿using Windows.ApplicationModel.Core;
+﻿using System;
+using Windows.ApplicationModel.Core;
 using Windows.UI;
 using Windows.UI.ViewManagement;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using WinRTXamlToolkit.Controls.DataVisualization.Charting;
@@ -15,6 +17,7 @@ namespace nnui_test
     public sealed partial class MainPage : Page
     {
         private MainPageViewModel ViewModel = new MainPageViewModel();
+        DispatcherTimer dispatchertimer = new DispatcherTimer();
         public MainPage()
         {
             this.InitializeComponent();
@@ -48,8 +51,17 @@ namespace nnui_test
             ViewModel.SelectionChanged();
 
             ViewModel.IpDisplay = "127.0.0.1:5000";
+
+            dispatchertimer.Tick += dispatcherTimer_Tick;
+            dispatchertimer.Interval = new TimeSpan(0, 0, 1);
+            dispatchertimer.Start();
         }
 
+        public void dispatcherTimer_Tick(object sender, object e)
+        {
+            (LineChart.Series[0] as LineSeries).ItemsSource = null;
+            (LineChart.Series[0] as LineSeries).ItemsSource = ViewModel.losslist;
+        }
         private void Button_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             (LineChart.Series[0] as LineSeries).ItemsSource = null;
