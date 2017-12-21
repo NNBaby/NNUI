@@ -181,7 +181,7 @@ namespace nnui_test
         #region MOdel SendContent definitions
         private class ModelSendContent
         {
-            public string request_type = "Model";
+            public string request_type = "Compile";
             public string name = "TestNet";
             public Train train = new Train();
             public List<Object> operators = new List<Object>();
