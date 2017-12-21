@@ -169,12 +169,19 @@ namespace nnui_test
         }
 
         public List<LossInfo> losslist = new List<LossInfo>();
+
+        private Boolean enableCompile = false;
+        public Boolean EnableCompile
+        {
+            get => enableCompile;
+            set { enableCompile = value; OnPropertyChanged(); }
+        }
         #endregion
 
         #region MOdel SendContent definitions
         private class ModelSendContent
         {
-            public int request_type;
+            public string request_type = "Model";
             public string name = "TestNet";
             public Train train = new Train();
             public List<Object> operators = new List<Object>();
@@ -295,10 +302,18 @@ namespace nnui_test
         public LossInfo curlossinfo = new LossInfo() { itr = 0, loss = -1 };
         private class ResultRequestSendContent
         {
-            public int request_type;
+            public string request_type = "ResultRequest";
             public LossInfo curlossinfo_send = new LossInfo() { itr = 0, loss = -1 };
         }
 
+
+        #endregion
+
+        #region TestConnection SendContent Definitions
+        public  class TestConnectionSendContent
+        {
+            public string request_type = "Connect";
+        }
 
         #endregion
 
@@ -494,7 +509,6 @@ namespace nnui_test
         public async void Compile()
         {
             ModelSendContent sendcontent = new ModelSendContent();
-            sendcontent.request_type = 0;
             InputLayer tempInput = new InputLayer();
             Conv tempConv = new Conv();
             Pool tempPool = new Pool();
@@ -564,59 +578,16 @@ namespace nnui_test
 
         }
 
-        private List<int> FormatConvert(string s)
+
+
+        public async void TestConnection()
         {
-            List<int> list = new List<int>();
-            try
-            {
-                list.Add(s[1] - 48);
-                list.Add(s[4] - 48);
-                return list;
-            }
-            catch
-            {
-                return list;
-            }
+            TestConnectionSendContent sendcontent = new TestConnectionSendContent();
+            string send = JsonConvert.SerializeObject(sendcontent);
+            await SendInfo(send, 2);
         }
 
-        public async Task SendInfo(string send, int func)
-        {
-            string str_uri = string.Format("http://{0}/post", IpDisplay);
-            Uri requestUri = new Uri(str_uri);
-            HttpResponseMessage httpresponse = new HttpResponseMessage();
-            string httpresponsebody;
-
-            HttpClient httpclient = new HttpClient();
-            try
-            {
-                httpclient.DefaultRequestHeaders.Accept.Add(new Windows.Web.Http.Headers.HttpMediaTypeWithQualityHeaderValue("application/json"));
-                httpresponse = await httpclient.PostAsync(requestUri, new HttpStringContent(send, Windows.Storage.Streams.UnicodeEncoding.Utf8, "application/json"));
-
-                httpresponsebody = await httpresponse.Content.ReadAsStringAsync();
-            }
-            catch (Exception ex)
-            {
-                httpresponsebody = JsonConvert.SerializeObject("Error: " + ex.HResult.ToString("x") + "Message: " + ex.Message);
-            }
-            //SendContent receivecontent = JsonConvert.DeserializeObject<SendContent>(httpresponsebody);
-            //DisplayInfo = "wait for response";
-            if (func == 1)
-            {
-                curlossinfo = JsonConvert.DeserializeObject<LossInfo>(httpresponsebody);
-                if (curlossinfo.loss != -1)
-                {
-                    losslist.Add(new LossInfo() { itr = curlossinfo.itr, loss = curlossinfo.loss });
-                    DisplayInfo = DisplayInfo + '\n' + curlossinfo.itr.ToString() + "   " + curlossinfo.loss.ToString();
-                }
-            }
-
-        }
-
-        public void TestConnection()
-        {
-            
-        }
-
+        #region Result Update
         public void GetLossInfo()
         {
             dispatchertimer.Tick += dispatcherTimer_Tick;
@@ -635,7 +606,6 @@ namespace nnui_test
                 curlossinfo.itr = itr;
                 curlossinfo.loss = -1;
                 ResultRequestSendContent sendcontent = new ResultRequestSendContent();
-                sendcontent.request_type = 1;
                 sendcontent.curlossinfo_send = curlossinfo;
                 string request = JsonConvert.SerializeObject(sendcontent);
                 await SendInfo(request, 1);
@@ -648,6 +618,77 @@ namespace nnui_test
                 if (ActivationSelect[i] == str)
                     return i;
             return -1;
+        }
+        #endregion
+
+
+        public async Task SendInfo(string send, int func)
+        {
+            string str_uri = string.Format("http://{0}/post", IpDisplay);
+            HttpResponseMessage httpresponse = new HttpResponseMessage();
+            string httpresponsebody;
+            Uri requestUri = new Uri(str_uri);
+
+            HttpClient httpclient = new HttpClient();
+            try
+            {
+                httpclient.DefaultRequestHeaders.Accept.Add(new Windows.Web.Http.Headers.HttpMediaTypeWithQualityHeaderValue("application/json"));
+                httpresponse = await httpclient.PostAsync(requestUri, new HttpStringContent(send, Windows.Storage.Streams.UnicodeEncoding.Utf8, "application/json"));
+
+                httpresponsebody = await httpresponse.Content.ReadAsStringAsync();
+                if (func == 1)
+                {
+                    curlossinfo = JsonConvert.DeserializeObject<LossInfo>(httpresponsebody);
+                    if (curlossinfo.loss != -1)
+                    {
+                        losslist.Add(new LossInfo() { itr = curlossinfo.itr, loss = curlossinfo.loss });
+                        DisplayInfo = DisplayInfo + '\n' + curlossinfo.itr.ToString() + "   " + curlossinfo.loss.ToString();
+                    }
+                }
+                if (func == 2)
+                {
+                    string response = JsonConvert.DeserializeObject<string>(httpresponsebody);
+                    if (response == "success")
+                        EnableCompile = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                EnableCompile = false;
+                httpresponsebody = JsonConvert.SerializeObject("Error: " + ex.HResult.ToString("x") + "Message: " + ex.Message);
+                DisplayDialog("Connection failed", "Please check server IP address and your network status and try again");
+            }
+            //SendContent receivecontent = JsonConvert.DeserializeObject<SendContent>(httpresponsebody);
+            //DisplayInfo = "wait for response";
+
+        }
+
+
+        private List<int> FormatConvert(string s)
+        {
+            List<int> list = new List<int>();
+            try
+            {
+                list.Add(s[1] - 48);
+                list.Add(s[4] - 48);
+                return list;
+            }
+            catch
+            {
+                return list;
+            }
+        }
+
+        private async void DisplayDialog(string title, string content)
+        {
+            ContentDialog noWifiDialog = new ContentDialog
+            {
+                Title = title,
+                Content = content,
+                CloseButtonText = "Ok"
+            };
+
+            ContentDialogResult result = await noWifiDialog.ShowAsync();
         }
     }
 }

@@ -557,12 +557,14 @@
                                             Content="Test"
                                             Style="{StaticResource ButtonRevealStyle}"
                                             HorizontalAlignment="Stretch"
+                                            IsEnabled="False"
                                             Margin="10,10,5,10"/>
                                     <Button Grid.Column="1"
                                             Grid.Row="1"
                                             Content="Connect"
                                             Style="{StaticResource ButtonRevealStyle}"
                                             HorizontalAlignment="Stretch"
+                                            Click="{x:Bind ViewModel.TestConnection}"
                                             Margin="5,10,10,10"/>
                                 </Grid>
                             </StackPanel>
@@ -571,6 +573,7 @@
                                 Click="{x:Bind ViewModel.Compile}"
                                 HorizontalAlignment="Stretch"
                                 Style="{StaticResource ButtonRevealStyle}"
+                                IsEnabled="{x:Bind ViewModel.EnableCompile, Mode=OneWay}"
                                 Margin="10"/>
                     </StackPanel>
                 </Grid>
@@ -588,6 +591,7 @@
                                 HorizontalAlignment="Stretch" 
                                 VerticalAlignment="Stretch" 
                                 Margin="10" 
+                                IsEnabled="{x:Bind ViewModel.EnableCompile, Mode=OneWay}"
                                 Click="{x:Bind ViewModel.GetLossInfo}">
                         </Button>
 
