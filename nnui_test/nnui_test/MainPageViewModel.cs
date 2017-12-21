@@ -171,21 +171,13 @@ namespace nnui_test
         public List<LossInfo> losslist = new List<LossInfo>();
         #endregion
 
-        #region SendContent definitions
-        public class LossInfo
-        {
-            public int itr { get; set; }
-            //int itr_end = -1;
-            public float loss { get; set; }
-        }
-        public LossInfo curlossinfo = new LossInfo() { itr = 0, loss = -1 };
-        private class SendContent
+        #region MOdel SendContent definitions
+        private class ModelSendContent
         {
             public int request_type;
             public string name = "TestNet";
             public Train train = new Train();
             public List<Object> operators = new List<Object>();
-            public LossInfo curlossinfo_send = new LossInfo() { itr = 0, loss = -1 };
         }
 
         private class Train
@@ -290,6 +282,24 @@ namespace nnui_test
                 return copy;
             }
         }
+        #endregion
+
+        #region Result Request SendContent Definitions
+
+        public class LossInfo
+        {
+            public int itr { get; set; }
+            //int itr_end = -1;
+            public float loss { get; set; }
+        }
+        public LossInfo curlossinfo = new LossInfo() { itr = 0, loss = -1 };
+        private class ResultRequestSendContent
+        {
+            public int request_type;
+            public LossInfo curlossinfo_send = new LossInfo() { itr = 0, loss = -1 };
+        }
+
+
         #endregion
 
         #region Op button logic
@@ -483,7 +493,7 @@ namespace nnui_test
         }
         public async void Compile()
         {
-            SendContent sendcontent = new SendContent();
+            ModelSendContent sendcontent = new ModelSendContent();
             sendcontent.request_type = 0;
             InputLayer tempInput = new InputLayer();
             Conv tempConv = new Conv();
@@ -571,7 +581,8 @@ namespace nnui_test
 
         public async Task SendInfo(string send, int func)
         {
-            Uri requestUri = new Uri("http://127.0.0.1:5000/post");
+            string str_uri = string.Format("http://{0}/post", IpDisplay);
+            Uri requestUri = new Uri(str_uri);
             HttpResponseMessage httpresponse = new HttpResponseMessage();
             string httpresponsebody;
 
@@ -600,6 +611,12 @@ namespace nnui_test
             }
 
         }
+
+        public void TestConnection()
+        {
+            
+        }
+
         public void GetLossInfo()
         {
             dispatchertimer.Tick += dispatcherTimer_Tick;
@@ -617,7 +634,7 @@ namespace nnui_test
             {
                 curlossinfo.itr = itr;
                 curlossinfo.loss = -1;
-                SendContent sendcontent = new SendContent();
+                ResultRequestSendContent sendcontent = new ResultRequestSendContent();
                 sendcontent.request_type = 1;
                 sendcontent.curlossinfo_send = curlossinfo;
                 string request = JsonConvert.SerializeObject(sendcontent);

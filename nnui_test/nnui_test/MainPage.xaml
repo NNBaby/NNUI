@@ -567,7 +567,7 @@
                                 </Grid>
                             </StackPanel>
                         </Grid>
-                        <Button Content="Compile"
+                        <Button Content="Start Training"
                                 Click="{x:Bind ViewModel.Compile}"
                                 HorizontalAlignment="Stretch"
                                 Style="{StaticResource ButtonRevealStyle}"
