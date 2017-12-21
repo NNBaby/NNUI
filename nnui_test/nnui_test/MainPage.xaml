@@ -14,17 +14,17 @@
     <Page.Resources>
         <AcrylicBrush x:Key="CustomAcrylicBrush"
                         BackgroundSource="HostBackdrop"
-                        TintOpacity="0.4"
+                        TintOpacity="0.3"
                         TintColor="White"
                         FallbackColor="White" />
         <AcrylicBrush x:Key="CustomAcrylicBrush1"
                         BackgroundSource="HostBackdrop"
-                        TintOpacity="0.6"
+                        TintOpacity="0.5"
                         TintColor="White"
                         FallbackColor="White" />
         <AcrylicBrush x:Key="CustomAcrylicBrush2"
                         BackgroundSource="HostBackdrop"
-                        TintOpacity="0.8"
+                        TintOpacity="0.7"
                         TintColor="White"
                         FallbackColor="White" />
         <AcrylicBrush x:Key="CustomAcrylicBrush3"
@@ -68,7 +68,7 @@
                             <Button Grid.Column="0"
                                     Grid.Row="0"
                                     Content="Convolution2D"
-                                    Margin="10"
+                                    Margin="10,10,5,10"
                                     HorizontalAlignment="Stretch"
                                     Background="Orange"
                                     Style="{StaticResource ButtonRevealStyle}"
@@ -77,7 +77,7 @@
                             <Button Grid.Column="1"
                                     Grid.Row="0"
                                     Content="Batch Norm"
-                                    Margin="10"
+                                    Margin="5,10,10,10"
                                     HorizontalAlignment="Stretch"
                                     Background="LightBlue"
                                     Style="{StaticResource ButtonRevealStyle}"
@@ -86,7 +86,7 @@
                             <Button Grid.Column="0"
                                     Grid.Row="1"
                                     Content="ReLU"
-                                    Margin="10"
+                                    Margin="10,10,5,10"
                                     HorizontalAlignment="Stretch"
                                     Background="LightGreen"
                                     Style="{StaticResource ButtonRevealStyle}"
@@ -95,7 +95,7 @@
                             <Button Grid.Column="1"
                                     Grid.Row="1"
                                     Content="Pooling2D"
-                                    Margin="10"
+                                    Margin="5,10,10,10"
                                     HorizontalAlignment="Stretch"
                                     Background="LightYellow"
                                     Style="{StaticResource ButtonRevealStyle}"
@@ -104,7 +104,7 @@
                             <Button Grid.Column="0"
                                     Grid.Row="2"
                                     Content="Flattem"
-                                    Margin="10"
+                                    Margin="10,10,5,10"
                                     HorizontalAlignment="Stretch"
                                     Background="LightSalmon"
                                     Style="{StaticResource ButtonRevealStyle}"
@@ -113,7 +113,7 @@
                             <Button Grid.Column="1"
                                     Grid.Row="2"
                                     Content="Dense"
-                                    Margin="10"
+                                    Margin="5,10,10,10"
                                     HorizontalAlignment="Stretch"
                                     Background="LightPink"
                                     Style="{StaticResource ButtonRevealStyle}"
@@ -472,13 +472,13 @@
                                             Content="Test"
                                             Style="{StaticResource ButtonRevealStyle}"
                                             HorizontalAlignment="Stretch"
-                                            Margin="10"/>
+                                            Margin="10,10,5,10"/>
                                     <Button Grid.Column="1"
                                             Grid.Row="1"
                                             Content="Connect"
                                             Style="{StaticResource ButtonRevealStyle}"
                                             HorizontalAlignment="Stretch"
-                                            Margin="10"/>
+                                            Margin="5,10,10,10"/>
                                 </Grid>
                             </StackPanel>
                         </Grid>
@@ -494,8 +494,8 @@
                 <!--Pivot content goes here-->
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
-                        <ColumnDefinition Width="3*" MinWidth="300"></ColumnDefinition>
+                        <ColumnDefinition Width="*" MinWidth="200"></ColumnDefinition>
+                        <ColumnDefinition Width="3*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
 
                     <StackPanel Grid.Column="0" Background="{ThemeResource CustomAcrylicBrush1}">
@@ -518,7 +518,7 @@
                                 Margin="10">
                         </Button>
                     </StackPanel>
-                    <Grid Grid.Column="1">
+                    <Grid Grid.Column="1" Background="{ThemeResource CustomAcrylicBrush2}">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="2*"></RowDefinition>
                             <RowDefinition Height="*"></RowDefinition>
@@ -546,7 +546,8 @@
                                       HorizontalAlignment="Stretch" 
                                       Margin="20" 
                                       HorizontalScrollBarVisibility="Auto" 
-                                      VerticalScrollBarVisibility="Auto">
+                                      VerticalScrollBarVisibility="Auto"
+                                      Background="{ThemeResource CustomAcrylicBrush3}">
                             <TextBlock   Text="{x:Bind ViewModel.DisplayInfo, Mode=TwoWay}"  VerticalAlignment="Top"/>
                         </ScrollViewer>
                     </Grid>
