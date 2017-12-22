@@ -648,7 +648,7 @@ namespace nnui_test
                 if (func == 2)
                 {
                     string response = JsonConvert.DeserializeObject<string>(httpresponsebody);
-                    if (response == "success")
+                    if (response.Trim() == "success")
                         EnableCompile = true;
                 }
             }
