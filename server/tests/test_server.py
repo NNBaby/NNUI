@@ -21,6 +21,7 @@ def test_login():
 def test_model():
     fin = open("LeNet5-keras.json")
     json_data = json.loads(fin.read())
+    json_data["request_type"] = "Compile"
     r = requests.post("%s/post" % ADDRESS, json = json_data)
     print('response from server(POST)', r.json())
     
