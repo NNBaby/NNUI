@@ -41,6 +41,7 @@ class LogRedirectCallback(keras.callbacks.Callback):
         pass
 
     def on_batch_end(self, batch, logs={}):
+        print (logs)
         self.nnbaby_model.write_logs(logs)
 
 class Model:

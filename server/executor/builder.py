@@ -1,67 +1,7 @@
-import keras.layers as L
-from keras import backend as K
-from keras.models import Model
+from .babynet import layers as L
+from .babynet import Model
 
 OPERATOR_NO_INPUT = "There is no input in this operator"
-
-def get_mnist():
-    # mnist
-    from keras.datasets import mnist
-    (x_train, y_train), (x_test, y_test) = mnist.load_data()
-    rows, cols = 28, 28
-    if K.image_data_format() == 'channels_first':
-        # NCHW
-        x_train = x_train.reshape((x_train.shape[0], 1, rows, cols))
-        x_test = x_test.reshape((x_test.shape[0], 1, rows, cols))
-    else:
-        # NHWC
-        x_train = x_train.reshape((x_train.shape[0], rows, cols, 1))
-        x_test = x_test.reshape((x_test.shape[0], rows, cols, 1))
-
-def Data(x = None, **argv):
-    # the default shape is NHWC
-    # if K.image_data_format() != 'channels_first':
-    assert "shapes" in argv, ValueError(OPERATOR_NO_INPUT)
-    return [L.Input(name = argv.get("name"), shape = shape) for shape in argv["shapes"]]
-
-def FC(x, **argv):
-    if len(x.get_shape()) > 2:
-        x = L.Flatten()(x)
-    return L.Dense(argv["dim_out"])(x)
-    
-def Conv(x, **argv):
-    return L.Conv2D(name = argv.get("name"), 
-                    filters = argv["dim_out"],
-                    kernel_size = argv["kernel"],
-                    strides = argv.get("stride", 1),
-                    padding = argv.get("padding", "valid"))(x)
-                    
-def Pool(x, **argv):
-    if argv["pool"] == "MAX":
-        return L.MaxPooling2D(name = argv.get("name"), 
-                              pool_size = argv["kernel"],
-                              strides = argv.get("stride", 1))(x)
-    elif argv["pool"] == "AVE":
-        return L.AveragePooling2D(name = argv.get("name"), 
-                                  pool_size = argv["kernel"],
-                                  strides = argv.get("stride", 1))(x)
-    raise ValueError("The pool operator must have pool type.")
-    
-def ReLU(x, **argv):
-    return L.Activation(name = argv.get("name"), activation = "relu")(x) 
-
-def Softmax(x, **argv):
-    return L.Activation(name = argv.get("name"), activation = "softmax")(x)
-    
-    
-OP_MAP = {
-    "Data": Data,
-    "FC": FC,
-    "Conv": Conv,
-    "Pool": Pool,
-    "ReLU": ReLU,
-    "Softmax": Softmax
-}
 
 def read_dataset(name):
     dataset = dict()
