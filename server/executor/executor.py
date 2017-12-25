@@ -1,6 +1,5 @@
 import multiprocessing
 import threading
-from .reader import *
 
 def pipe_thread(pipe, model):
     while 1:
@@ -14,6 +13,7 @@ def pipe_thread(pipe, model):
                 pipe.send(-1)    
     
 def worker(dict_info, pipe):
+    from .reader import Model
     model = Model(mode = "train")
     t = threading.Thread(target = pipe_thread, args = (pipe, model))
     t.start()
