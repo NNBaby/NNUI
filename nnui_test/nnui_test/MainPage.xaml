@@ -400,28 +400,28 @@
                                                        Visibility="{x:Bind ViewModel.TypeVisib, Mode=OneWay}">
                                             </TextBlock>
                                             <TextBox x:Name="NameBox"
-                                                     Text="{x:Bind ViewModel.NameDisplay, Mode=TwoWay}"
+                                                     Text="{x:Bind ViewModel.NameDisplay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                      Grid.Column="1"
                                                      Grid.Row="1"
                                                      Margin="10"
                                                      VerticalAlignment="Center"
                                                      Visibility="{x:Bind ViewModel.NameVisib, Mode=OneWay}">
                                             </TextBox>
-                                            <TextBox Text="{x:Bind ViewModel.ShapeDisplay, Mode=TwoWay}"
+                                            <TextBox Text="{x:Bind ViewModel.ShapeDisplay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                      Grid.Column="3"
                                                      Grid.Row="2"
                                                      Margin="10"
                                                      VerticalAlignment="Center"
                                                      Visibility="{x:Bind ViewModel.KernelShapeVisib, Mode=OneWay}">
                                             </TextBox>
-                                            <TextBox Text="{x:Bind ViewModel.OutDimDisplay, Mode=TwoWay}"
+                                            <TextBox Text="{x:Bind ViewModel.OutDimDisplay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                      Grid.Column="1"
                                                      Grid.Row="3"
                                                      Margin="10"
                                                      VerticalAlignment="Center"
                                                      Visibility="{x:Bind ViewModel.DimOutVisib, Mode=OneWay}">
                                             </TextBox>
-                                            <TextBox Text="{x:Bind ViewModel.StrideDisplay, Mode=TwoWay}"
+                                            <TextBox Text="{x:Bind ViewModel.StrideDisplay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                      Grid.Column="1"
                                                      Grid.Row="4"
                                                      Margin="10"
@@ -445,11 +445,6 @@
                                                      Visibility="{x:Bind ViewModel.InputShapeVisib, Mode=OneWay}">
                                             </TextBlock>
                                         </Grid>
-                                        <Button Content="Modify"
-                                                Margin="10"
-                                                Style="{StaticResource ButtonRevealStyle}"
-                                                Click="{x:Bind ViewModel.PropertyModify}"
-                                                HorizontalAlignment="Stretch"/>
                                     </StackPanel>
                                     <StackPanel Grid.Row="1">
                                         <TextBlock Text="Summary"
