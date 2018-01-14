@@ -407,7 +407,7 @@ namespace nnui_test
         }
         #endregion
 
-
+        #region Property modification
         int LastSelectedIndex = 0;
         public void SelectionChanged()
         {
@@ -582,18 +582,9 @@ namespace nnui_test
 
             OpItems[SelectedIndex].InputShape = InputShapeDisplay;
         }
-        //public void TextBoxLostFocus(object sender)
-        //{
-        //    TextBox textBox = sender as TextBox;
-        //    OpItems[SelectedIndex].OpType = TypeDisplay;
-        //    OpItems[SelectedIndex].Kernel = ShapeDisplay;
-        //    OpItems[SelectedIndex].Name = textBox.Text;
-        //    OpItems[SelectedIndex].DimOut = OutDimDisplay;
-        //    OpItems[SelectedIndex].Stride = StrideDisplay;
-        //    if (ActivationSelectIndex != -1)
-        //        OpItems[SelectedIndex].Activation = ActivationSelect[ActivationSelectIndex];
-        //    OpItems[SelectedIndex].InputShape = InputShapeDisplay;
-        //}
+
+        #endregion
+
         public async void Compile()
         {
             PropertyModify();
@@ -709,8 +700,7 @@ namespace nnui_test
             return -1;
         }
         #endregion
-
-
+        
         public async Task SendInfo(string send, int func)
         {
             string str_uri = string.Format("http://{0}/post", IpDisplay);

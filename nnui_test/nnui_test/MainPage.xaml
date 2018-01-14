@@ -24,12 +24,12 @@
                         FallbackColor="White" />
         <AcrylicBrush x:Key="CustomAcrylicBrush2"
                         BackgroundSource="HostBackdrop"
-                        TintOpacity="0.7"
+                        TintOpacity="0.9"
                         TintColor="White"
                         FallbackColor="White" />
         <AcrylicBrush x:Key="CustomAcrylicBrush3"
                         BackgroundSource="HostBackdrop"
-                        TintOpacity="0.9"
+                        TintOpacity="1"
                         TintColor="White"
                         FallbackColor="White" />
         <CollectionViewSource x:Name="TestSourceCVS"/>
@@ -584,7 +584,7 @@
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" MinWidth="200"></ColumnDefinition>
-                        <ColumnDefinition Width="3*"></ColumnDefinition>
+                        <ColumnDefinition Width="5*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
 
                     <StackPanel Grid.Column="0" Background="{ThemeResource CustomAcrylicBrush1}">
@@ -636,8 +636,11 @@
                                       HorizontalAlignment="Stretch" 
                                       HorizontalScrollBarVisibility="Auto" 
                                       VerticalScrollBarVisibility="Auto"
+                                      Margin="10"
                                       Background="{ThemeResource CustomAcrylicBrush3}">
-                            <TextBlock   Text="{x:Bind ViewModel.DisplayInfo, Mode=TwoWay}"  VerticalAlignment="Top"/>
+                            <TextBlock   Text="{x:Bind ViewModel.DisplayInfo, Mode=TwoWay}"
+                                         VerticalAlignment="Top"
+                                         Margin="10"/>
                         </ScrollViewer>
                     </Grid>
                 </Grid>
