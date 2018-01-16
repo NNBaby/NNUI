@@ -654,8 +654,14 @@ namespace nnui_test
             }
 
             string send = JsonConvert.SerializeObject(sendcontent);
-            await SendInfo(send, 0);
+            try
+            {
+                await SendInfo(send, 0);
+            }
+            catch
+            {
 
+            }
         }
 
 
@@ -664,7 +670,12 @@ namespace nnui_test
         {
             TestConnectionSendContent sendcontent = new TestConnectionSendContent();
             string send = JsonConvert.SerializeObject(sendcontent);
-            await SendInfo(send, 2);
+            try
+            {
+                await SendInfo(send, 2);
+            }catch{
+
+            }
         }
 
         #region Result Update
@@ -688,7 +699,14 @@ namespace nnui_test
                 ResultRequestSendContent sendcontent = new ResultRequestSendContent();
                 sendcontent.curlossinfo_send = curlossinfo;
                 string request = JsonConvert.SerializeObject(sendcontent);
-                await SendInfo(request, 1);
+                try
+                {
+                    await SendInfo(request, 1);
+                }
+                catch
+                {
+                    dispatchertimer.Stop();
+                }
             }
         }
 
@@ -736,6 +754,7 @@ namespace nnui_test
                 EnableCompile = false;
                 httpresponsebody = JsonConvert.SerializeObject("Error: " + ex.HResult.ToString("x") + "Message: " + ex.Message);
                 DisplayDialog("Connection failed", "Please check server IP address and your network status and try again");
+                throw (ex);
             }
             //SendContent receivecontent = JsonConvert.DeserializeObject<SendContent>(httpresponsebody);
             //DisplayInfo = "wait for response";
@@ -766,8 +785,14 @@ namespace nnui_test
                 Content = content,
                 CloseButtonText = "Ok"
             };
+            try
+            {
+                ContentDialogResult result = await noWifiDialog.ShowAsync();
+            }
+            catch
+            {
 
-            ContentDialogResult result = await noWifiDialog.ShowAsync();
+            }
         }
     }
 }
