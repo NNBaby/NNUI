@@ -1,39 +1,17 @@
-from .babynet import layers as L
-from .babynet import Model
+from keras import layers as L
+from keras.models import Model
+BABYNET_BACKEND = "keras"
 
+print ("Using %s backend" % BABYNET_BACKEND)
+    
 OPERATOR_NO_INPUT = "There is no input in this operator"
 
-def read_dataset(name):
-    dataset = dict()
-    if name == "mnist":
-        from keras.datasets import mnist
-        (x_train, y_train), (x_test, y_test) = mnist.load_data()
-        rows, cols = 28, 28
-        num_classes = 10
-        # NHWC
-        x_train = x_train.reshape((x_train.shape[0], rows, cols, 1))
-        x_test = x_test.reshape((x_test.shape[0], rows, cols, 1))
-        y_train = keras.utils.np_utils.to_categorical(y_train, num_classes)
-        y_test = keras.utils.np_utils.to_categorical(y_test, num_classes)
-        dataset["x_train"] = x_train
-        dataset["y_train"] = y_train
-        dataset["x_test"] = x_test
-        dataset["y_test"] = y_test
-    return dataset
-    
 def build_keras_model(info, topo, mode):
-    # configure data operators
-    name2op = dict()
-    for op in topo:
-        name2op[op["name"]] = op
     mode_info = info[mode]
-    # inputs = mode_info["inputs"]
 
     xs = dict()
     for op in topo:
         inputs = [xs[name] for name in op["inputs"]]
-        #op_func = OP_MAP[op["type"]]
-        #outputs = op_func(*inputs, **op)
         op_func = L.__getattribute__(op["optype"])
         info = op.copy()
         for s in ["optype", "input", "inputs", "output", "outputs"]:
@@ -73,4 +51,11 @@ def build_keras_model(info, topo, mode):
         
     model.compile(optimizer = optimizer, loss = loss, loss_weights = loss_weights, metrics = metrics)
     return model
-    
+
+BUILDING_BACKEND = {
+    "keras" : build_keras_model,
+}
+
+def build_model(info, topo, mode):
+    assert BABYNET_BACKEND in BUILDING_BACKEND, "Unknown Backend: %s" % BABYNET_BACKEND
+    return BUILDING_BACKEND[BABYNET_BACKEND](info, topo, mode)
