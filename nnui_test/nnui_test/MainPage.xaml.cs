@@ -48,7 +48,7 @@ namespace nnui_test
             newItem2.Activation = ViewModel.ActivationSelect[1];
             newItem2.OpColor = new SolidColorBrush(Colors.Azure);
             ViewModel.OpItems.Add(newItem2);
-            ViewModel.SelectionChanged();
+            ViewModel.SelectionInit();
 
             ViewModel.IpDisplay = "127.0.0.1:5000";
 

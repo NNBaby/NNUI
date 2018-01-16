@@ -94,13 +94,13 @@ namespace nnui_test
             get => inputShapeDisplay;
             set { inputShapeDisplay = value; OnPropertyChanged(); }
         }
-        private int batchSizeDisplay;
+        private int batchSizeDisplay = 64;
         public int BatchSizeDisplay
         {
             get => batchSizeDisplay;
             set { batchSizeDisplay = value; OnPropertyChanged(); }
         }
-        private int epochDisplay;
+        private int epochDisplay = 5;
         public int EpochDisplay
         {
             get => epochDisplay;
@@ -407,11 +407,23 @@ namespace nnui_test
         }
         #endregion
 
-
+        #region Property modification
+        int LastSelectedIndex = 0;
         public void SelectionChanged()
         {
             if (SelectedIndex != -1)
             {
+                OpItems[LastSelectedIndex].OpType = TypeDisplay;
+                OpItems[LastSelectedIndex].Kernel = ShapeDisplay;
+                OpItems[LastSelectedIndex].Name = NameDisplay;
+                OpItems[LastSelectedIndex].DimOut = OutDimDisplay;
+                OpItems[LastSelectedIndex].Stride = StrideDisplay;
+
+                if (ActivationSelectIndex != -1)
+                    OpItems[LastSelectedIndex].Activation = ActivationSelect[ActivationSelectIndex];
+
+
+                OpItems[SelectedIndex].InputShape = InputShapeDisplay;
                 TypeDisplay = OpItems[SelectedIndex].OpType;
                 ShapeDisplay = OpItems[SelectedIndex].Kernel;
                 NameDisplay = OpItems[SelectedIndex].Name;
@@ -479,6 +491,82 @@ namespace nnui_test
                         InputShapeVisib = Visibility.Visible;
                         break;
                 }
+                LastSelectedIndex = SelectedIndex;
+            }
+        }
+        public void SelectionInit()
+        {
+            if (SelectedIndex != -1)
+            {
+                OpItems[SelectedIndex].InputShape = InputShapeDisplay;
+                TypeDisplay = OpItems[SelectedIndex].OpType;
+                ShapeDisplay = OpItems[SelectedIndex].Kernel;
+                NameDisplay = OpItems[SelectedIndex].Name;
+                OutDimDisplay = OpItems[SelectedIndex].DimOut;
+                StrideDisplay = OpItems[SelectedIndex].Stride;
+                OutDimDisplay = OpItems[SelectedIndex].DimOut;
+                ActivationSelectIndex = GetActivationIndex(OpItems[SelectedIndex].Activation);
+                InputShapeDisplay = OpItems[SelectedIndex].InputShape;
+                switch (OpItems[SelectedIndex].OpType)
+                {
+                    case "Convolution2D":
+                        KernelShapeVisib = Visibility.Visible;
+                        DimOutVisib = Visibility.Visible;
+                        StrideVisib = Visibility.Visible;
+                        PadVisib = Visibility.Visible;
+                        ActivationVisib = Visibility.Collapsed;
+                        InputShapeVisib = Visibility.Collapsed;
+                        break;
+                    case "BatchNormalization":
+                        KernelShapeVisib = Visibility.Collapsed;
+                        DimOutVisib = Visibility.Collapsed;
+                        StrideVisib = Visibility.Collapsed;
+                        PadVisib = Visibility.Collapsed;
+                        ActivationVisib = Visibility.Collapsed;
+                        InputShapeVisib = Visibility.Collapsed;
+                        break;
+                    case "Activation":
+                        KernelShapeVisib = Visibility.Collapsed;
+                        DimOutVisib = Visibility.Collapsed;
+                        StrideVisib = Visibility.Collapsed;
+                        PadVisib = Visibility.Collapsed;
+                        ActivationVisib = Visibility.Visible;
+                        InputShapeVisib = Visibility.Collapsed;
+                        break;
+                    case "MaxPooling2D":
+                        KernelShapeVisib = Visibility.Visible;
+                        DimOutVisib = Visibility.Collapsed;
+                        StrideVisib = Visibility.Visible;
+                        PadVisib = Visibility.Collapsed;
+                        ActivationVisib = Visibility.Collapsed;
+                        InputShapeVisib = Visibility.Collapsed;
+                        break;
+                    case "Flatten":
+                        KernelShapeVisib = Visibility.Collapsed;
+                        DimOutVisib = Visibility.Collapsed;
+                        StrideVisib = Visibility.Collapsed;
+                        PadVisib = Visibility.Collapsed;
+                        ActivationVisib = Visibility.Collapsed;
+                        InputShapeVisib = Visibility.Collapsed;
+                        break;
+                    case "Dense":
+                        KernelShapeVisib = Visibility.Collapsed;
+                        DimOutVisib = Visibility.Visible;
+                        StrideVisib = Visibility.Collapsed;
+                        PadVisib = Visibility.Collapsed;
+                        ActivationVisib = Visibility.Collapsed;
+                        InputShapeVisib = Visibility.Collapsed;
+                        break;
+                    case "Input":
+                        KernelShapeVisib = Visibility.Collapsed;
+                        DimOutVisib = Visibility.Collapsed;
+                        StrideVisib = Visibility.Collapsed;
+                        PadVisib = Visibility.Collapsed;
+                        ActivationVisib = Visibility.Collapsed;
+                        InputShapeVisib = Visibility.Visible;
+                        break;
+                }
+                LastSelectedIndex = SelectedIndex;
             }
         }
         public void PropertyModify()
@@ -494,20 +582,12 @@ namespace nnui_test
 
             OpItems[SelectedIndex].InputShape = InputShapeDisplay;
         }
-        public void TextBoxLostFocus(object sender)
-        {
-            TextBox textBox = sender as TextBox;
-            OpItems[SelectedIndex].OpType = TypeDisplay;
-            OpItems[SelectedIndex].Kernel = ShapeDisplay;
-            OpItems[SelectedIndex].Name = textBox.Text;
-            OpItems[SelectedIndex].DimOut = OutDimDisplay;
-            OpItems[SelectedIndex].Stride = StrideDisplay;
-            if (ActivationSelectIndex != -1)
-                OpItems[SelectedIndex].Activation = ActivationSelect[ActivationSelectIndex];
-            OpItems[SelectedIndex].InputShape = InputShapeDisplay;
-        }
+
+        #endregion
+
         public async void Compile()
         {
+            PropertyModify();
             ModelSendContent sendcontent = new ModelSendContent();
             InputLayer tempInput = new InputLayer();
             Conv tempConv = new Conv();
@@ -574,8 +654,14 @@ namespace nnui_test
             }
 
             string send = JsonConvert.SerializeObject(sendcontent);
-            await SendInfo(send, 0);
+            try
+            {
+                await SendInfo(send, 0);
+            }
+            catch
+            {
 
+            }
         }
 
 
@@ -584,7 +670,12 @@ namespace nnui_test
         {
             TestConnectionSendContent sendcontent = new TestConnectionSendContent();
             string send = JsonConvert.SerializeObject(sendcontent);
-            await SendInfo(send, 2);
+            try
+            {
+                await SendInfo(send, 2);
+            }catch{
+
+            }
         }
 
         #region Result Update
@@ -608,7 +699,14 @@ namespace nnui_test
                 ResultRequestSendContent sendcontent = new ResultRequestSendContent();
                 sendcontent.curlossinfo_send = curlossinfo;
                 string request = JsonConvert.SerializeObject(sendcontent);
-                await SendInfo(request, 1);
+                try
+                {
+                    await SendInfo(request, 1);
+                }
+                catch
+                {
+                    dispatchertimer.Stop();
+                }
             }
         }
 
@@ -620,8 +718,7 @@ namespace nnui_test
             return -1;
         }
         #endregion
-
-
+        
         public async Task SendInfo(string send, int func)
         {
             string str_uri = string.Format("http://{0}/post", IpDisplay);
@@ -657,6 +754,7 @@ namespace nnui_test
                 EnableCompile = false;
                 httpresponsebody = JsonConvert.SerializeObject("Error: " + ex.HResult.ToString("x") + "Message: " + ex.Message);
                 DisplayDialog("Connection failed", "Please check server IP address and your network status and try again");
+                throw (ex);
             }
             //SendContent receivecontent = JsonConvert.DeserializeObject<SendContent>(httpresponsebody);
             //DisplayInfo = "wait for response";
@@ -687,8 +785,14 @@ namespace nnui_test
                 Content = content,
                 CloseButtonText = "Ok"
             };
+            try
+            {
+                ContentDialogResult result = await noWifiDialog.ShowAsync();
+            }
+            catch
+            {
 
-            ContentDialogResult result = await noWifiDialog.ShowAsync();
+            }
         }
     }
 }

@@ -24,12 +24,12 @@
                         FallbackColor="White" />
         <AcrylicBrush x:Key="CustomAcrylicBrush2"
                         BackgroundSource="HostBackdrop"
-                        TintOpacity="0.7"
+                        TintOpacity="0.9"
                         TintColor="White"
                         FallbackColor="White" />
         <AcrylicBrush x:Key="CustomAcrylicBrush3"
                         BackgroundSource="HostBackdrop"
-                        TintOpacity="0.9"
+                        TintOpacity="1"
                         TintColor="White"
                         FallbackColor="White" />
         <CollectionViewSource x:Name="TestSourceCVS"/>
@@ -41,549 +41,550 @@
             <PivotItem Header="Model"
                        Margin="0">
                 <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
-                        <ColumnDefinition Width="3*"></ColumnDefinition>
-                        <ColumnDefinition Width="*" MinWidth="300"></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
-                    <StackPanel Grid.Column="0"
-                                Background="{ThemeResource CustomAcrylicBrush1}">
-                        <TextBlock Text="Blocks"
-                                 Margin="10"
-                                 HorizontalAlignment="Stretch"
-                                 TextAlignment="Left"
-                                 FontSize="24">
-                        </TextBlock>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="*"/>
-                            </Grid.RowDefinitions>
-                            <Button Grid.Column="0"
-                                    Grid.Row="0"
-                                    Content="Convolution2D"
-                                    Margin="10,10,5,5"
-                                    HorizontalAlignment="Stretch"
-                                    FontSize="16"
-                                    Style="{StaticResource ButtonRevealStyle}"
-                                    Click="{x:Bind ViewModel.AddConv}">
-                                <Button.Resources>
-                                    <ResourceDictionary>
-                                        <ResourceDictionary.ThemeDictionaries>
-                                            <ResourceDictionary x:Key="Light">
-                                                <SolidColorBrush x:Key="ButtonForegroundPointerOver"
-                                                                 Color="Black"/>
-                                                <SolidColorBrush x:Key="ButtonRevealBackgroundPointerOver"
-                                                                 Color="Orange"/>
-                                                <SolidColorBrush x:Key="ButtonForeground"
-                                                                 Color="Orange"/>
-                                            </ResourceDictionary>
-                                        </ResourceDictionary.ThemeDictionaries>
-                                    </ResourceDictionary>
-                                </Button.Resources>
-                            </Button>
-                            <Button Grid.Column="1"
-                                    Grid.Row="0"
-                                    Content="Batch Norm"
-                                    Margin="5,10,10,5"
-                                    HorizontalAlignment="Stretch"
-                                    FontSize="16"
-                                    Style="{StaticResource ButtonRevealStyle}"
-                                    Click="{x:Bind ViewModel.AddBN}">
-                                <Button.Resources>
-                                    <ResourceDictionary>
-                                        <ResourceDictionary.ThemeDictionaries>
-                                            <ResourceDictionary x:Key="Light">
-                                                <SolidColorBrush x:Key="ButtonForegroundPointerOver"
-                                                                 Color="Black"/>
-                                                <SolidColorBrush x:Key="ButtonRevealBackgroundPointerOver"
-                                                                 Color="LightBlue"/>
-                                                <SolidColorBrush x:Key="ButtonForeground"
-                                                                 Color="LightBlue"/>
-                                            </ResourceDictionary>
-                                        </ResourceDictionary.ThemeDictionaries>
-                                    </ResourceDictionary>
-                                </Button.Resources>
-                            </Button>
-                            <Button Grid.Column="0"
-                                    Grid.Row="1"
-                                    Content="ReLU"
-                                    Margin="10,5,5,5"
-                                    HorizontalAlignment="Stretch"
-                                    FontSize="16"
-                                    Style="{StaticResource ButtonRevealStyle}"
-                                    Click="{x:Bind ViewModel.AddReLU}">
-                                <Button.Resources>
-                                    <ResourceDictionary>
-                                        <ResourceDictionary.ThemeDictionaries>
-                                            <ResourceDictionary x:Key="Light">
-                                                <SolidColorBrush x:Key="ButtonForegroundPointerOver"
-                                                                 Color="Black"/>
-                                                <SolidColorBrush x:Key="ButtonRevealBackgroundPointerOver"
-                                                                 Color="LightGreen"/>
-                                                <SolidColorBrush x:Key="ButtonForeground"
-                                                                 Color="LightGreen"/>
-                                            </ResourceDictionary>
-                                        </ResourceDictionary.ThemeDictionaries>
-                                    </ResourceDictionary>
-                                </Button.Resources>
-                            </Button>
-                            <Button Grid.Column="1"
-                                    Grid.Row="1"
-                                    Content="Pooling2D"
-                                    Margin="5,5,10,5"
-                                    HorizontalAlignment="Stretch"
-                                    FontSize="16"
-                                    Style="{StaticResource ButtonRevealStyle}"
-                                    Click="{x:Bind ViewModel.AddPooling}">
-                                <Button.Resources>
-                                    <ResourceDictionary>
-                                        <ResourceDictionary.ThemeDictionaries>
-                                            <ResourceDictionary x:Key="Light">
-                                                <SolidColorBrush x:Key="ButtonForegroundPointerOver"
-                                                                 Color="Black"/>
-                                                <SolidColorBrush x:Key="ButtonRevealBackgroundPointerOver"
-                                                                 Color="LightYellow"/>
-                                                <SolidColorBrush x:Key="ButtonForeground"
-                                                                 Color="LightYellow"/>
-                                            </ResourceDictionary>
-                                        </ResourceDictionary.ThemeDictionaries>
-                                    </ResourceDictionary>
-                                </Button.Resources>
-                            </Button>
-                            <Button Grid.Column="0"
-                                    Grid.Row="2"
-                                    Content="Flattem"
-                                    Margin="10,5,5,10"
-                                    HorizontalAlignment="Stretch"
-                                    FontSize="16"
-                                    Style="{StaticResource ButtonRevealStyle}"
-                                    Click="{x:Bind ViewModel.AddFlatten}">
-                                <Button.Resources>
-                                    <ResourceDictionary>
-                                        <ResourceDictionary.ThemeDictionaries>
-                                            <ResourceDictionary x:Key="Light">
-                                                <SolidColorBrush x:Key="ButtonForegroundPointerOver"
-                                                                 Color="Black"/>
-                                                <SolidColorBrush x:Key="ButtonRevealBackgroundPointerOver"
-                                                                 Color="LightSalmon"/>
-                                                <SolidColorBrush x:Key="ButtonForeground"
-                                                                 Color="LightSalmon"/>
-                                            </ResourceDictionary>
-                                        </ResourceDictionary.ThemeDictionaries>
-                                    </ResourceDictionary>
-                                </Button.Resources>
-                            </Button>
-                            <Button Grid.Column="1"
-                                    Grid.Row="2"
-                                    Content="Dense"
-                                    Margin="5,5,10,10"
-                                    HorizontalAlignment="Stretch"
-                                    FontSize="16"
-                                    Style="{StaticResource ButtonRevealStyle}"
-                                    Click="{x:Bind ViewModel.AddFC}">
-                                <Button.Resources>
-                                    <ResourceDictionary>
-                                        <ResourceDictionary.ThemeDictionaries>
-                                            <ResourceDictionary x:Key="Light">
-                                                <SolidColorBrush x:Key="ButtonForegroundPointerOver"
-                                                                 Color="Black"/>
-                                                <SolidColorBrush x:Key="ButtonRevealBackgroundPointerOver"
-                                                                 Color="LightPink"/>
-                                                <SolidColorBrush x:Key="ButtonForeground"
-                                                                 Color="LightPink"/>
-                                            </ResourceDictionary>
-                                        </ResourceDictionary.ThemeDictionaries>
-                                    </ResourceDictionary>
-                                </Button.Resources>
-                            </Button>
-                        </Grid>
-                        <Button Content="Remove"
-                                Background="Red"
-                                Margin="10"
-                                HorizontalAlignment="Stretch"
-                                    FontSize="16"
-                                Style="{StaticResource ButtonRevealStyle}"
-                                Click="{x:Bind ViewModel.Remove}">
-                        </Button>
-                        <TextBlock Text="Models"
-                                   Margin="10"
-                                   HorizontalAlignment="Stretch"
-                                   TextAlignment="Left"
-                                   FontSize="24"/>
-                        <Button Content="LeNet-5"
-                                Margin="10"
-                                HorizontalAlignment="Stretch"
-                                Style="{StaticResource ButtonRevealStyle}"/>
-
-                    </StackPanel>
-                    <StackPanel Grid.Column="1"
-                                Background="{ThemeResource CustomAcrylicBrush2}">
-                        <TextBlock Text="Network"
-                                 Margin="10"
-                                 HorizontalAlignment="Stretch"
-                                 TextAlignment="Left"
-                                 FontSize="24">
-                        </TextBlock>
-                        <!--<StackPanel>
-                                <Button Content="Input"
-                                        Width="200"
-                                        Background="White">
-                                </Button>
-                                <Button Content="Convolution"
-                                        Width="200"
-                                        Background="Orange">
-                                </Button>
-                                <Button Content="Batch Normalization"
-                                        Width="200"
-                                        Background="LightBlue">
-                                </Button>
-                                <Button Content="ReLU"
-                                        Width="200"
-                                        Background="LightGreen">
-                                </Button>
-                                <Button Content="Convolution"
-                                        Width="200"
-                                        Background="Orange">
-                                </Button>
-                                <Button Content="Batch Normalization"
-                                        Width="200"
-                                        Background="LightBlue">
-                                </Button>
-                                <Button Content="ReLU"
-                                        Width="200"
-                                        Background="LightGreen">
-                                </Button>
-                                <Button Content="Convolution"
-                                        Width="200"
-                                        Background="Orange">
-                                </Button>
-                                <Button Content="Batch Normalization"
-                                        Width="200"
-                                        Background="LightBlue">
-                                </Button>
-                                <Button Content="ReLU"
-                                        Width="200"
-                                        Background="LightGreen">
-                                </Button>
-                                <Button Content="FC"
-                                        Width="200"
-                                        Background="LightPink">
-                                </Button>
-                                <Button Content="Softmax"
-                                        Width="200"
-                                        Background="White">
-                                </Button>
-                            </StackPanel>-->
-                        <Grid>
-                            <ListView ItemsSource="{x:Bind ViewModel.OpItems, Mode=TwoWay}"
-                                      Width="250"
-                                      HorizontalAlignment="Left"
-                                      SelectedIndex="{x:Bind ViewModel.SelectedIndex, Mode=TwoWay}"
-                                      SelectionChanged="{x:Bind ViewModel.SelectionChanged}">
-                                <ListView.ItemTemplate>
-                                    <DataTemplate x:Name="TestListViewTemplate"
-                                                  x:DataType="data:OpItem">
-                                        <Grid Background="{x:Bind OpColor}"
-                                              Width="250"
-                                              Height="44"
-                                              HorizontalAlignment="Center"
-                                              VerticalAlignment="Center">
-                                            <TextBlock Text="{x:Bind OpType, Mode=TwoWay}" 
-                                                       Style="{ThemeResource BaseTextBlockStyle}"
-                                                       HorizontalAlignment="Center"
-                                                       VerticalAlignment="Center"   />
-                                        </Grid>
-                                    </DataTemplate>
-                                </ListView.ItemTemplate>
-                            </ListView>
-                        </Grid>
-                    </StackPanel>
-                    <StackPanel Grid.Column="2"
-                                Background="{ThemeResource CustomAcrylicBrush3}">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*"></RowDefinition>
-                                <RowDefinition Height="*"></RowDefinition>
-                            </Grid.RowDefinitions>
-                            <StackPanel Grid.Row="0">
-                                <TextBlock Text="Property"
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" MinWidth="300"></ColumnDefinition>
+                            <ColumnDefinition Width="3*"></ColumnDefinition>
+                            <ColumnDefinition Width="*" MinWidth="300"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <ScrollViewer Grid.Column="0"
+                                    Background="{ThemeResource CustomAcrylicBrush1}">
+                            <StackPanel>
+                                <TextBlock Text="Blocks"
                                          Margin="10"
+                                         HorizontalAlignment="Stretch"
+                                         TextAlignment="Left"
                                          FontSize="24">
                                 </TextBlock>
                                 <Grid>
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"
-                                                          MaxWidth="120"></ColumnDefinition>
-                                        <ColumnDefinition Width="*"></ColumnDefinition>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="*"></RowDefinition>
-                                        <RowDefinition Height="*"></RowDefinition>
-                                        <RowDefinition Height="*"></RowDefinition>
-                                        <RowDefinition Height="*"></RowDefinition>
-                                        <RowDefinition Height="*"></RowDefinition>
-                                        <RowDefinition Height="*"></RowDefinition>
-                                        <RowDefinition Height="*"></RowDefinition>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
                                     </Grid.RowDefinitions>
-                                    <TextBlock Text="Block Type:"
-                                               Grid.Column="0"
-                                               Grid.Row="0"
-                                               Margin="10"
-                                               TextAlignment="Left"
-                                               VerticalAlignment="Center"
-                                               Visibility="{x:Bind ViewModel.TypeVisib, Mode=OneWay}">
-                                    </TextBlock>
-                                    <TextBlock Text="Name:"
-                                               Grid.Column="0"
-                                               Grid.Row="1"
-                                               Margin="10"
-                                               TextAlignment="Left"
-                                               VerticalAlignment="Center"
-                                               Visibility="{x:Bind ViewModel.NameVisib, Mode=OneWay}">
-                                    </TextBlock>
-                                    <TextBlock Text="Kernel Shape:"
-                                               Grid.Column="0"
-                                               Grid.Row="2"
-                                               Margin="10"
-                                               TextAlignment="Left"
-                                               VerticalAlignment="Center"
-                                               Visibility="{x:Bind ViewModel.KernelShapeVisib, Mode=OneWay}">
-                                    </TextBlock>
-                                    <TextBlock Text="OutDim:"
-                                               Grid.Column="0"
-                                               Grid.Row="3"
-                                               Margin="10"
-                                               TextAlignment="Left"
-                                               VerticalAlignment="Center"
-                                               Visibility="{x:Bind ViewModel.DimOutVisib, Mode=OneWay}">
-                                    </TextBlock>
-                                    <TextBlock Text="Stride:"
-                                               Grid.Column="0"
-                                               Grid.Row="4"
-                                               Margin="10"
-                                               TextAlignment="Left"
-                                               VerticalAlignment="Center"
-                                               Visibility="{x:Bind ViewModel.StrideVisib, Mode=OneWay}">
-                                    </TextBlock>
-                                    <TextBlock Text="Act. type:"
-                                               Grid.Column="0"
-                                               Grid.Row="5"
-                                               Margin="10"
-                                               TextAlignment="Left"
-                                               VerticalAlignment="Center"
-                                               Visibility="{x:Bind ViewModel.ActivationVisib, Mode=OneWay}">
-                                    </TextBlock>
-                                    <TextBlock Text="Input shape:"
-                                               Grid.Column="0"
-                                               Grid.Row="6"
-                                               Margin="10"
-                                               TextAlignment="Left"
-                                               VerticalAlignment="Center"
-                                               Visibility="{x:Bind ViewModel.InputShapeVisib, Mode=OneWay}">
-                                    </TextBlock>
-                                    <TextBlock Text="{x:Bind ViewModel.TypeDisplay, Mode=TwoWay}"
-                                               Grid.Column="1"
-                                               Grid.Row="0"
-                                               Margin="10"
-                                               VerticalAlignment="Center"
-                                               Visibility="{x:Bind ViewModel.TypeVisib, Mode=OneWay}">
-                                    </TextBlock>
-                                    <TextBox x:Name="NameBox"
-                                             Text="{x:Bind ViewModel.NameDisplay, Mode=TwoWay}"
-                                             Grid.Column="1"
-                                             Grid.Row="1"
-                                             Margin="10"
-                                             VerticalAlignment="Center"
-                                             Visibility="{x:Bind ViewModel.NameVisib, Mode=OneWay}">
-                                    </TextBox>
-                                    <TextBox Text="{x:Bind ViewModel.ShapeDisplay, Mode=TwoWay}"
-                                             Grid.Column="3"
-                                             Grid.Row="2"
-                                             Margin="10"
-                                             VerticalAlignment="Center"
-                                             Visibility="{x:Bind ViewModel.KernelShapeVisib, Mode=OneWay}">
-                                    </TextBox>
-                                    <TextBox Text="{x:Bind ViewModel.OutDimDisplay, Mode=TwoWay}"
-                                             Grid.Column="1"
-                                             Grid.Row="3"
-                                             Margin="10"
-                                             VerticalAlignment="Center"
-                                             Visibility="{x:Bind ViewModel.DimOutVisib, Mode=OneWay}">
-                                    </TextBox>
-                                    <TextBox Text="{x:Bind ViewModel.StrideDisplay, Mode=TwoWay}"
-                                             Grid.Column="1"
-                                             Grid.Row="4"
-                                             Margin="10"
-                                             VerticalAlignment="Center"
-                                             Visibility="{x:Bind ViewModel.StrideVisib, Mode=OneWay}">
-                                    </TextBox>
-                                    <ComboBox ItemsSource="{x:Bind ViewModel.ActivationSelect, Mode=TwoWay}"
-                                              Grid.Column="1"
-                                              Grid.Row="5"
-                                              Margin="10"
-                                              VerticalAlignment="Center"
-                                              Visibility="{x:Bind ViewModel.ActivationVisib, Mode=OneWay}"
-                                              HorizontalAlignment="Stretch"
-                                              SelectedIndex="{x:Bind ViewModel.ActivationSelectIndex, Mode=TwoWay}">
-                                    </ComboBox>
-                                    <TextBlock Text="{x:Bind ViewModel.InputShapeDisplay, Mode=TwoWay}"
-                                             Grid.Column="1"
-                                             Grid.Row="6"
-                                             Margin="10"
-                                             VerticalAlignment="Center"
-                                             Visibility="{x:Bind ViewModel.InputShapeVisib, Mode=OneWay}">
-                                    </TextBlock>
-                                </Grid>
-                                <Button Content="Modify"
-                                        Margin="10"
-                                        Style="{StaticResource ButtonRevealStyle}"
-                                        Click="{x:Bind ViewModel.PropertyModify}"
-                                        HorizontalAlignment="Stretch"/>
-                            </StackPanel>
-                            <StackPanel Grid.Row="1">
-                                <TextBlock Text="Summary"
-                                           Margin="10"
-                                           FontSize="24">
-                                </TextBlock>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" MaxWidth="100"></ColumnDefinition>
-                                        <ColumnDefinition Width="*"></ColumnDefinition>
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="*"></RowDefinition>
-                                        <RowDefinition Height="*"></RowDefinition>
-                                        <RowDefinition Height="*"></RowDefinition>
-                                        <RowDefinition Height="*"></RowDefinition>
-                                        <RowDefinition Height="*"></RowDefinition>
-                                    </Grid.RowDefinitions>
-                                    <TextBlock Text="#Params:"
-                                               Grid.Row="0"
-                                               Grid.Column="0"
-                                               VerticalAlignment="Center"
-                                               Margin="10">
-                                    </TextBlock>
-                                    <TextBlock Text="FLOPs:"
-                                               Grid.Row="1"
-                                               Grid.Column="0"
-                                               VerticalAlignment="Center"
-                                               Margin="10">
-                                    </TextBlock>
-                                    <TextBlock Text="Batch size:"
-                                               Grid.Row="2"
-                                               Grid.Column="0"
-                                               VerticalAlignment="Center"
-                                               Margin="10">
-                                    </TextBlock>
-                                    <TextBlock Text="Epochs:"
-                                               Grid.Row="3"
-                                               Grid.Column="0"
-                                               VerticalAlignment="Center"
-                                               Margin="10">
-                                    </TextBlock>
-                                    <TextBlock Text="Optimizer:"
-                                               Grid.Row="4"
-                                               Grid.Column="0"
-                                               VerticalAlignment="Center"
-                                               Margin="10">
-                                    </TextBlock>
-                                    <TextBlock Text="0.42M"
-                                               Grid.Row="0"
-                                               Grid.Column="1"
-                                               VerticalAlignment="Center"
-                                               Margin="10">
-                                    </TextBlock>
-                                    <TextBlock Text="30M"
-                                               Grid.Row="1"
-                                               Grid.Column="1"
-                                               VerticalAlignment="Center"
-                                               Margin="10">
-                                    </TextBlock>
-                                    <TextBox Text="{x:Bind ViewModel.BatchSizeDisplay, Mode=TwoWay}"
-                                               Grid.Row="2"
-                                               Grid.Column="1"
-                                               VerticalAlignment="Center"
-                                               Margin="10">
-                                    </TextBox>
-                                    <TextBox Text="{x:Bind ViewModel.EpochDisplay, Mode=TwoWay}"
-                                               Grid.Row="3"
-                                               Grid.Column="1"
-                                               VerticalAlignment="Center"
-                                               Margin="10">
-                                    </TextBox>
-                                    <TextBox Text="{x:Bind ViewModel.EpochDisplay, Mode=TwoWay}"
-                                               Grid.Row="3"
-                                               Grid.Column="1"
-                                               VerticalAlignment="Center"
-                                               Margin="10">
-                                    </TextBox>
-                                    <ComboBox ItemsSource="{x:Bind ViewModel.OptimizerSelect, Mode=OneWay}"
-                                              Margin="10"
-                                              Grid.Column="1"
-                                              Grid.Row="4"
-                                              HorizontalAlignment="Stretch"
-                                              SelectedIndex="{x:Bind ViewModel.OptimizerSelectedIndex, Mode=TwoWay}">
-                                    </ComboBox>
-                                </Grid>
-                                <TextBlock Text="Connection"
-                                           Margin="10"
-                                           FontSize="24"/>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" MaxWidth="100"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Grid.Column="0"
-                                               Text="Server IP:"
-                                               Margin="10"/>
-                                    <TextBox Grid.Column="1"
-                                               Text="{x:Bind ViewModel.IpDisplay, Mode=TwoWay}"
-                                               Margin="10"/>
-                                </Grid>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
+                                    <Button Grid.Column="0"
+                                            Grid.Row="0"
+                                            Content="Convolution2D"
+                                            Margin="10,10,5,5"
+                                            HorizontalAlignment="Stretch"
+                                            FontSize="16"
+                                            Style="{StaticResource ButtonRevealStyle}"
+                                            Click="{x:Bind ViewModel.AddConv}">
+                                        <Button.Resources>
+                                            <ResourceDictionary>
+                                                <ResourceDictionary.ThemeDictionaries>
+                                                    <ResourceDictionary x:Key="Light">
+                                                        <SolidColorBrush x:Key="ButtonForegroundPointerOver"
+                                                                         Color="Black"/>
+                                                        <SolidColorBrush x:Key="ButtonRevealBackgroundPointerOver"
+                                                                         Color="Orange"/>
+                                                        <SolidColorBrush x:Key="ButtonForeground"
+                                                                         Color="Orange"/>
+                                                    </ResourceDictionary>
+                                                </ResourceDictionary.ThemeDictionaries>
+                                            </ResourceDictionary>
+                                        </Button.Resources>
+                                    </Button>
+                                    <Button Grid.Column="1"
+                                            Grid.Row="0"
+                                            Content="Batch Norm"
+                                            Margin="5,10,10,5"
+                                            HorizontalAlignment="Stretch"
+                                            FontSize="16"
+                                            Style="{StaticResource ButtonRevealStyle}"
+                                            Click="{x:Bind ViewModel.AddBN}">
+                                        <Button.Resources>
+                                            <ResourceDictionary>
+                                                <ResourceDictionary.ThemeDictionaries>
+                                                    <ResourceDictionary x:Key="Light">
+                                                        <SolidColorBrush x:Key="ButtonForegroundPointerOver"
+                                                                         Color="Black"/>
+                                                        <SolidColorBrush x:Key="ButtonRevealBackgroundPointerOver"
+                                                                         Color="LightBlue"/>
+                                                        <SolidColorBrush x:Key="ButtonForeground"
+                                                                         Color="LightBlue"/>
+                                                    </ResourceDictionary>
+                                                </ResourceDictionary.ThemeDictionaries>
+                                            </ResourceDictionary>
+                                        </Button.Resources>
+                                    </Button>
                                     <Button Grid.Column="0"
                                             Grid.Row="1"
-                                            Content="Test"
-                                            Style="{StaticResource ButtonRevealStyle}"
+                                            Content="ReLU"
+                                            Margin="10,5,5,5"
                                             HorizontalAlignment="Stretch"
-                                            IsEnabled="False"
-                                            Margin="10,10,5,10"/>
+                                            FontSize="16"
+                                            Style="{StaticResource ButtonRevealStyle}"
+                                            Click="{x:Bind ViewModel.AddReLU}">
+                                        <Button.Resources>
+                                            <ResourceDictionary>
+                                                <ResourceDictionary.ThemeDictionaries>
+                                                    <ResourceDictionary x:Key="Light">
+                                                        <SolidColorBrush x:Key="ButtonForegroundPointerOver"
+                                                                         Color="Black"/>
+                                                        <SolidColorBrush x:Key="ButtonRevealBackgroundPointerOver"
+                                                                         Color="LightGreen"/>
+                                                        <SolidColorBrush x:Key="ButtonForeground"
+                                                                         Color="LightGreen"/>
+                                                    </ResourceDictionary>
+                                                </ResourceDictionary.ThemeDictionaries>
+                                            </ResourceDictionary>
+                                        </Button.Resources>
+                                    </Button>
                                     <Button Grid.Column="1"
                                             Grid.Row="1"
-                                            Content="Connect"
-                                            Style="{StaticResource ButtonRevealStyle}"
+                                            Content="Pooling2D"
+                                            Margin="5,5,10,5"
                                             HorizontalAlignment="Stretch"
-                                            Click="{x:Bind ViewModel.TestConnection}"
-                                            Margin="5,10,10,10"/>
+                                            FontSize="16"
+                                            Style="{StaticResource ButtonRevealStyle}"
+                                            Click="{x:Bind ViewModel.AddPooling}">
+                                        <Button.Resources>
+                                            <ResourceDictionary>
+                                                <ResourceDictionary.ThemeDictionaries>
+                                                    <ResourceDictionary x:Key="Light">
+                                                        <SolidColorBrush x:Key="ButtonForegroundPointerOver"
+                                                                         Color="Black"/>
+                                                        <SolidColorBrush x:Key="ButtonRevealBackgroundPointerOver"
+                                                                         Color="LightYellow"/>
+                                                        <SolidColorBrush x:Key="ButtonForeground"
+                                                                         Color="LightYellow"/>
+                                                    </ResourceDictionary>
+                                                </ResourceDictionary.ThemeDictionaries>
+                                            </ResourceDictionary>
+                                        </Button.Resources>
+                                    </Button>
+                                    <Button Grid.Column="0"
+                                            Grid.Row="2"
+                                            Content="Flattem"
+                                            Margin="10,5,5,10"
+                                            HorizontalAlignment="Stretch"
+                                            FontSize="16"
+                                            Style="{StaticResource ButtonRevealStyle}"
+                                            Click="{x:Bind ViewModel.AddFlatten}">
+                                        <Button.Resources>
+                                            <ResourceDictionary>
+                                                <ResourceDictionary.ThemeDictionaries>
+                                                    <ResourceDictionary x:Key="Light">
+                                                        <SolidColorBrush x:Key="ButtonForegroundPointerOver"
+                                                                         Color="Black"/>
+                                                        <SolidColorBrush x:Key="ButtonRevealBackgroundPointerOver"
+                                                                         Color="LightSalmon"/>
+                                                        <SolidColorBrush x:Key="ButtonForeground"
+                                                                         Color="LightSalmon"/>
+                                                    </ResourceDictionary>
+                                                </ResourceDictionary.ThemeDictionaries>
+                                            </ResourceDictionary>
+                                        </Button.Resources>
+                                    </Button>
+                                    <Button Grid.Column="1"
+                                            Grid.Row="2"
+                                            Content="Dense"
+                                            Margin="5,5,10,10"
+                                            HorizontalAlignment="Stretch"
+                                            FontSize="16"
+                                            Style="{StaticResource ButtonRevealStyle}"
+                                            Click="{x:Bind ViewModel.AddFC}">
+                                        <Button.Resources>
+                                            <ResourceDictionary>
+                                                <ResourceDictionary.ThemeDictionaries>
+                                                    <ResourceDictionary x:Key="Light">
+                                                        <SolidColorBrush x:Key="ButtonForegroundPointerOver"
+                                                                         Color="Black"/>
+                                                        <SolidColorBrush x:Key="ButtonRevealBackgroundPointerOver"
+                                                                         Color="LightPink"/>
+                                                        <SolidColorBrush x:Key="ButtonForeground"
+                                                                         Color="LightPink"/>
+                                                    </ResourceDictionary>
+                                                </ResourceDictionary.ThemeDictionaries>
+                                            </ResourceDictionary>
+                                        </Button.Resources>
+                                    </Button>
+                                </Grid>
+                                <Button Content="Remove"
+                                        Background="Red"
+                                        Margin="10"
+                                        HorizontalAlignment="Stretch"
+                                            FontSize="16"
+                                        Style="{StaticResource ButtonRevealStyle}"
+                                        Click="{x:Bind ViewModel.Remove}">
+                                </Button>
+                                <TextBlock Text="Models"
+                                           Margin="10"
+                                           HorizontalAlignment="Stretch"
+                                           TextAlignment="Left"
+                                           FontSize="24"/>
+                                <Button Content="LeNet-5"
+                                        Margin="10"
+                                        HorizontalAlignment="Stretch"
+                                        Style="{StaticResource ButtonRevealStyle}"/>
+                            </StackPanel>
+                        </ScrollViewer>
+                        <ScrollViewer Grid.Column="1"
+                                    Background="{ThemeResource CustomAcrylicBrush2}">
+                            <StackPanel>
+                                <TextBlock Text="Network"
+                                         Margin="10"
+                                         HorizontalAlignment="Stretch"
+                                         TextAlignment="Left"
+                                         FontSize="24">
+                                </TextBlock>
+                                <!--<StackPanel>
+                                        <Button Content="Input"
+                                                Width="200"
+                                                Background="White">
+                                        </Button>
+                                        <Button Content="Convolution"
+                                                Width="200"
+                                                Background="Orange">
+                                        </Button>
+                                        <Button Content="Batch Normalization"
+                                                Width="200"
+                                                Background="LightBlue">
+                                        </Button>
+                                        <Button Content="ReLU"
+                                                Width="200"
+                                                Background="LightGreen">
+                                        </Button>
+                                        <Button Content="Convolution"
+                                                Width="200"
+                                                Background="Orange">
+                                        </Button>
+                                        <Button Content="Batch Normalization"
+                                                Width="200"
+                                                Background="LightBlue">
+                                        </Button>
+                                        <Button Content="ReLU"
+                                                Width="200"
+                                                Background="LightGreen">
+                                        </Button>
+                                        <Button Content="Convolution"
+                                                Width="200"
+                                                Background="Orange">
+                                        </Button>
+                                        <Button Content="Batch Normalization"
+                                                Width="200"
+                                                Background="LightBlue">
+                                        </Button>
+                                        <Button Content="ReLU"
+                                                Width="200"
+                                                Background="LightGreen">
+                                        </Button>
+                                        <Button Content="FC"
+                                                Width="200"
+                                                Background="LightPink">
+                                        </Button>
+                                        <Button Content="Softmax"
+                                                Width="200"
+                                                Background="White">
+                                        </Button>
+                                    </StackPanel>-->
+                                <Grid>
+                                    <ListView ItemsSource="{x:Bind ViewModel.OpItems, Mode=TwoWay}"
+                                              Width="250"
+                                              HorizontalAlignment="Left"
+                                              SelectedIndex="{x:Bind ViewModel.SelectedIndex, Mode=TwoWay}"
+                                              SelectionChanged="{x:Bind ViewModel.SelectionChanged}">
+                                        <ListView.ItemTemplate>
+                                            <DataTemplate x:Name="TestListViewTemplate"
+                                                          x:DataType="data:OpItem">
+                                                <Grid Background="{x:Bind OpColor}"
+                                                      Width="250"
+                                                      Height="44"
+                                                      HorizontalAlignment="Center"
+                                                      VerticalAlignment="Center">
+                                                    <TextBlock Text="{x:Bind OpType, Mode=TwoWay}" 
+                                                               Style="{ThemeResource BaseTextBlockStyle}"
+                                                               HorizontalAlignment="Center"
+                                                               VerticalAlignment="Center"   />
+                                                </Grid>
+                                            </DataTemplate>
+                                        </ListView.ItemTemplate>
+                                    </ListView>
                                 </Grid>
                             </StackPanel>
-                        </Grid>
-                        <Button Content="Start Training"
-                                Click="{x:Bind ViewModel.Compile}"
-                                HorizontalAlignment="Stretch"
-                                Style="{StaticResource ButtonRevealStyle}"
-                                IsEnabled="{x:Bind ViewModel.EnableCompile, Mode=OneWay}"
-                                Margin="10"/>
-                    </StackPanel>
-                </Grid>
+                        </ScrollViewer>
+                        <ScrollViewer Grid.Column="2"
+                                    Background="{ThemeResource CustomAcrylicBrush3}">
+                            <StackPanel>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"></RowDefinition>
+                                        <RowDefinition Height="*"></RowDefinition>
+                                    </Grid.RowDefinitions>
+                                    <StackPanel Grid.Row="0">
+                                        <TextBlock Text="Property"
+                                                 Margin="10"
+                                                 FontSize="24">
+                                        </TextBlock>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"
+                                                                  MaxWidth="120"></ColumnDefinition>
+                                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="*"></RowDefinition>
+                                                <RowDefinition Height="*"></RowDefinition>
+                                                <RowDefinition Height="*"></RowDefinition>
+                                                <RowDefinition Height="*"></RowDefinition>
+                                                <RowDefinition Height="*"></RowDefinition>
+                                                <RowDefinition Height="*"></RowDefinition>
+                                                <RowDefinition Height="*"></RowDefinition>
+                                            </Grid.RowDefinitions>
+                                            <TextBlock Text="Block Type:"
+                                                       Grid.Column="0"
+                                                       Grid.Row="0"
+                                                       Margin="10"
+                                                       TextAlignment="Left"
+                                                       VerticalAlignment="Center"
+                                                       Visibility="{x:Bind ViewModel.TypeVisib, Mode=OneWay}">
+                                            </TextBlock>
+                                            <TextBlock Text="Name:"
+                                                       Grid.Column="0"
+                                                       Grid.Row="1"
+                                                       Margin="10"
+                                                       TextAlignment="Left"
+                                                       VerticalAlignment="Center"
+                                                       Visibility="{x:Bind ViewModel.NameVisib, Mode=OneWay}">
+                                            </TextBlock>
+                                            <TextBlock Text="Kernel Shape:"
+                                                       Grid.Column="0"
+                                                       Grid.Row="2"
+                                                       Margin="10"
+                                                       TextAlignment="Left"
+                                                       VerticalAlignment="Center"
+                                                       Visibility="{x:Bind ViewModel.KernelShapeVisib, Mode=OneWay}">
+                                            </TextBlock>
+                                            <TextBlock Text="OutDim:"
+                                                       Grid.Column="0"
+                                                       Grid.Row="3"
+                                                       Margin="10"
+                                                       TextAlignment="Left"
+                                                       VerticalAlignment="Center"
+                                                       Visibility="{x:Bind ViewModel.DimOutVisib, Mode=OneWay}">
+                                            </TextBlock>
+                                            <TextBlock Text="Stride:"
+                                                       Grid.Column="0"
+                                                       Grid.Row="4"
+                                                       Margin="10"
+                                                       TextAlignment="Left"
+                                                       VerticalAlignment="Center"
+                                                       Visibility="{x:Bind ViewModel.StrideVisib, Mode=OneWay}">
+                                            </TextBlock>
+                                            <TextBlock Text="Act. type:"
+                                                       Grid.Column="0"
+                                                       Grid.Row="5"
+                                                       Margin="10"
+                                                       TextAlignment="Left"
+                                                       VerticalAlignment="Center"
+                                                       Visibility="{x:Bind ViewModel.ActivationVisib, Mode=OneWay}">
+                                            </TextBlock>
+                                            <TextBlock Text="Input shape:"
+                                                       Grid.Column="0"
+                                                       Grid.Row="6"
+                                                       Margin="10"
+                                                       TextAlignment="Left"
+                                                       VerticalAlignment="Center"
+                                                       Visibility="{x:Bind ViewModel.InputShapeVisib, Mode=OneWay}">
+                                            </TextBlock>
+                                            <TextBlock Text="{x:Bind ViewModel.TypeDisplay, Mode=TwoWay}"
+                                                       Grid.Column="1"
+                                                       Grid.Row="0"
+                                                       Margin="10"
+                                                       VerticalAlignment="Center"
+                                                       Visibility="{x:Bind ViewModel.TypeVisib, Mode=OneWay}">
+                                            </TextBlock>
+                                            <TextBox x:Name="NameBox"
+                                                     Text="{x:Bind ViewModel.NameDisplay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                     Grid.Column="1"
+                                                     Grid.Row="1"
+                                                     Margin="10"
+                                                     VerticalAlignment="Center"
+                                                     Visibility="{x:Bind ViewModel.NameVisib, Mode=OneWay}">
+                                            </TextBox>
+                                            <TextBox Text="{x:Bind ViewModel.ShapeDisplay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                     Grid.Column="3"
+                                                     Grid.Row="2"
+                                                     Margin="10"
+                                                     VerticalAlignment="Center"
+                                                     Visibility="{x:Bind ViewModel.KernelShapeVisib, Mode=OneWay}">
+                                            </TextBox>
+                                            <TextBox Text="{x:Bind ViewModel.OutDimDisplay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                     Grid.Column="1"
+                                                     Grid.Row="3"
+                                                     Margin="10"
+                                                     VerticalAlignment="Center"
+                                                     Visibility="{x:Bind ViewModel.DimOutVisib, Mode=OneWay}">
+                                            </TextBox>
+                                            <TextBox Text="{x:Bind ViewModel.StrideDisplay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                     Grid.Column="1"
+                                                     Grid.Row="4"
+                                                     Margin="10"
+                                                     VerticalAlignment="Center"
+                                                     Visibility="{x:Bind ViewModel.StrideVisib, Mode=OneWay}">
+                                            </TextBox>
+                                            <ComboBox ItemsSource="{x:Bind ViewModel.ActivationSelect, Mode=TwoWay}"
+                                                      Grid.Column="1"
+                                                      Grid.Row="5"
+                                                      Margin="10"
+                                                      VerticalAlignment="Center"
+                                                      Visibility="{x:Bind ViewModel.ActivationVisib, Mode=OneWay}"
+                                                      HorizontalAlignment="Stretch"
+                                                      SelectedIndex="{x:Bind ViewModel.ActivationSelectIndex, Mode=TwoWay}">
+                                            </ComboBox>
+                                            <TextBlock Text="{x:Bind ViewModel.InputShapeDisplay, Mode=TwoWay}"
+                                                     Grid.Column="1"
+                                                     Grid.Row="6"
+                                                     Margin="10"
+                                                     VerticalAlignment="Center"
+                                                     Visibility="{x:Bind ViewModel.InputShapeVisib, Mode=OneWay}">
+                                            </TextBlock>
+                                        </Grid>
+                                    </StackPanel>
+                                    <StackPanel Grid.Row="1">
+                                        <TextBlock Text="Summary"
+                                                   Margin="10"
+                                                   FontSize="24">
+                                        </TextBlock>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" MaxWidth="100"></ColumnDefinition>
+                                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="*"></RowDefinition>
+                                                <RowDefinition Height="*"></RowDefinition>
+                                                <RowDefinition Height="*"></RowDefinition>
+                                                <RowDefinition Height="*"></RowDefinition>
+                                                <RowDefinition Height="*"></RowDefinition>
+                                            </Grid.RowDefinitions>
+                                            <TextBlock Text="#Params:"
+                                                       Grid.Row="0"
+                                                       Grid.Column="0"
+                                                       VerticalAlignment="Center"
+                                                       Margin="10">
+                                            </TextBlock>
+                                            <TextBlock Text="FLOPs:"
+                                                       Grid.Row="1"
+                                                       Grid.Column="0"
+                                                       VerticalAlignment="Center"
+                                                       Margin="10">
+                                            </TextBlock>
+                                            <TextBlock Text="Batch size:"
+                                                       Grid.Row="2"
+                                                       Grid.Column="0"
+                                                       VerticalAlignment="Center"
+                                                       Margin="10">
+                                            </TextBlock>
+                                            <TextBlock Text="Epochs:"
+                                                       Grid.Row="3"
+                                                       Grid.Column="0"
+                                                       VerticalAlignment="Center"
+                                                       Margin="10">
+                                            </TextBlock>
+                                            <TextBlock Text="Optimizer:"
+                                                       Grid.Row="4"
+                                                       Grid.Column="0"
+                                                       VerticalAlignment="Center"
+                                                       Margin="10">
+                                            </TextBlock>
+                                            <TextBlock Text="0.42M"
+                                                       Grid.Row="0"
+                                                       Grid.Column="1"
+                                                       VerticalAlignment="Center"
+                                                       Margin="10">
+                                            </TextBlock>
+                                            <TextBlock Text="30M"
+                                                       Grid.Row="1"
+                                                       Grid.Column="1"
+                                                       VerticalAlignment="Center"
+                                                       Margin="10">
+                                            </TextBlock>
+                                            <TextBox Text="{x:Bind ViewModel.BatchSizeDisplay, Mode=TwoWay}"
+                                                       Grid.Row="2"
+                                                       Grid.Column="1"
+                                                       VerticalAlignment="Center"
+                                                       Margin="10">
+                                            </TextBox>
+                                            <TextBox Text="{x:Bind ViewModel.EpochDisplay, Mode=TwoWay}"
+                                                       Grid.Row="3"
+                                                       Grid.Column="1"
+                                                       VerticalAlignment="Center"
+                                                       Margin="10">
+                                            </TextBox>
+                                            <TextBox Text="{x:Bind ViewModel.EpochDisplay, Mode=TwoWay}"
+                                                       Grid.Row="3"
+                                                       Grid.Column="1"
+                                                       VerticalAlignment="Center"
+                                                       Margin="10">
+                                            </TextBox>
+                                            <ComboBox ItemsSource="{x:Bind ViewModel.OptimizerSelect, Mode=OneWay}"
+                                                      Margin="10"
+                                                      Grid.Column="1"
+                                                      Grid.Row="4"
+                                                      HorizontalAlignment="Stretch"
+                                                      SelectedIndex="{x:Bind ViewModel.OptimizerSelectedIndex, Mode=TwoWay}">
+                                            </ComboBox>
+                                        </Grid>
+                                        <TextBlock Text="Connection"
+                                                   Margin="10"
+                                                   FontSize="24"/>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" MaxWidth="100"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Grid.Column="0"
+                                                       Text="Server IP:"
+                                                       Margin="10"/>
+                                            <TextBox Grid.Column="1"
+                                                       Text="{x:Bind ViewModel.IpDisplay, Mode=TwoWay}"
+                                                       Margin="10"/>
+                                        </Grid>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Button Grid.Column="0"
+                                                    Grid.Row="1"
+                                                    Content="Test"
+                                                    Style="{StaticResource ButtonRevealStyle}"
+                                                    HorizontalAlignment="Stretch"
+                                                    IsEnabled="False"
+                                                    Margin="10,10,5,10"/>
+                                            <Button Grid.Column="1"
+                                                    Grid.Row="1"
+                                                    Content="Connect"
+                                                    Style="{StaticResource ButtonRevealStyle}"
+                                                    HorizontalAlignment="Stretch"
+                                                    Click="{x:Bind ViewModel.TestConnection}"
+                                                    Margin="5,10,10,10"/>
+                                        </Grid>
+                                    </StackPanel>
+                                </Grid>
+                                <Button Content="Start Training"
+                                        Click="{x:Bind ViewModel.Compile}"
+                                        HorizontalAlignment="Stretch"
+                                        Style="{StaticResource ButtonRevealStyle}"
+                                        IsEnabled="{x:Bind ViewModel.EnableCompile, Mode=OneWay}"
+                                        Margin="10"/>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </Grid>
             </PivotItem>
-            <PivotItem Header="Training">
+            <PivotItem Header="Training"
+                       Margin="0">
                 <!--Pivot content goes here-->
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" MinWidth="200"></ColumnDefinition>
-                        <ColumnDefinition Width="3*"></ColumnDefinition>
+                        <ColumnDefinition Width="5*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
 
                     <StackPanel Grid.Column="0" Background="{ThemeResource CustomAcrylicBrush1}">
@@ -612,12 +613,12 @@
                             <RowDefinition Height="2*"></RowDefinition>
                             <RowDefinition Height="*"></RowDefinition>
                         </Grid.RowDefinitions>
-                        <Button Content="refresh" 
+                        <!--<Button Content="refresh" 
                                 Margin="0" 
                                 Width="100"
                                 Height="50"
                                 Click="Button_Click">
-                        </Button>
+                        </Button>-->
 
 
                         <!--<Charting:Chart x:Name="LineChart" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="100">
@@ -633,11 +634,13 @@
 
                         <ScrollViewer Grid.Row="1" Height="230"
                                       HorizontalAlignment="Stretch" 
-                                      Margin="20" 
                                       HorizontalScrollBarVisibility="Auto" 
                                       VerticalScrollBarVisibility="Auto"
+                                      Margin="10"
                                       Background="{ThemeResource CustomAcrylicBrush3}">
-                            <TextBlock   Text="{x:Bind ViewModel.DisplayInfo, Mode=TwoWay}"  VerticalAlignment="Top"/>
+                            <TextBlock   Text="{x:Bind ViewModel.DisplayInfo, Mode=TwoWay}"
+                                         VerticalAlignment="Top"
+                                         Margin="10"/>
                         </ScrollViewer>
                     </Grid>
                 </Grid>
