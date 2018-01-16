@@ -4,7 +4,7 @@ try:
 except:
     import queue as Queue
     
-import keras
+
 import sys
 import socket
 from . import builder
@@ -16,30 +16,16 @@ OPERATOR_NOT_EXISTS = "Operator %s doesn't exist"
 OPERATOR_TOPO_ERROR = "Operator topology errors"
 OPERATOR_LOOP_ERROR = "Error:-( There is a cycle in the graph."
 
-'''
-class RedirectStdOut:
-    ADDRESS = ("127.0.0.1", 3939)
-    def __init__(self):
-        self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.buffer = ""
-    def write(self, text):
-        self.buffer += text
-    def flush(self):
-        self.socket.sendto(self.buffer.encode("UTF-8"), self.ADDRESS)
-        self.buffer = ""
-        
-sys.stdout = RedirectStdOut()
-'''
-
-class LogRedirectCallback(keras.callbacks.Callback):
+import keras
+CALLBACK_PARENT = keras.callbacks.Callback
+    
+class LogRedirectCallback(CALLBACK_PARENT):
 
     def __init__(self, nnbaby_model):
         super(LogRedirectCallback, self).__init__()
         self.nnbaby_model = nnbaby_model
-
     def on_train_begin(self, logs={}):
         pass
-
     def on_batch_end(self, batch, logs={}):
         self.nnbaby_model.write_logs(logs)
 
@@ -65,7 +51,7 @@ class Model:
     def read_dict(self, dict_data):
         self.info = dict_data
         self.topo = self.get_model_topo(self.info)
-        self.model = builder.build_keras_model(self.info, self.topo, self.mode)
+        self.model = builder.build_model(self.info, self.topo, self.mode)
     def open_json(self, filename):
         fin = open(filename)
         return json.loads(fin.read())
@@ -167,6 +153,7 @@ class Model:
         x_test = x_test.reshape((x_test.shape[0], rows, cols, 1)) / 255.0
         y_train = keras.utils.np_utils.to_categorical(y_train, num_classes)
         y_test = keras.utils.np_utils.to_categorical(y_test, num_classes)
+
         self.model.fit(x = {"data": x_train}, y = {"pred": y_train},
                        batch_size = mode_info["batch_size"], epochs = mode_info["epochs"],
                        callbacks = [LogRedirectCallback(nnbaby_model = self)], verbose = 0)

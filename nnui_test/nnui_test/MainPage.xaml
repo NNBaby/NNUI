@@ -14,17 +14,17 @@
     <Page.Resources>
         <AcrylicBrush x:Key="CustomAcrylicBrush"
                         BackgroundSource="HostBackdrop"
-                        TintOpacity="0.4"
+                        TintOpacity="0.3"
                         TintColor="White"
                         FallbackColor="White" />
         <AcrylicBrush x:Key="CustomAcrylicBrush1"
                         BackgroundSource="HostBackdrop"
-                        TintOpacity="0.6"
+                        TintOpacity="0.5"
                         TintColor="White"
                         FallbackColor="White" />
         <AcrylicBrush x:Key="CustomAcrylicBrush2"
                         BackgroundSource="HostBackdrop"
-                        TintOpacity="0.8"
+                        TintOpacity="0.7"
                         TintColor="White"
                         FallbackColor="White" />
         <AcrylicBrush x:Key="CustomAcrylicBrush3"
@@ -68,62 +68,147 @@
                             <Button Grid.Column="0"
                                     Grid.Row="0"
                                     Content="Convolution2D"
-                                    Margin="10"
+                                    Margin="10,10,5,5"
                                     HorizontalAlignment="Stretch"
-                                    Background="Orange"
+                                    FontSize="16"
                                     Style="{StaticResource ButtonRevealStyle}"
                                     Click="{x:Bind ViewModel.AddConv}">
+                                <Button.Resources>
+                                    <ResourceDictionary>
+                                        <ResourceDictionary.ThemeDictionaries>
+                                            <ResourceDictionary x:Key="Light">
+                                                <SolidColorBrush x:Key="ButtonForegroundPointerOver"
+                                                                 Color="Black"/>
+                                                <SolidColorBrush x:Key="ButtonRevealBackgroundPointerOver"
+                                                                 Color="Orange"/>
+                                                <SolidColorBrush x:Key="ButtonForeground"
+                                                                 Color="Orange"/>
+                                            </ResourceDictionary>
+                                        </ResourceDictionary.ThemeDictionaries>
+                                    </ResourceDictionary>
+                                </Button.Resources>
                             </Button>
                             <Button Grid.Column="1"
                                     Grid.Row="0"
                                     Content="Batch Norm"
-                                    Margin="10"
+                                    Margin="5,10,10,5"
                                     HorizontalAlignment="Stretch"
-                                    Background="LightBlue"
+                                    FontSize="16"
                                     Style="{StaticResource ButtonRevealStyle}"
                                     Click="{x:Bind ViewModel.AddBN}">
+                                <Button.Resources>
+                                    <ResourceDictionary>
+                                        <ResourceDictionary.ThemeDictionaries>
+                                            <ResourceDictionary x:Key="Light">
+                                                <SolidColorBrush x:Key="ButtonForegroundPointerOver"
+                                                                 Color="Black"/>
+                                                <SolidColorBrush x:Key="ButtonRevealBackgroundPointerOver"
+                                                                 Color="LightBlue"/>
+                                                <SolidColorBrush x:Key="ButtonForeground"
+                                                                 Color="LightBlue"/>
+                                            </ResourceDictionary>
+                                        </ResourceDictionary.ThemeDictionaries>
+                                    </ResourceDictionary>
+                                </Button.Resources>
                             </Button>
                             <Button Grid.Column="0"
                                     Grid.Row="1"
                                     Content="ReLU"
-                                    Margin="10"
+                                    Margin="10,5,5,5"
                                     HorizontalAlignment="Stretch"
-                                    Background="LightGreen"
+                                    FontSize="16"
                                     Style="{StaticResource ButtonRevealStyle}"
                                     Click="{x:Bind ViewModel.AddReLU}">
+                                <Button.Resources>
+                                    <ResourceDictionary>
+                                        <ResourceDictionary.ThemeDictionaries>
+                                            <ResourceDictionary x:Key="Light">
+                                                <SolidColorBrush x:Key="ButtonForegroundPointerOver"
+                                                                 Color="Black"/>
+                                                <SolidColorBrush x:Key="ButtonRevealBackgroundPointerOver"
+                                                                 Color="LightGreen"/>
+                                                <SolidColorBrush x:Key="ButtonForeground"
+                                                                 Color="LightGreen"/>
+                                            </ResourceDictionary>
+                                        </ResourceDictionary.ThemeDictionaries>
+                                    </ResourceDictionary>
+                                </Button.Resources>
                             </Button>
                             <Button Grid.Column="1"
                                     Grid.Row="1"
                                     Content="Pooling2D"
-                                    Margin="10"
+                                    Margin="5,5,10,5"
                                     HorizontalAlignment="Stretch"
-                                    Background="LightYellow"
+                                    FontSize="16"
                                     Style="{StaticResource ButtonRevealStyle}"
                                     Click="{x:Bind ViewModel.AddPooling}">
+                                <Button.Resources>
+                                    <ResourceDictionary>
+                                        <ResourceDictionary.ThemeDictionaries>
+                                            <ResourceDictionary x:Key="Light">
+                                                <SolidColorBrush x:Key="ButtonForegroundPointerOver"
+                                                                 Color="Black"/>
+                                                <SolidColorBrush x:Key="ButtonRevealBackgroundPointerOver"
+                                                                 Color="LightYellow"/>
+                                                <SolidColorBrush x:Key="ButtonForeground"
+                                                                 Color="LightYellow"/>
+                                            </ResourceDictionary>
+                                        </ResourceDictionary.ThemeDictionaries>
+                                    </ResourceDictionary>
+                                </Button.Resources>
                             </Button>
                             <Button Grid.Column="0"
                                     Grid.Row="2"
                                     Content="Flattem"
-                                    Margin="10"
+                                    Margin="10,5,5,10"
                                     HorizontalAlignment="Stretch"
-                                    Background="LightSalmon"
+                                    FontSize="16"
                                     Style="{StaticResource ButtonRevealStyle}"
                                     Click="{x:Bind ViewModel.AddFlatten}">
+                                <Button.Resources>
+                                    <ResourceDictionary>
+                                        <ResourceDictionary.ThemeDictionaries>
+                                            <ResourceDictionary x:Key="Light">
+                                                <SolidColorBrush x:Key="ButtonForegroundPointerOver"
+                                                                 Color="Black"/>
+                                                <SolidColorBrush x:Key="ButtonRevealBackgroundPointerOver"
+                                                                 Color="LightSalmon"/>
+                                                <SolidColorBrush x:Key="ButtonForeground"
+                                                                 Color="LightSalmon"/>
+                                            </ResourceDictionary>
+                                        </ResourceDictionary.ThemeDictionaries>
+                                    </ResourceDictionary>
+                                </Button.Resources>
                             </Button>
                             <Button Grid.Column="1"
                                     Grid.Row="2"
                                     Content="Dense"
-                                    Margin="10"
+                                    Margin="5,5,10,10"
                                     HorizontalAlignment="Stretch"
-                                    Background="LightPink"
+                                    FontSize="16"
                                     Style="{StaticResource ButtonRevealStyle}"
                                     Click="{x:Bind ViewModel.AddFC}">
+                                <Button.Resources>
+                                    <ResourceDictionary>
+                                        <ResourceDictionary.ThemeDictionaries>
+                                            <ResourceDictionary x:Key="Light">
+                                                <SolidColorBrush x:Key="ButtonForegroundPointerOver"
+                                                                 Color="Black"/>
+                                                <SolidColorBrush x:Key="ButtonRevealBackgroundPointerOver"
+                                                                 Color="LightPink"/>
+                                                <SolidColorBrush x:Key="ButtonForeground"
+                                                                 Color="LightPink"/>
+                                            </ResourceDictionary>
+                                        </ResourceDictionary.ThemeDictionaries>
+                                    </ResourceDictionary>
+                                </Button.Resources>
                             </Button>
                         </Grid>
                         <Button Content="Remove"
                                 Background="Red"
                                 Margin="10"
                                 HorizontalAlignment="Stretch"
+                                    FontSize="16"
                                 Style="{StaticResource ButtonRevealStyle}"
                                 Click="{x:Bind ViewModel.Remove}">
                         </Button>
@@ -472,20 +557,23 @@
                                             Content="Test"
                                             Style="{StaticResource ButtonRevealStyle}"
                                             HorizontalAlignment="Stretch"
-                                            Margin="10"/>
+                                            IsEnabled="False"
+                                            Margin="10,10,5,10"/>
                                     <Button Grid.Column="1"
                                             Grid.Row="1"
                                             Content="Connect"
                                             Style="{StaticResource ButtonRevealStyle}"
                                             HorizontalAlignment="Stretch"
-                                            Margin="10"/>
+                                            Click="{x:Bind ViewModel.TestConnection}"
+                                            Margin="5,10,10,10"/>
                                 </Grid>
                             </StackPanel>
                         </Grid>
-                        <Button Content="Compile"
+                        <Button Content="Start Training"
                                 Click="{x:Bind ViewModel.Compile}"
                                 HorizontalAlignment="Stretch"
                                 Style="{StaticResource ButtonRevealStyle}"
+                                IsEnabled="{x:Bind ViewModel.EnableCompile, Mode=OneWay}"
                                 Margin="10"/>
                     </StackPanel>
                 </Grid>
@@ -494,8 +582,8 @@
                 <!--Pivot content goes here-->
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
-                        <ColumnDefinition Width="3*" MinWidth="300"></ColumnDefinition>
+                        <ColumnDefinition Width="*" MinWidth="200"></ColumnDefinition>
+                        <ColumnDefinition Width="3*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
 
                     <StackPanel Grid.Column="0" Background="{ThemeResource CustomAcrylicBrush1}">
@@ -503,6 +591,7 @@
                                 HorizontalAlignment="Stretch" 
                                 VerticalAlignment="Stretch" 
                                 Margin="10" 
+                                IsEnabled="{x:Bind ViewModel.EnableCompile, Mode=OneWay}"
                                 Click="{x:Bind ViewModel.GetLossInfo}">
                         </Button>
 
@@ -518,7 +607,7 @@
                                 Margin="10">
                         </Button>
                     </StackPanel>
-                    <Grid Grid.Column="1">
+                    <Grid Grid.Column="1" Background="{ThemeResource CustomAcrylicBrush2}">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="2*"></RowDefinition>
                             <RowDefinition Height="*"></RowDefinition>
@@ -546,7 +635,8 @@
                                       HorizontalAlignment="Stretch" 
                                       Margin="20" 
                                       HorizontalScrollBarVisibility="Auto" 
-                                      VerticalScrollBarVisibility="Auto">
+                                      VerticalScrollBarVisibility="Auto"
+                                      Background="{ThemeResource CustomAcrylicBrush3}">
                             <TextBlock   Text="{x:Bind ViewModel.DisplayInfo, Mode=TwoWay}"  VerticalAlignment="Top"/>
                         </ScrollViewer>
                     </Grid>
