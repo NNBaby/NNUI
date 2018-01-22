@@ -25,8 +25,8 @@ namespace nnui_test
             formattableTitleBar.ButtonBackgroundColor = Colors.Transparent;
             CoreApplicationViewTitleBar coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
             coreTitleBar.ExtendViewIntoTitleBar = true;
-            ViewModel.TypeVisib = Windows.UI.Xaml.Visibility.Visible;
-            ViewModel.NameVisib = Windows.UI.Xaml.Visibility.Visible;
+            ViewModel.TypeVisib = Visibility.Visible;
+            ViewModel.NameVisib = Visibility.Visible;
 
             ViewModel.OptimizerSelect.Add("SGD");
             ViewModel.OptimizerSelect.Add("Adam");
@@ -35,10 +35,14 @@ namespace nnui_test
             ViewModel.ActivationSelect.Add("softmax");
             ViewModel.ActivationSelect.Add("sigmoid");
 
+            ViewModel.DatasetSelect.Add("MNIST");
+            ViewModel.DatasetSelect.Add("CIFAR-10");
+            ViewModel.DatasetSelect.Add("CIFAR-100");
+
             OpItem newItem = new OpItem();
             newItem.Name = "data";
             newItem.OpType = "Input";
-            newItem.InputShape = "[28, 28, 1]";
+            newItem.InputShape = "[28, 28]";
             newItem.OpColor = new SolidColorBrush(Colors.Azure);
             ViewModel.OpItems.Add(newItem);
 
