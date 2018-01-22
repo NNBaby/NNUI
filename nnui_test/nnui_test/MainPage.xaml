@@ -218,11 +218,56 @@
                                            HorizontalAlignment="Stretch"
                                            TextAlignment="Left"
                                            FontSize="24"/>
-                                <Button Content="LeNet-5"
+                            <Button Content="LeNet-5"
                                         Margin="10"
                                         HorizontalAlignment="Stretch"
                                         Style="{StaticResource ButtonRevealStyle}"/>
-                            </StackPanel>
+                            <Button Content="Save Model"
+                                        Margin="10"
+                                        HorizontalAlignment="Stretch"
+                                        Style="{StaticResource ButtonRevealStyle}">
+                                <Button.Flyout>
+                                    <Flyout>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="200"/>
+                                                <ColumnDefinition Width="100"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="*"/>
+                                                <RowDefinition Height="*"/>
+                                            </Grid.RowDefinitions>
+                                            <TextBlock Text="Model Name" Margin="10"/>
+                                            <TextBox Grid.Column="0"
+                                                     Grid.Row="1"
+                                                     Text="{x:Bind ViewModel.CurrentSavedModelName, Mode=TwoWay}"
+                                                     HorizontalAlignment="Stretch"
+                                                     Margin="10, 10, 5, 10"/>
+                                            <Button Grid.Column="1"
+                                                    Grid.Row="1"
+                                                    HorizontalAlignment="Stretch"
+                                                    Content="OK"
+                                                    Click="{x:Bind ViewModel.SaveModelButtonClicked, Mode=OneWay}"
+                                                    Margin="5, 10, 10, 10"/>
+                                        </Grid>
+                                    </Flyout>
+                                </Button.Flyout>
+                            </Button>
+                            <Button Content="Load Model"
+                                        Margin="10"
+                                        HorizontalAlignment="Stretch"
+                                        Style="{StaticResource ButtonRevealStyle}"
+                                        Click="{x:Bind ViewModel.LoadModelClick, Mode=OneWay}">
+                                <Button.Flyout>
+                                    <Flyout>
+                                        <ListView ItemsSource="{x:Bind ViewModel.CurrentModels, Mode=OneWay}"
+                                                  ItemClick="{x:Bind ViewModel.LoadModelClick, Mode=OneWay}"
+                                                  SelectedIndex="{x:Bind ViewModel.LoadModelSelectIndex, Mode=TwoWay}"
+                                                  Width="300"/>
+                                    </Flyout>
+                                </Button.Flyout>
+                            </Button>
+                        </StackPanel>
                         </ScrollViewer>
                         <ScrollViewer Grid.Column="1"
                                     Background="{ThemeResource CustomAcrylicBrush2}">
@@ -447,7 +492,7 @@
                                         </Grid>
                                     </StackPanel>
                                     <StackPanel Grid.Row="1">
-                                        <TextBlock Text="Summary"
+                                        <TextBlock Text="Settings"
                                                    Margin="10"
                                                    FontSize="24">
                                         </TextBlock>
@@ -456,25 +501,13 @@
                                                 <ColumnDefinition Width="*" MaxWidth="100"></ColumnDefinition>
                                                 <ColumnDefinition Width="*"></ColumnDefinition>
                                             </Grid.ColumnDefinitions>
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="*"></RowDefinition>
-                                                <RowDefinition Height="*"></RowDefinition>
-                                                <RowDefinition Height="*"></RowDefinition>
-                                                <RowDefinition Height="*"></RowDefinition>
-                                                <RowDefinition Height="*"></RowDefinition>
-                                            </Grid.RowDefinitions>
-                                            <TextBlock Text="#Params:"
-                                                       Grid.Row="0"
-                                                       Grid.Column="0"
-                                                       VerticalAlignment="Center"
-                                                       Margin="10">
-                                            </TextBlock>
-                                            <TextBlock Text="FLOPs:"
-                                                       Grid.Row="1"
-                                                       Grid.Column="0"
-                                                       VerticalAlignment="Center"
-                                                       Margin="10">
-                                            </TextBlock>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*"></RowDefinition>
+                                            <RowDefinition Height="*"></RowDefinition>
+                                            <RowDefinition Height="*"></RowDefinition>
+                                            <RowDefinition Height="*"></RowDefinition>
+                                            <RowDefinition Height="*"></RowDefinition>
+                                        </Grid.RowDefinitions>
                                             <TextBlock Text="Batch size:"
                                                        Grid.Row="2"
                                                        Grid.Column="0"
@@ -488,22 +521,10 @@
                                                        Margin="10">
                                             </TextBlock>
                                             <TextBlock Text="Optimizer:"
-                                                       Grid.Row="4"
-                                                       Grid.Column="0"
-                                                       VerticalAlignment="Center"
-                                                       Margin="10">
-                                            </TextBlock>
-                                            <TextBlock Text="0.42M"
-                                                       Grid.Row="0"
-                                                       Grid.Column="1"
-                                                       VerticalAlignment="Center"
-                                                       Margin="10">
-                                            </TextBlock>
-                                            <TextBlock Text="30M"
-                                                       Grid.Row="1"
-                                                       Grid.Column="1"
-                                                       VerticalAlignment="Center"
-                                                       Margin="10">
+                                                            Grid.Row="4"
+                                                            Grid.Column="0"
+                                                            VerticalAlignment="Center"
+                                                            Margin="10">
                                             </TextBlock>
                                             <TextBox Text="{x:Bind ViewModel.BatchSizeDisplay, Mode=TwoWay}"
                                                        Grid.Row="2"

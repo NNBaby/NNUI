@@ -55,6 +55,8 @@ namespace nnui_test
             dispatchertimer.Tick += dispatcherTimer_Tick;
             dispatchertimer.Interval = new TimeSpan(0, 0, 1);
             dispatchertimer.Start();
+
+            //ViewModel.SaveModel();
         }
 
         public void dispatcherTimer_Tick(object sender, object e)

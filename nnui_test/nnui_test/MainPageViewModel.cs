@@ -3,6 +3,7 @@ using Meowtrix.ComponentModel;
 using Windows.UI.Xaml;
 using Newtonsoft.Json;
 using System.Collections.ObjectModel;
+using Windows.Storage;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Controls;
 using Windows.Web.Http;
@@ -176,6 +177,28 @@ namespace nnui_test
             get => enableCompile;
             set { enableCompile = value; OnPropertyChanged(); }
         }
+
+        private string currentSavedModelName;
+        public string CurrentSavedModelName
+        {
+            get => currentSavedModelName;
+            set { currentSavedModelName = value; OnPropertyChanged(); }
+        }
+
+        private ObservableCollection<string> currentModels = new ObservableCollection<string>();
+        public ObservableCollection<string> CurrentModels
+        {
+            get => currentModels;
+            set { currentModels = value; OnPropertyChanged(); }
+        }
+
+        private int loadModelSelectIndex = -1;
+        public int LoadModelSelectIndex
+        {
+            get => loadModelSelectIndex;
+            set { loadModelSelectIndex = value; OnPropertyChanged(); }
+        }
+
         #endregion
 
         #region MOdel SendContent definitions
@@ -793,6 +816,40 @@ namespace nnui_test
             {
 
             }
+        }
+
+        private async void SaveModel()
+        {
+            Windows.Storage.StorageFolder storageFolder =
+                Windows.Storage.ApplicationData.Current.LocalFolder;
+            Windows.Storage.StorageFile sampleFile =
+                await storageFolder.CreateFileAsync("sample.txt",
+                    Windows.Storage.CreationCollisionOption.ReplaceExisting);
+            await Windows.Storage.FileIO.WriteTextAsync(sampleFile, "Swift as a shadow");
+            string text = await Windows.Storage.FileIO.ReadTextAsync(sampleFile);
+        }
+
+        public void SaveModelButtonClicked()
+        {
+
+        }
+
+        private async Task GetModelList()
+        {
+            StorageFolder storageFolder =
+                ApplicationData.Current.LocalFolder;
+            IReadOnlyList<StorageFile> fileList = await storageFolder.GetFilesAsync();
+            CurrentModels.Clear();
+            foreach (StorageFile file in fileList)
+            {
+                CurrentModels.Add(file.DisplayName);
+            }
+
+        }
+
+        public async void LoadModelClick()
+        {
+            await GetModelList();
         }
     }
 }
