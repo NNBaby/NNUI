@@ -46,7 +46,7 @@ namespace nnui_test
             newItem2.Name = "pred";
             newItem2.OpType = "Activation";
             newItem2.Activation = ViewModel.ActivationSelect[1];
-            newItem2.OpColor = new SolidColorBrush(Colors.Azure);
+            newItem2.OpColor = new SolidColorBrush(Colors.LightGreen);
             ViewModel.OpItems.Add(newItem2);
             ViewModel.SelectionInit();
 
@@ -57,6 +57,7 @@ namespace nnui_test
             dispatchertimer.Start();
 
             //ViewModel.SaveModel();
+            ViewModel.LoadModelClick();
         }
 
         public void dispatcherTimer_Tick(object sender, object e)

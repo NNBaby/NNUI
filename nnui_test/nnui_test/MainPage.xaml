@@ -261,8 +261,8 @@
                                 <Button.Flyout>
                                     <Flyout>
                                         <ListView ItemsSource="{x:Bind ViewModel.CurrentModels, Mode=OneWay}"
-                                                  ItemClick="{x:Bind ViewModel.LoadModelClick, Mode=OneWay}"
                                                   SelectedIndex="{x:Bind ViewModel.LoadModelSelectIndex, Mode=TwoWay}"
+                                                  SelectionChanged="{x:Bind ViewModel.LoadModel, Mode=OneWay}"
                                                   Width="300"/>
                                     </Flyout>
                                 </Button.Flyout>

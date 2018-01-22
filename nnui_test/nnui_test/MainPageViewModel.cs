@@ -818,20 +818,39 @@ namespace nnui_test
             }
         }
 
-        private async void SaveModel()
+        private async Task SaveModel(string name)
         {
-            Windows.Storage.StorageFolder storageFolder =
-                Windows.Storage.ApplicationData.Current.LocalFolder;
-            Windows.Storage.StorageFile sampleFile =
-                await storageFolder.CreateFileAsync("sample.txt",
-                    Windows.Storage.CreationCollisionOption.ReplaceExisting);
-            await Windows.Storage.FileIO.WriteTextAsync(sampleFile, "Swift as a shadow");
-            string text = await Windows.Storage.FileIO.ReadTextAsync(sampleFile);
+            StorageFolder storageFolder =
+                ApplicationData.Current.LocalFolder;
+            StorageFile sampleFile =
+                await storageFolder.CreateFileAsync(String.Format("{0}.txt", name),
+                    CreationCollisionOption.ReplaceExisting);
+            List<OpItem4Save> OpList = new List<OpItem4Save>();
+            OpItem4Save op_temp = new OpItem4Save();
+            foreach (OpItem op in OpItems)
+            {
+                op_temp.Name = op.Name;
+                op_temp.OpType = op.OpType;
+                op_temp.Kernel = op.Kernel;
+                op_temp.InputShape = op.InputShape;
+                op_temp.DimOut = op.DimOut;
+                op_temp.Activation = op.Activation;
+                op_temp.Padding = op.Padding;
+                op_temp.Pool = op.Pool;
+                op_temp.Stride = op.Stride;
+                OpList.Add(op_temp.Copy());
+            }
+            await FileIO.WriteTextAsync(sampleFile, JsonConvert.SerializeObject(OpList));
+            //string text = await Windows.Storage.FileIO.ReadTextAsync(sampleFile);
         }
 
-        public void SaveModelButtonClicked()
+        public async void SaveModelButtonClicked()
         {
-
+            PropertyModify();
+            if (CurrentSavedModelName != "")
+                await SaveModel(CurrentSavedModelName);
+            else
+                DisplayDialog("Ooops", "Please enter a valid model name");
         }
 
         private async Task GetModelList()
@@ -850,6 +869,89 @@ namespace nnui_test
         public async void LoadModelClick()
         {
             await GetModelList();
+        }
+
+        public async void LoadModel()
+        {
+            try
+            {
+                if (LoadModelSelectIndex != -1)
+                {
+                    StorageFolder storageFolder =
+                        ApplicationData.Current.LocalFolder;
+                    StorageFile sampleFile =
+                        await storageFolder.GetFileAsync(String.Format("{0}.txt", CurrentModels[LoadModelSelectIndex]));
+                    string text = await FileIO.ReadTextAsync(sampleFile);
+                    List<OpItem4Save> OpList = JsonConvert.DeserializeObject<List<OpItem4Save>>(text);
+                    OpConvert(OpList);
+                    SelectedIndex = 0;
+                }
+            }
+            catch
+            {
+                DisplayDialog("Invalid Model", "The model is probably broken, please try another one");
+            }
+
+        }
+
+        private void OpConvert(List<OpItem4Save> OpList)
+        {
+            OpItems.Clear();
+            ObservableCollection<OpItem> OpItemReturn = new ObservableCollection<OpItem>();
+            OpItem op_temp = new OpItem();
+            foreach (OpItem4Save op in OpList)
+            {
+                op_temp.Name = op.Name;
+                op_temp.OpType = op.OpType;
+                op_temp.Kernel = op.Kernel;
+                op_temp.InputShape = op.InputShape;
+                op_temp.DimOut = op.DimOut;
+                op_temp.Activation = op.Activation;
+                op_temp.Padding = op.Padding;
+                op_temp.Pool = op.Pool;
+                op_temp.Stride = op.Stride;
+                switch(op.OpType)
+                {
+                    case "Input":
+                        op_temp.OpColor = new SolidColorBrush(Windows.UI.Colors.Azure);
+                        break;
+                    case "Convolution2D":
+                        op_temp.OpColor = new SolidColorBrush(Windows.UI.Colors.Orange);
+                        break;
+                    case "BatchNormalization":
+                        op_temp.OpColor = new SolidColorBrush(Windows.UI.Colors.LightBlue);
+                        break;
+                    case "Activation":
+                        op_temp.OpColor = new SolidColorBrush(Windows.UI.Colors.LightGreen);
+                        break;
+                    case "Maxpooling2D":
+                        op_temp.OpColor = new SolidColorBrush(Windows.UI.Colors.LightYellow);
+                        break;
+                    case "Flatten":
+                        op_temp.OpColor = new SolidColorBrush(Windows.UI.Colors.LightSalmon);
+                        break;
+                    case "Dense":
+                        op_temp.OpColor = new SolidColorBrush(Windows.UI.Colors.LightPink);
+                        break;
+                }
+                OpItems.Add(CopyItem(op_temp));
+            }
+        }
+
+        private OpItem CopyItem(OpItem op)
+        {
+            OpItem op_temp = new OpItem();
+            op_temp.Name = op.Name;
+            op_temp.OpType = op.OpType;
+            op_temp.Kernel = op.Kernel;
+            op_temp.InputShape = op.InputShape;
+            op_temp.DimOut = op.DimOut;
+            op_temp.Activation = op.Activation;
+            op_temp.Padding = op.Padding;
+            op_temp.Pool = op.Pool;
+            op_temp.Stride = op.Stride;
+            op_temp.OpColor = op.OpColor;
+            return op_temp;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Windows.UI.Xaml.Media;
+using Newtonsoft.Json;
 //using Meowtrix.ComponentModel;
 
 namespace nnui_test
@@ -66,7 +67,5 @@ namespace nnui_test
             get { return inputShape; }
             set { inputShape = value; }
         }
-
-
     }
 }
