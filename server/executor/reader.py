@@ -144,7 +144,14 @@ class Model:
         self.logger.append(logs)
     def train(self):
         # get dataset
-        x_train, y_train, x_test, y_test = datasets.get_dataset('mnist')
+        dataset_name = self.info['dataset']
+        if dataset_name in datasets.BUILDIN_DATASETS:
+            # build-in dataset
+            x_train, y_train, x_test, y_test = datasets.get_dataset(datasets.BUILDIN_DATASETS[dataset_name], custom = False)
+        else:
+            # custom dataset
+            x_train, y_train, x_test, y_test = datasets.get_dataset(dataset_name, custom = True)
+            
         mode_info = self.info[self.mode]
         self.model.fit(x = {"data": x_train}, y = {"pred": y_train},
                        batch_size = mode_info["batch_size"], epochs = mode_info["epochs"],
