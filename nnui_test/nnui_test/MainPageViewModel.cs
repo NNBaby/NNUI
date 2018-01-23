@@ -670,7 +670,7 @@ namespace nnui_test
             sendcontent.dataset = DatasetSelect[DatasetSelectIndex];
             Input input = new Input();
             input.name = "data";
-            input.shape = new List<int> { 28, 28, 1 };
+            //input.shape = new List<int> { 28, 28, 1 };
             input.batch_size = BatchSizeDisplay;
             sendcontent.train.inputs.Add(input);
             sendcontent.train.batch_size = BatchSizeDisplay;
@@ -689,7 +689,10 @@ namespace nnui_test
                     case "Input":
                         tempInput.name = item.Name;
                         tempInput.optype = item.OpType;
-                        tempInput.shape = new List<int> { 28, 28, 1 };
+                        if (sendcontent.dataset == "MNIST")
+                            tempInput.shape = new List<int> { 28, 28, 1 };
+                        else if (sendcontent.dataset == "CIFAR-10" || sendcontent.dataset == "CIFAR-100")
+                            tempInput.shape = new List<int> { 32, 32, 3 };
                         sendcontent.operators.Add(tempInput.Copy());
                         break;
                     case "Convolution2D":
