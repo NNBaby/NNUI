@@ -8,6 +8,7 @@ except:
 import sys
 import socket
 from . import builder
+from . import datasets
 
 OPERATOR_FIRST_INPUT_NOT_EXISTS = "The input of the first operator must exist"
 OPERATOR_INPUT_ERROR = "The key 'input' and 'inputs' cannot exist at the same time"
@@ -142,18 +143,9 @@ class Model:
     def write_logs(self, logs):
         self.logger.append(logs)
     def train(self):
-        import keras
-        from keras.datasets import mnist
+        # get dataset
+        x_train, y_train, x_test, y_test = datasets.get_dataset('mnist')
         mode_info = self.info[self.mode]
-        (x_train, y_train), (x_test, y_test) = mnist.load_data()
-        rows, cols = 28, 28
-        num_classes = 10
-        # NHWC
-        x_train = x_train.reshape((x_train.shape[0], rows, cols, 1)) / 255.0
-        x_test = x_test.reshape((x_test.shape[0], rows, cols, 1)) / 255.0
-        y_train = keras.utils.np_utils.to_categorical(y_train, num_classes)
-        y_test = keras.utils.np_utils.to_categorical(y_test, num_classes)
-
         self.model.fit(x = {"data": x_train}, y = {"pred": y_train},
                        batch_size = mode_info["batch_size"], epochs = mode_info["epochs"],
                        callbacks = [LogRedirectCallback(nnbaby_model = self)], verbose = 0)
