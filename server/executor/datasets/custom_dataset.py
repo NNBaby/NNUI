@@ -5,8 +5,12 @@ import numpy as np
 
 IMG_EXTS = ['jpg', 'png', 'jpeg', 'bmp']
 
+PATH = os.path.dirname(__file__)
+
 def get_custom_dataset(path, shape = (224, 224), train_val_ratio = 0.7):
     # return: a tensor whose shape is (N,C,H,W), H, W = shape
+    if len(os.path.dirname(path)) == 0:
+        path = os.path.join(PATH, path)
     dirs = os.listdir(path)
     cls_imgs = dict()
     for cls_name in dirs:
@@ -45,7 +49,7 @@ def get_custom_dataset(path, shape = (224, 224), train_val_ratio = 0.7):
             dh = ch - th
             ow = dw // 2
             oh = dh // 2
-            im = im[oh:oh + th, ow:ow + tw, :].transpose((2,0,1))
+            im = im[oh:oh + th, ow:ow + tw, :] # .transpose((2,0,1))
             raw.append((im, gt))
             
     random.shuffle(raw)

@@ -38,6 +38,7 @@ namespace nnui_test
             ViewModel.DatasetSelect.Add("MNIST");
             ViewModel.DatasetSelect.Add("CIFAR-10");
             ViewModel.DatasetSelect.Add("CIFAR-100");
+            ViewModel.DatasetSelect.Add("little_dog_cat");
 
             OpItem newItem = new OpItem();
             newItem.Name = "data";

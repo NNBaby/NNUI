@@ -693,6 +693,8 @@ namespace nnui_test
                             tempInput.shape = new List<int> { 28, 28, 1 };
                         else if (sendcontent.dataset == "CIFAR-10" || sendcontent.dataset == "CIFAR-100")
                             tempInput.shape = new List<int> { 32, 32, 3 };
+                        else
+                            tempInput.shape = new List<int> { 224, 224, 3 };
                         sendcontent.operators.Add(tempInput.Copy());
                         break;
                     case "Convolution2D":
@@ -1026,10 +1028,13 @@ namespace nnui_test
 
         public void DatasetSelectionChanged()
         {
-            if (DatasetSelectIndex == 0)
+            string dataset = DatasetSelect[DatasetSelectIndex];
+            if (dataset == "MNIST")
                 InputShapeDisplay = "[28, 28]";
-            else
+            else if (dataset == "CIFAR-10" || dataset == "CIFAR-100")
                 InputShapeDisplay = "[32, 32]";
+            else
+                InputShapeDisplay = "[224, 224]";
         }
     }
 }
