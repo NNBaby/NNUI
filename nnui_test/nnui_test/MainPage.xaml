@@ -458,7 +458,7 @@
                                                       ItemsSource="{x:Bind ViewModel.DatasetSelect, Mode=OneWay}"
                                                       Visibility="{x:Bind ViewModel.DatasetVisib, Mode=OneWay}"
                                                       SelectedIndex="{x:Bind ViewModel.DatasetSelectIndex, Mode=TwoWay}"
-                                                      SelectionChanged="{x:Bind ViewModel.DataetSelectionChanged, Mode=OneWay}">
+                                                      SelectionChanged="{x:Bind ViewModel.DatasetSelectionChanged, Mode=OneWay}">
                                             </ComboBox>
                                             <TextBox x:Name="NameBox"
                                                      Text="{x:Bind ViewModel.NameDisplay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"

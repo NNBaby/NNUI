@@ -474,7 +474,7 @@ namespace nnui_test
                 StrideDisplay = OpItems[SelectedIndex].Stride;
                 OutDimDisplay = OpItems[SelectedIndex].DimOut;
                 ActivationSelectIndex = GetActivationIndex(OpItems[SelectedIndex].Activation);
-                DataetSelectionChanged();
+                DatasetSelectionChanged();
                 switch (OpItems[SelectedIndex].OpType)
                 {
                     case "Convolution2D":
@@ -564,7 +564,7 @@ namespace nnui_test
                 OutDimDisplay = OpItems[SelectedIndex].DimOut;
                 ActivationSelectIndex = GetActivationIndex(OpItems[SelectedIndex].Activation);
                 InputShapeDisplay = OpItems[SelectedIndex].InputShape;
-                DataetSelectionChanged();
+                DatasetSelectionChanged();
                 switch (OpItems[SelectedIndex].OpType)
                 {
                     case "Convolution2D":
@@ -1024,7 +1024,7 @@ namespace nnui_test
             return op_temp;
         }
 
-        public void DataetSelectionChanged()
+        public void DatasetSelectionChanged()
         {
             if (DatasetSelectIndex == 0)
                 InputShapeDisplay = "[28, 28]";
