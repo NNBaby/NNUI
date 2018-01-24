@@ -889,7 +889,7 @@ namespace nnui_test
             await GetModelList();
             if (CurrentModels.Contains(name))
                 await DisplayPromptDialog("The model already existed", "Do you want to replace it? If continue, the previous model will be overwritten.", "Replace", "Cancel");
-            if (PromptResult == ContentDialogResult.Primary)
+            if (PromptResult == ContentDialogResult.Primary || CurrentModels.Contains(name) == false)
             {
                 StorageFile sampleFile =
                     await storageFolder.CreateFileAsync(String.Format("{0}.txt", name),
