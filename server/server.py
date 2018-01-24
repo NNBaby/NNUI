@@ -2,21 +2,7 @@ from flask import Flask, request, jsonify
 import json
 from executor import new_model, get_loss
 app = Flask(__name__)
-
-@app.route('/get/')
-def get_res():
-    username = request.args.get('usr')
-    if(username != ''):
-        print('received parameter usr:',username)
-
-    password = request.args.get('pwd')
-    if(password != ''):
-        print('received parameter pwd:',password)
-
-    jsonpack = request.json
-    print('This is json message :', jsonpack,'\n\n')
-    return jsonify(jsonpack)
-    
+   
 def post_compile(jsonpack):
     print (jsonpack)
     mid = new_model(jsonpack)
