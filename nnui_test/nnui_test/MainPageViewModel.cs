@@ -3,6 +3,7 @@ using Meowtrix.ComponentModel;
 using Windows.UI.Xaml;
 using Newtonsoft.Json;
 using System.Collections.ObjectModel;
+using Windows.Storage;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Controls;
 using Windows.Web.Http;
@@ -13,6 +14,7 @@ namespace nnui_test
 {
     public class MainPageViewModel : NotificationObject
     {
+        ContentDialogResult PromptResult = new ContentDialogResult();
         #region ViewModel definitions
         public string json;
         DispatcherTimer dispatchertimer = new DispatcherTimer();//for display info
@@ -82,11 +84,23 @@ namespace nnui_test
             get => activationSelect;
             set { activationSelect = value; OnPropertyChanged(); }
         }
+        private ObservableCollection<string> datasetSelect = new ObservableCollection<string>();
+        public ObservableCollection<string> DatasetSelect
+        {
+            get => datasetSelect;
+            set { datasetSelect = value; OnPropertyChanged(); }
+        }
         private int activationSelectIndex;
         public int ActivationSelectIndex
         {
             get => activationSelectIndex;
             set { activationSelectIndex = value; OnPropertyChanged(); }
+        }
+        private int datasetSelectIndex;
+        public int DatasetSelectIndex
+        {
+            get => datasetSelectIndex;
+            set { datasetSelectIndex = value; OnPropertyChanged(); }
         }
         private string inputShapeDisplay;
         public string InputShapeDisplay
@@ -161,6 +175,12 @@ namespace nnui_test
             get => inputShapeVisib;
             set { inputShapeVisib = value; OnPropertyChanged(); }
         }
+        private Visibility datasetVisib;
+        public Visibility DatasetVisib
+        {
+            get => datasetVisib;
+            set { datasetVisib = value; OnPropertyChanged(); }
+        }
         public string display_info = "information display";
         public string DisplayInfo
         {
@@ -176,13 +196,36 @@ namespace nnui_test
             get => enableCompile;
             set { enableCompile = value; OnPropertyChanged(); }
         }
+
+        private string currentSavedModelName;
+        public string CurrentSavedModelName
+        {
+            get => currentSavedModelName;
+            set { currentSavedModelName = value; OnPropertyChanged(); }
+        }
+
+        private ObservableCollection<string> currentModels = new ObservableCollection<string>();
+        public ObservableCollection<string> CurrentModels
+        {
+            get => currentModels;
+            set { currentModels = value; OnPropertyChanged(); }
+        }
+
+        private int loadModelSelectIndex = -1;
+        public int LoadModelSelectIndex
+        {
+            get => loadModelSelectIndex;
+            set { loadModelSelectIndex = value; OnPropertyChanged(); }
+        }
+
         #endregion
 
-        #region MOdel SendContent definitions
+        #region Model SendContent definitions
         private class ModelSendContent
         {
             public string request_type = "Compile";
             public string name = "TestNet";
+            public string dataset = "MNIST";
             public Train train = new Train();
             public List<Object> operators = new List<Object>();
         }
@@ -423,7 +466,7 @@ namespace nnui_test
                     OpItems[LastSelectedIndex].Activation = ActivationSelect[ActivationSelectIndex];
 
 
-                OpItems[SelectedIndex].InputShape = InputShapeDisplay;
+                InputShapeDisplay = OpItems[SelectedIndex].InputShape;
                 TypeDisplay = OpItems[SelectedIndex].OpType;
                 ShapeDisplay = OpItems[SelectedIndex].Kernel;
                 NameDisplay = OpItems[SelectedIndex].Name;
@@ -431,7 +474,7 @@ namespace nnui_test
                 StrideDisplay = OpItems[SelectedIndex].Stride;
                 OutDimDisplay = OpItems[SelectedIndex].DimOut;
                 ActivationSelectIndex = GetActivationIndex(OpItems[SelectedIndex].Activation);
-                InputShapeDisplay = OpItems[SelectedIndex].InputShape;
+                DatasetSelectionChanged();
                 switch (OpItems[SelectedIndex].OpType)
                 {
                     case "Convolution2D":
@@ -441,6 +484,8 @@ namespace nnui_test
                         PadVisib = Visibility.Visible;
                         ActivationVisib = Visibility.Collapsed;
                         InputShapeVisib = Visibility.Collapsed;
+                        DatasetVisib = Visibility.Collapsed;
+                        NameVisib = Visibility.Visible;
                         break;
                     case "BatchNormalization":
                         KernelShapeVisib = Visibility.Collapsed;
@@ -449,6 +494,8 @@ namespace nnui_test
                         PadVisib = Visibility.Collapsed;
                         ActivationVisib = Visibility.Collapsed;
                         InputShapeVisib = Visibility.Collapsed;
+                        DatasetVisib = Visibility.Collapsed;
+                        NameVisib = Visibility.Visible;
                         break;
                     case "Activation":
                         KernelShapeVisib = Visibility.Collapsed;
@@ -457,6 +504,8 @@ namespace nnui_test
                         PadVisib = Visibility.Collapsed;
                         ActivationVisib = Visibility.Visible;
                         InputShapeVisib = Visibility.Collapsed;
+                        DatasetVisib = Visibility.Collapsed;
+                        NameVisib = Visibility.Visible;
                         break;
                     case "MaxPooling2D":
                         KernelShapeVisib = Visibility.Visible;
@@ -465,6 +514,8 @@ namespace nnui_test
                         PadVisib = Visibility.Collapsed;
                         ActivationVisib = Visibility.Collapsed;
                         InputShapeVisib = Visibility.Collapsed;
+                        DatasetVisib = Visibility.Collapsed;
+                        NameVisib = Visibility.Visible;
                         break;
                     case "Flatten":
                         KernelShapeVisib = Visibility.Collapsed;
@@ -473,6 +524,8 @@ namespace nnui_test
                         PadVisib = Visibility.Collapsed;
                         ActivationVisib = Visibility.Collapsed;
                         InputShapeVisib = Visibility.Collapsed;
+                        DatasetVisib = Visibility.Collapsed;
+                        NameVisib = Visibility.Visible;
                         break;
                     case "Dense":
                         KernelShapeVisib = Visibility.Collapsed;
@@ -481,6 +534,8 @@ namespace nnui_test
                         PadVisib = Visibility.Collapsed;
                         ActivationVisib = Visibility.Collapsed;
                         InputShapeVisib = Visibility.Collapsed;
+                        DatasetVisib = Visibility.Collapsed;
+                        NameVisib = Visibility.Visible;
                         break;
                     case "Input":
                         KernelShapeVisib = Visibility.Collapsed;
@@ -489,6 +544,8 @@ namespace nnui_test
                         PadVisib = Visibility.Collapsed;
                         ActivationVisib = Visibility.Collapsed;
                         InputShapeVisib = Visibility.Visible;
+                        DatasetVisib = Visibility.Visible;
+                        NameVisib = Visibility.Collapsed;
                         break;
                 }
                 LastSelectedIndex = SelectedIndex;
@@ -498,7 +555,7 @@ namespace nnui_test
         {
             if (SelectedIndex != -1)
             {
-                OpItems[SelectedIndex].InputShape = InputShapeDisplay;
+                InputShapeDisplay = OpItems[SelectedIndex].InputShape;
                 TypeDisplay = OpItems[SelectedIndex].OpType;
                 ShapeDisplay = OpItems[SelectedIndex].Kernel;
                 NameDisplay = OpItems[SelectedIndex].Name;
@@ -507,6 +564,7 @@ namespace nnui_test
                 OutDimDisplay = OpItems[SelectedIndex].DimOut;
                 ActivationSelectIndex = GetActivationIndex(OpItems[SelectedIndex].Activation);
                 InputShapeDisplay = OpItems[SelectedIndex].InputShape;
+                DatasetSelectionChanged();
                 switch (OpItems[SelectedIndex].OpType)
                 {
                     case "Convolution2D":
@@ -516,6 +574,8 @@ namespace nnui_test
                         PadVisib = Visibility.Visible;
                         ActivationVisib = Visibility.Collapsed;
                         InputShapeVisib = Visibility.Collapsed;
+                        DatasetVisib = Visibility.Collapsed;
+                        NameVisib = Visibility.Visible;
                         break;
                     case "BatchNormalization":
                         KernelShapeVisib = Visibility.Collapsed;
@@ -524,6 +584,8 @@ namespace nnui_test
                         PadVisib = Visibility.Collapsed;
                         ActivationVisib = Visibility.Collapsed;
                         InputShapeVisib = Visibility.Collapsed;
+                        DatasetVisib = Visibility.Collapsed;
+                        NameVisib = Visibility.Visible;
                         break;
                     case "Activation":
                         KernelShapeVisib = Visibility.Collapsed;
@@ -532,6 +594,8 @@ namespace nnui_test
                         PadVisib = Visibility.Collapsed;
                         ActivationVisib = Visibility.Visible;
                         InputShapeVisib = Visibility.Collapsed;
+                        DatasetVisib = Visibility.Collapsed;
+                        NameVisib = Visibility.Visible;
                         break;
                     case "MaxPooling2D":
                         KernelShapeVisib = Visibility.Visible;
@@ -540,6 +604,8 @@ namespace nnui_test
                         PadVisib = Visibility.Collapsed;
                         ActivationVisib = Visibility.Collapsed;
                         InputShapeVisib = Visibility.Collapsed;
+                        DatasetVisib = Visibility.Collapsed;
+                        NameVisib = Visibility.Visible;
                         break;
                     case "Flatten":
                         KernelShapeVisib = Visibility.Collapsed;
@@ -548,6 +614,8 @@ namespace nnui_test
                         PadVisib = Visibility.Collapsed;
                         ActivationVisib = Visibility.Collapsed;
                         InputShapeVisib = Visibility.Collapsed;
+                        DatasetVisib = Visibility.Collapsed;
+                        NameVisib = Visibility.Visible;
                         break;
                     case "Dense":
                         KernelShapeVisib = Visibility.Collapsed;
@@ -556,6 +624,8 @@ namespace nnui_test
                         PadVisib = Visibility.Collapsed;
                         ActivationVisib = Visibility.Collapsed;
                         InputShapeVisib = Visibility.Collapsed;
+                        DatasetVisib = Visibility.Collapsed;
+                        NameVisib = Visibility.Visible;
                         break;
                     case "Input":
                         KernelShapeVisib = Visibility.Collapsed;
@@ -564,6 +634,8 @@ namespace nnui_test
                         PadVisib = Visibility.Collapsed;
                         ActivationVisib = Visibility.Collapsed;
                         InputShapeVisib = Visibility.Visible;
+                        DatasetVisib = Visibility.Visible;
+                        NameVisib = Visibility.Collapsed;
                         break;
                 }
                 LastSelectedIndex = SelectedIndex;
@@ -595,9 +667,10 @@ namespace nnui_test
             Flatten tempFlatten = new Flatten();
             Dense tempDense = new Dense();
             Activation tempActivation = new Activation();
+            sendcontent.dataset = DatasetSelect[DatasetSelectIndex];
             Input input = new Input();
             input.name = "data";
-            input.shape = new List<int> { 28, 28, 1 };
+            //input.shape = new List<int> { 28, 28, 1 };
             input.batch_size = BatchSizeDisplay;
             sendcontent.train.inputs.Add(input);
             sendcontent.train.batch_size = BatchSizeDisplay;
@@ -616,7 +689,10 @@ namespace nnui_test
                     case "Input":
                         tempInput.name = item.Name;
                         tempInput.optype = item.OpType;
-                        tempInput.shape = new List<int> { 28, 28, 1 };
+                        if (sendcontent.dataset == "MNIST")
+                            tempInput.shape = new List<int> { 28, 28, 1 };
+                        else if (sendcontent.dataset == "CIFAR-10" || sendcontent.dataset == "CIFAR-100")
+                            tempInput.shape = new List<int> { 32, 32, 3 };
                         sendcontent.operators.Add(tempInput.Copy());
                         break;
                     case "Convolution2D":
@@ -709,7 +785,7 @@ namespace nnui_test
                 }
             }
         }
-
+        #endregion
         private int GetActivationIndex(string str)
         {
             for (int i = 0; i < ActivationSelect.Count; i++)
@@ -717,8 +793,7 @@ namespace nnui_test
                     return i;
             return -1;
         }
-        #endregion
-        
+
         public async Task SendInfo(string send, int func)
         {
             string str_uri = string.Format("http://{0}/post", IpDisplay);
@@ -793,6 +868,168 @@ namespace nnui_test
             {
 
             }
+        }
+        private async Task DisplayPromptDialog(string title, string content, string primaryButton, string closeButton)
+        {
+            ContentDialog locationPromptDialog = new ContentDialog
+            {
+                Title = title,
+                Content = content,
+                CloseButtonText = closeButton,
+                PrimaryButtonText = primaryButton
+            };
+
+            PromptResult = await locationPromptDialog.ShowAsync();
+        }
+
+        private async Task SaveModel(string name)
+        {
+            StorageFolder storageFolder =
+                ApplicationData.Current.LocalFolder;
+            await GetModelList();
+            if (CurrentModels.Contains(name))
+                await DisplayPromptDialog("The model already existed", "Do you want to replace it? If continue, the previous model will be overwritten.", "Replace", "Cancel");
+            if (PromptResult == ContentDialogResult.Primary || CurrentModels.Contains(name) == false)
+            {
+                StorageFile sampleFile =
+                    await storageFolder.CreateFileAsync(String.Format("{0}.txt", name),
+                        CreationCollisionOption.ReplaceExisting);
+                List<OpItem4Save> OpList = new List<OpItem4Save>();
+                OpItem4Save op_temp = new OpItem4Save();
+                foreach (OpItem op in OpItems)
+                {
+                    op_temp.Name = op.Name;
+                    op_temp.OpType = op.OpType;
+                    op_temp.Kernel = op.Kernel;
+                    op_temp.InputShape = op.InputShape;
+                    op_temp.DimOut = op.DimOut;
+                    op_temp.Activation = op.Activation;
+                    op_temp.Padding = op.Padding;
+                    op_temp.Pool = op.Pool;
+                    op_temp.Stride = op.Stride;
+                    OpList.Add(op_temp.Copy());
+                }
+                await FileIO.WriteTextAsync(sampleFile, JsonConvert.SerializeObject(OpList));
+                //string text = await Windows.Storage.FileIO.ReadTextAsync(sampleFile);
+            }
+        }
+
+        public async void SaveModelButtonClicked()
+        {
+            PropertyModify();
+            if (CurrentSavedModelName != "")
+                await SaveModel(CurrentSavedModelName);
+            else
+                DisplayDialog("Ooops", "Please enter a valid model name");
+        }
+
+        private async Task GetModelList()
+        {
+            StorageFolder storageFolder =
+                ApplicationData.Current.LocalFolder;
+            IReadOnlyList<StorageFile> fileList = await storageFolder.GetFilesAsync();
+            CurrentModels.Clear();
+            foreach (StorageFile file in fileList)
+            {
+                CurrentModels.Add(file.DisplayName);
+            }
+
+        }
+
+        public async void LoadModelClick()
+        {
+            await GetModelList();
+        }
+
+        public async void LoadModel()
+        {
+            try
+            {
+                if (LoadModelSelectIndex != -1)
+                {
+                    StorageFolder storageFolder =
+                        ApplicationData.Current.LocalFolder;
+                    StorageFile sampleFile =
+                        await storageFolder.GetFileAsync(String.Format("{0}.txt", CurrentModels[LoadModelSelectIndex]));
+                    string text = await FileIO.ReadTextAsync(sampleFile);
+                    List<OpItem4Save> OpList = JsonConvert.DeserializeObject<List<OpItem4Save>>(text);
+                    OpConvert(OpList);
+                    SelectedIndex = 0;
+                }
+            }
+            catch
+            {
+                DisplayDialog("Invalid Model", "The model is probably broken, please try another one");
+            }
+
+        }
+
+        private void OpConvert(List<OpItem4Save> OpList)
+        {
+            OpItems.Clear();
+            ObservableCollection<OpItem> OpItemReturn = new ObservableCollection<OpItem>();
+            OpItem op_temp = new OpItem();
+            foreach (OpItem4Save op in OpList)
+            {
+                op_temp.Name = op.Name;
+                op_temp.OpType = op.OpType;
+                op_temp.Kernel = op.Kernel;
+                op_temp.InputShape = op.InputShape;
+                op_temp.DimOut = op.DimOut;
+                op_temp.Activation = op.Activation;
+                op_temp.Padding = op.Padding;
+                op_temp.Pool = op.Pool;
+                op_temp.Stride = op.Stride;
+                switch(op.OpType)
+                {
+                    case "Input":
+                        op_temp.OpColor = new SolidColorBrush(Windows.UI.Colors.Azure);
+                        break;
+                    case "Convolution2D":
+                        op_temp.OpColor = new SolidColorBrush(Windows.UI.Colors.Orange);
+                        break;
+                    case "BatchNormalization":
+                        op_temp.OpColor = new SolidColorBrush(Windows.UI.Colors.LightBlue);
+                        break;
+                    case "Activation":
+                        op_temp.OpColor = new SolidColorBrush(Windows.UI.Colors.LightGreen);
+                        break;
+                    case "MaxPooling2D":
+                        op_temp.OpColor = new SolidColorBrush(Windows.UI.Colors.LightYellow);
+                        break;
+                    case "Flatten":
+                        op_temp.OpColor = new SolidColorBrush(Windows.UI.Colors.LightSalmon);
+                        break;
+                    case "Dense":
+                        op_temp.OpColor = new SolidColorBrush(Windows.UI.Colors.LightPink);
+                        break;
+                }
+                OpItems.Add(CopyItem(op_temp));
+            }
+        }
+
+        private OpItem CopyItem(OpItem op)
+        {
+            OpItem op_temp = new OpItem();
+            op_temp.Name = op.Name;
+            op_temp.OpType = op.OpType;
+            op_temp.Kernel = op.Kernel;
+            op_temp.InputShape = op.InputShape;
+            op_temp.DimOut = op.DimOut;
+            op_temp.Activation = op.Activation;
+            op_temp.Padding = op.Padding;
+            op_temp.Pool = op.Pool;
+            op_temp.Stride = op.Stride;
+            op_temp.OpColor = op.OpColor;
+            return op_temp;
+        }
+
+        public void DatasetSelectionChanged()
+        {
+            if (DatasetSelectIndex == 0)
+                InputShapeDisplay = "[28, 28]";
+            else
+                InputShapeDisplay = "[32, 32]";
         }
     }
 }

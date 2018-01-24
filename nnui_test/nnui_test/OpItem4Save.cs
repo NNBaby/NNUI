@@ -1,10 +1,9 @@
-﻿using Windows.UI.Xaml.Media;
+﻿//using Meowtrix.ComponentModel;
 using Newtonsoft.Json;
-//using Meowtrix.ComponentModel;
 
 namespace nnui_test
 {
-    public class OpItem
+    public class OpItem4Save
     {
         private string name;
         private string optype;
@@ -15,7 +14,6 @@ namespace nnui_test
         private int padding;
         private string activation;
         private string inputShape;
-        private SolidColorBrush opColor;
 
         public string Name
         {
@@ -52,11 +50,6 @@ namespace nnui_test
             get { return padding; }
             set { padding = value; }
         }
-        public SolidColorBrush OpColor
-        {
-            get { return opColor; }
-            set { opColor = value; }
-        }
         public string Activation
         {
             get { return activation; }
@@ -67,5 +60,12 @@ namespace nnui_test
             get { return inputShape; }
             set { inputShape = value; }
         }
+        public OpItem4Save Copy()
+        {
+            string data = JsonConvert.SerializeObject(this);
+            OpItem4Save copy = JsonConvert.DeserializeObject<OpItem4Save>(data);
+            return copy;
+        }
+
     }
 }

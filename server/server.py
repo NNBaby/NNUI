@@ -18,6 +18,7 @@ def get_res():
     return jsonify(jsonpack)
     
 def post_compile(jsonpack):
+    print (jsonpack)
     mid = new_model(jsonpack)
     result = {"id" : mid}
     return result

@@ -25,8 +25,8 @@ namespace nnui_test
             formattableTitleBar.ButtonBackgroundColor = Colors.Transparent;
             CoreApplicationViewTitleBar coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
             coreTitleBar.ExtendViewIntoTitleBar = true;
-            ViewModel.TypeVisib = Windows.UI.Xaml.Visibility.Visible;
-            ViewModel.NameVisib = Windows.UI.Xaml.Visibility.Visible;
+            ViewModel.TypeVisib = Visibility.Visible;
+            ViewModel.NameVisib = Visibility.Visible;
 
             ViewModel.OptimizerSelect.Add("SGD");
             ViewModel.OptimizerSelect.Add("Adam");
@@ -35,10 +35,14 @@ namespace nnui_test
             ViewModel.ActivationSelect.Add("softmax");
             ViewModel.ActivationSelect.Add("sigmoid");
 
+            ViewModel.DatasetSelect.Add("MNIST");
+            ViewModel.DatasetSelect.Add("CIFAR-10");
+            ViewModel.DatasetSelect.Add("CIFAR-100");
+
             OpItem newItem = new OpItem();
             newItem.Name = "data";
             newItem.OpType = "Input";
-            newItem.InputShape = "[28, 28, 1]";
+            newItem.InputShape = "[28, 28]";
             newItem.OpColor = new SolidColorBrush(Colors.Azure);
             ViewModel.OpItems.Add(newItem);
 
@@ -46,7 +50,7 @@ namespace nnui_test
             newItem2.Name = "pred";
             newItem2.OpType = "Activation";
             newItem2.Activation = ViewModel.ActivationSelect[1];
-            newItem2.OpColor = new SolidColorBrush(Colors.Azure);
+            newItem2.OpColor = new SolidColorBrush(Colors.LightGreen);
             ViewModel.OpItems.Add(newItem2);
             ViewModel.SelectionInit();
 
@@ -55,6 +59,9 @@ namespace nnui_test
             dispatchertimer.Tick += dispatcherTimer_Tick;
             dispatchertimer.Interval = new TimeSpan(0, 0, 1);
             dispatchertimer.Start();
+
+            //ViewModel.SaveModel();
+            ViewModel.LoadModelClick();
         }
 
         public void dispatcherTimer_Tick(object sender, object e)

@@ -213,16 +213,57 @@
                                         Style="{StaticResource ButtonRevealStyle}"
                                         Click="{x:Bind ViewModel.Remove}">
                                 </Button>
-                                <TextBlock Text="Models"
+                            <TextBlock Text="Models"
                                            Margin="10"
                                            HorizontalAlignment="Stretch"
                                            TextAlignment="Left"
                                            FontSize="24"/>
-                                <Button Content="LeNet-5"
+                            <Button Content="Save Model"
                                         Margin="10"
                                         HorizontalAlignment="Stretch"
-                                        Style="{StaticResource ButtonRevealStyle}"/>
-                            </StackPanel>
+                                        Style="{StaticResource ButtonRevealStyle}">
+                                <Button.Flyout>
+                                    <Flyout>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="200"/>
+                                                <ColumnDefinition Width="100"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="*"/>
+                                                <RowDefinition Height="*"/>
+                                            </Grid.RowDefinitions>
+                                            <TextBlock Text="Model Name" Margin="10"/>
+                                            <TextBox Grid.Column="0"
+                                                     Grid.Row="1"
+                                                     Text="{x:Bind ViewModel.CurrentSavedModelName, Mode=TwoWay}"
+                                                     HorizontalAlignment="Stretch"
+                                                     Margin="10, 10, 5, 10"/>
+                                            <Button Grid.Column="1"
+                                                    Grid.Row="1"
+                                                    HorizontalAlignment="Stretch"
+                                                    Content="OK"
+                                                    Click="{x:Bind ViewModel.SaveModelButtonClicked, Mode=OneWay}"
+                                                    Margin="5, 10, 10, 10"/>
+                                        </Grid>
+                                    </Flyout>
+                                </Button.Flyout>
+                            </Button>
+                            <Button Content="Load Model"
+                                        Margin="10"
+                                        HorizontalAlignment="Stretch"
+                                        Style="{StaticResource ButtonRevealStyle}"
+                                        Click="{x:Bind ViewModel.LoadModelClick, Mode=OneWay}">
+                                <Button.Flyout>
+                                    <Flyout>
+                                        <ListView ItemsSource="{x:Bind ViewModel.CurrentModels, Mode=OneWay}"
+                                                  SelectedIndex="{x:Bind ViewModel.LoadModelSelectIndex, Mode=TwoWay}"
+                                                  SelectionChanged="{x:Bind ViewModel.LoadModel, Mode=OneWay}"
+                                                  Width="300"/>
+                                    </Flyout>
+                                </Button.Flyout>
+                            </Button>
+                        </StackPanel>
                         </ScrollViewer>
                         <ScrollViewer Grid.Column="1"
                                     Background="{ThemeResource CustomAcrylicBrush2}">
@@ -300,7 +341,7 @@
                                                     <TextBlock Text="{x:Bind OpType, Mode=TwoWay}" 
                                                                Style="{ThemeResource BaseTextBlockStyle}"
                                                                HorizontalAlignment="Center"
-                                                               VerticalAlignment="Center"   />
+                                                               VerticalAlignment="Center"/>
                                                 </Grid>
                                             </DataTemplate>
                                         </ListView.ItemTemplate>
@@ -335,18 +376,28 @@
                                                 <RowDefinition Height="*"></RowDefinition>
                                                 <RowDefinition Height="*"></RowDefinition>
                                                 <RowDefinition Height="*"></RowDefinition>
-                                            </Grid.RowDefinitions>
+                                                <RowDefinition Height="*"></RowDefinition>
+                                                <RowDefinition Height="*"></RowDefinition>
+                                        </Grid.RowDefinitions>
                                             <TextBlock Text="Block Type:"
-                                                       Grid.Column="0"
-                                                       Grid.Row="0"
-                                                       Margin="10"
-                                                       TextAlignment="Left"
-                                                       VerticalAlignment="Center"
-                                                       Visibility="{x:Bind ViewModel.TypeVisib, Mode=OneWay}">
+                                                           Grid.Column="0"
+                                                           Grid.Row="0"
+                                                           Margin="10"
+                                                           TextAlignment="Left"
+                                                           VerticalAlignment="Center"
+                                                           Visibility="{x:Bind ViewModel.TypeVisib, Mode=OneWay}">
+                                            </TextBlock>
+                                            <TextBlock Text="Dataset:"
+                                                           Grid.Column="0"
+                                                           Grid.Row="1"
+                                                           Margin="10"
+                                                           TextAlignment="Left"
+                                                           VerticalAlignment="Center"
+                                                           Visibility="{x:Bind ViewModel.DatasetVisib, Mode=OneWay}">
                                             </TextBlock>
                                             <TextBlock Text="Name:"
                                                        Grid.Column="0"
-                                                       Grid.Row="1"
+                                                       Grid.Row="2"
                                                        Margin="10"
                                                        TextAlignment="Left"
                                                        VerticalAlignment="Center"
@@ -354,7 +405,7 @@
                                             </TextBlock>
                                             <TextBlock Text="Kernel Shape:"
                                                        Grid.Column="0"
-                                                       Grid.Row="2"
+                                                       Grid.Row="3"
                                                        Margin="10"
                                                        TextAlignment="Left"
                                                        VerticalAlignment="Center"
@@ -362,7 +413,7 @@
                                             </TextBlock>
                                             <TextBlock Text="OutDim:"
                                                        Grid.Column="0"
-                                                       Grid.Row="3"
+                                                       Grid.Row="4"
                                                        Margin="10"
                                                        TextAlignment="Left"
                                                        VerticalAlignment="Center"
@@ -370,7 +421,7 @@
                                             </TextBlock>
                                             <TextBlock Text="Stride:"
                                                        Grid.Column="0"
-                                                       Grid.Row="4"
+                                                       Grid.Row="5"
                                                        Margin="10"
                                                        TextAlignment="Left"
                                                        VerticalAlignment="Center"
@@ -378,7 +429,7 @@
                                             </TextBlock>
                                             <TextBlock Text="Act. type:"
                                                        Grid.Column="0"
-                                                       Grid.Row="5"
+                                                       Grid.Row="6"
                                                        Margin="10"
                                                        TextAlignment="Left"
                                                        VerticalAlignment="Center"
@@ -386,7 +437,7 @@
                                             </TextBlock>
                                             <TextBlock Text="Input shape:"
                                                        Grid.Column="0"
-                                                       Grid.Row="6"
+                                                       Grid.Row="7"
                                                        Margin="10"
                                                        TextAlignment="Left"
                                                        VerticalAlignment="Center"
@@ -399,38 +450,48 @@
                                                        VerticalAlignment="Center"
                                                        Visibility="{x:Bind ViewModel.TypeVisib, Mode=OneWay}">
                                             </TextBlock>
+                                            <ComboBox Grid.Column="1"
+                                                      Grid.Row="1"
+                                                      Margin="10"
+                                                      VerticalAlignment="Center"
+                                                      HorizontalAlignment="Stretch"
+                                                      ItemsSource="{x:Bind ViewModel.DatasetSelect, Mode=OneWay}"
+                                                      Visibility="{x:Bind ViewModel.DatasetVisib, Mode=OneWay}"
+                                                      SelectedIndex="{x:Bind ViewModel.DatasetSelectIndex, Mode=TwoWay}"
+                                                      SelectionChanged="{x:Bind ViewModel.DatasetSelectionChanged, Mode=OneWay}">
+                                            </ComboBox>
                                             <TextBox x:Name="NameBox"
                                                      Text="{x:Bind ViewModel.NameDisplay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                      Grid.Column="1"
-                                                     Grid.Row="1"
+                                                     Grid.Row="2"
                                                      Margin="10"
                                                      VerticalAlignment="Center"
                                                      Visibility="{x:Bind ViewModel.NameVisib, Mode=OneWay}">
                                             </TextBox>
                                             <TextBox Text="{x:Bind ViewModel.ShapeDisplay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                     Grid.Column="3"
-                                                     Grid.Row="2"
+                                                     Grid.Column="1"
+                                                     Grid.Row="3"
                                                      Margin="10"
                                                      VerticalAlignment="Center"
                                                      Visibility="{x:Bind ViewModel.KernelShapeVisib, Mode=OneWay}">
                                             </TextBox>
                                             <TextBox Text="{x:Bind ViewModel.OutDimDisplay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                      Grid.Column="1"
-                                                     Grid.Row="3"
+                                                     Grid.Row="4"
                                                      Margin="10"
                                                      VerticalAlignment="Center"
                                                      Visibility="{x:Bind ViewModel.DimOutVisib, Mode=OneWay}">
                                             </TextBox>
                                             <TextBox Text="{x:Bind ViewModel.StrideDisplay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                      Grid.Column="1"
-                                                     Grid.Row="4"
+                                                     Grid.Row="5"
                                                      Margin="10"
                                                      VerticalAlignment="Center"
                                                      Visibility="{x:Bind ViewModel.StrideVisib, Mode=OneWay}">
                                             </TextBox>
                                             <ComboBox ItemsSource="{x:Bind ViewModel.ActivationSelect, Mode=TwoWay}"
                                                       Grid.Column="1"
-                                                      Grid.Row="5"
+                                                      Grid.Row="6"
                                                       Margin="10"
                                                       VerticalAlignment="Center"
                                                       Visibility="{x:Bind ViewModel.ActivationVisib, Mode=OneWay}"
@@ -439,7 +500,7 @@
                                             </ComboBox>
                                             <TextBlock Text="{x:Bind ViewModel.InputShapeDisplay, Mode=TwoWay}"
                                                      Grid.Column="1"
-                                                     Grid.Row="6"
+                                                     Grid.Row="7"
                                                      Margin="10"
                                                      VerticalAlignment="Center"
                                                      Visibility="{x:Bind ViewModel.InputShapeVisib, Mode=OneWay}">
@@ -447,7 +508,7 @@
                                         </Grid>
                                     </StackPanel>
                                     <StackPanel Grid.Row="1">
-                                        <TextBlock Text="Summary"
+                                        <TextBlock Text="Settings"
                                                    Margin="10"
                                                    FontSize="24">
                                         </TextBlock>
@@ -456,25 +517,13 @@
                                                 <ColumnDefinition Width="*" MaxWidth="100"></ColumnDefinition>
                                                 <ColumnDefinition Width="*"></ColumnDefinition>
                                             </Grid.ColumnDefinitions>
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="*"></RowDefinition>
-                                                <RowDefinition Height="*"></RowDefinition>
-                                                <RowDefinition Height="*"></RowDefinition>
-                                                <RowDefinition Height="*"></RowDefinition>
-                                                <RowDefinition Height="*"></RowDefinition>
-                                            </Grid.RowDefinitions>
-                                            <TextBlock Text="#Params:"
-                                                       Grid.Row="0"
-                                                       Grid.Column="0"
-                                                       VerticalAlignment="Center"
-                                                       Margin="10">
-                                            </TextBlock>
-                                            <TextBlock Text="FLOPs:"
-                                                       Grid.Row="1"
-                                                       Grid.Column="0"
-                                                       VerticalAlignment="Center"
-                                                       Margin="10">
-                                            </TextBlock>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*"></RowDefinition>
+                                            <RowDefinition Height="*"></RowDefinition>
+                                            <RowDefinition Height="*"></RowDefinition>
+                                            <RowDefinition Height="*"></RowDefinition>
+                                            <RowDefinition Height="*"></RowDefinition>
+                                        </Grid.RowDefinitions>
                                             <TextBlock Text="Batch size:"
                                                        Grid.Row="2"
                                                        Grid.Column="0"
@@ -488,22 +537,10 @@
                                                        Margin="10">
                                             </TextBlock>
                                             <TextBlock Text="Optimizer:"
-                                                       Grid.Row="4"
-                                                       Grid.Column="0"
-                                                       VerticalAlignment="Center"
-                                                       Margin="10">
-                                            </TextBlock>
-                                            <TextBlock Text="0.42M"
-                                                       Grid.Row="0"
-                                                       Grid.Column="1"
-                                                       VerticalAlignment="Center"
-                                                       Margin="10">
-                                            </TextBlock>
-                                            <TextBlock Text="30M"
-                                                       Grid.Row="1"
-                                                       Grid.Column="1"
-                                                       VerticalAlignment="Center"
-                                                       Margin="10">
+                                                            Grid.Row="4"
+                                                            Grid.Column="0"
+                                                            VerticalAlignment="Center"
+                                                            Margin="10">
                                             </TextBlock>
                                             <TextBox Text="{x:Bind ViewModel.BatchSizeDisplay, Mode=TwoWay}"
                                                        Grid.Row="2"

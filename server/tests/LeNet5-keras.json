@@ -1,5 +1,6 @@
 {
     "name": "LeNet-5",
+    "dataset": "mnist",
     
     "train":{
         "epochs": 5,
