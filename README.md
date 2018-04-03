@@ -3,6 +3,11 @@
 NNUI is a visual neural networks editor. 
 It's convenient and efficient and it aims to the beginners and the researchers.
 
+## Show
+![](screenshots/save.gif)
+![](screenshots/train.gif)
+![](screenshots/loss.gif)
+
 ## Requirements
 
 Windows 10 (version 10586 or higher version)
